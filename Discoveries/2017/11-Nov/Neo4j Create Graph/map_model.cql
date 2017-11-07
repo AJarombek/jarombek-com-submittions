@@ -134,25 +134,65 @@ CREATE (aj:Person {name: 'Andy J.'}),
 // It also specifies where the pizza place is located - however there is a bug:
 // New settlements are created for each pizza place LOCATED_IN relationship instead
 // of attaching it to an existing location
-CREATE (stan:Pizza {name: 'Stanziato’s Wood Fired Pizza', price: 2, rating: 4.5}),
+CREATE (stan:Pizza {
+            name: 'Stanziato’s Wood Fired Pizza',
+            price: 2,
+            rating: 4.5
+        }),
         (stan)-[:LOCATED_IN]->(:Settlement {name: 'Danbury'}),
-        (bw:Pizza {name: 'Brick + Wood', price: 2, rating: 4.5}),
+        (bw:Pizza {
+            name: 'Brick + Wood',
+            price: 2,
+            rating: 4.5
+        }),
         (bw)-[:LOCATED_IN]->(:Settlement {name: 'Fairfield'}),
-        (pp:Pizza {name: 'Prime Pub - Danbury', price: 2, rating: 4.5}),
+        (pp:Pizza {
+            name: 'Prime Pub - Danbury',
+            price: 2,
+            rating: 4.5
+        }),
         (pp)-[:LOCATED_IN]->(:Settlement {name: 'Danbury'}),
-        (cp:Pizza {name: 'Classic Pizza', price: 1, rating: 4.5}),
+        (cp:Pizza {
+            name: 'Classic Pizza',
+            price: 1,
+            rating: 4.5
+        }),
         (cp)-[:LOCATED_IN]->(:Settlement {name: 'Norwalk'}),
-        (s:Pizza {name: 'Savor', price: 2, rating: 4.5}),
+        (s:Pizza {
+            name: 'Savor',
+            price: 2,
+            rating: 4.5
+        }),
         (s)-[:LOCATED_IN]->(:Settlement {name: 'Norwalk'}),
-        (spr:Pizza {name: 'Fire Engine Pizza Company', price: 2, rating: 4}),
+        (spr:Pizza {
+            name: 'Fire Engine Pizza Company',
+            price: 2,
+            rating: 4
+        }),
         (spr)-[:LOCATED_IN]->(:Settlement {name: 'Bridgeport'}),
-        (mpr:Pizza {name: 'Michael’s Pizzeria Restaurant', price: 2, rating: 4.5}),
+        (mpr:Pizza {
+            name: 'Michael’s Pizzeria Restaurant',
+            price: 2,
+            rating: 4.5
+        }),
         (mpr)-[:LOCATED_IN]->(:Settlement {name: 'Stamford'}),
-        (piep:Pizza {name: 'Pieology Pizzeria', price: 2, rating: 5}),
+        (piep:Pizza {
+            name: 'Pieology Pizzeria',
+            price: 2,
+            rating: 5
+        }),
         (piep)-[:LOCATED_IN]->(:Settlement {name: 'Stamford'}),
-        (rompb:Pizza {name: 'Romanacci Pizza Bar', price: 2, rating: 4}),
+        (rompb:Pizza {
+            name: 'Romanacci Pizza Bar',
+            price: 2,
+            rating: 4
+        }),
         (rompb)-[:LOCATED_IN]->(:Settlement {name: 'Trumbull'}),
-        (rom:Pizza {name: 'Romanacci', price: 2, rating: 4}),
+        (rom:Pizza {
+            name: 'Romanacci',
+            price: 2,
+            rating: 4
+        }),
         (rom)-[:LOCATED_IN]->(:Settlement {name: 'Norwalk'})
 
 // This undos the previous mistake
