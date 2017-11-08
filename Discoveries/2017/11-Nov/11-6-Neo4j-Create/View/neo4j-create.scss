@@ -2,7 +2,8 @@
 // Date: 11/6/2017
 // Sass stylesheet for the neo4j-create discovery
 
-$light-background: #bbb;
+$light-background: #ddd;
+$gray-background: #bbb;
 $text-color: #333;
 
 body {
@@ -12,8 +13,7 @@ body {
 
 .discoveryBody {
     width: 100%;
-    height: 100vh;
-    background-color: #ddd;
+    background-color: $light-background;
     margin: 0 auto;
 }
 
@@ -30,7 +30,7 @@ body {
     }
     width: 100%;
     text-align: right;
-    color: $light-background;
+    color: $gray-background;
     padding-top: 10px;
 }
 
@@ -53,4 +53,44 @@ p {
 
 .badge-default {
     background-color: #aaa;
+}
+
+#discovertText {
+    padding-top: 20px;
+}
+
+pre, code {
+    font-family: monospace, monospace;
+}
+
+pre {
+    overflow: auto;
+    background-color: $light-background !important;
+}
+
+pre > code {
+    display: block;
+    padding: 1em;
+    word-wrap: normal;
+}
+
+// Matches the code html element 'code' with an element 'class' with a value starting with 'language-'
+// Does the same match for html element 'pre'
+code[class *= "language-"], pre[class *= "language-"] {
+    line-height: 2 !important;
+    -moz-tab-size: 2 !important; -o-tab-size: 2 !important; tab-size: 2 !important;
+}
+
+pre[class*="language-"]>code {
+    border-left: 5px solid #0b631f !important;
+    box-shadow: -1px 0px 0px 0px #0b631f !important;
+}
+
+pre > code[class]::before {
+    content: attr(title);
+    display: block;
+    font-size: small;
+    font-style: bold;
+    color: #aaa;
+    float: right;
 }

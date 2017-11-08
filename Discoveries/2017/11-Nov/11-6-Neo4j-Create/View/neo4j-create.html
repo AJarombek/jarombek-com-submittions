@@ -12,6 +12,7 @@
         <link href='https://fonts.googleapis.com/css?family=Roboto:500,700,400' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
             integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link href="../../../../../prism.css" rel="stylesheet" />
     </head>
     <body>
         <div class="col-md-12 discoveryBody">
@@ -25,13 +26,52 @@
                     <p>Graph Databases <span class="badge badge-default">Basic</span></p>
                     <p>Neo4j <span class="badge badge-default">Basic</span></p>
                     <p>Cypher Query Language <span class="badge badge-default">Basic</span></p>
-                </div>
-                <div class="container">
+                </div><br>
+                <div id="discoveryText" class="container">
                     <p>
-                        hello
+                        Lately I have been reading up on graph databases and their place in the NoSQL data storage universe.
+                        The graph database I've worked with is Neo4j, which is very easy to get set up.  I've found the user interface
+                        to view graphs and type in queries to be very enjoyable and I highly recommend it if you need a graph database solution.
                     </p>
+                    <p>
+                        Without going into too much detail, the largest draw to graph databases is storing relationships between data and the 
+                        speed at which you can query related data points (or in graph terms nodes/verticies). Relationships are first class citizens
+                        in graph databases which allows you to query related data by traversing the relationship itself.  This is contrasted with a 
+                        typical relational database solution where you have to find relationships through foreign keys or combine two tables of data 
+                        with a very slow SQL JOIN operation.  Our same slow query in a RDBMS (Relational DataBase Management System) is extremely quick
+                        in a graph database.
+                    </p>
+                    <p>
+                        One of the first graphs I made in Neo4j was of the county I grew up in - Fairfield County CT.  The first task on my list was to 
+                        create a vertex to represent a state - in this case Connecticut.  In Cypher (the query language used by Neo4j) that is easy!
+                    </p>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-clike" title="Cypher" contenteditable="true" spellcheck="false">CREATE (ct:State {name: 'Connecticut'}) RETURN ct</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        We use the CREATE statement to build a vertex and pass it a label ':State' and a property 'name'.  The label is used for grouping, in this
+                        case all states will have the label :State. You can also name the vertex along with supply additional key->value information in the verticies
+                        properties.
+                    </p>
+                    <p>
+                        You can also create multiple verticies from a single CREATE statement.  I will utilize this to populate the counties towns and cities:
+                    </p>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-clike" title="Cypher" contenteditable="true" spellcheck="false">CREATE (:City {name: 'Bridgeport'}),
+    (:City {name: 'Danbury'}),
+    ...
+    
+CREATE (:Town {name: 'Bethel'}),
+    (:Town {name: 'Brookfield'}),
+    ...</code>
+                        </pre>
+                    </figure>
                 </div>
             </div>
         </div>
+        <script src="../../../../../prism.js"></script>
     </body>
 </html>
