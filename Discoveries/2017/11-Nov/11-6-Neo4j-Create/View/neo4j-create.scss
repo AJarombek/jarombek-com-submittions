@@ -94,3 +94,9 @@ pre > code[class]::before {
     color: #aaa;
     float: right;
 }
+
+// This page specific code
+img {
+    height: 700px;
+    border: 2px double #999 !important;
+}
