@@ -39,4 +39,4 @@ var lyric = {
 };
 
 let result = taylorSwiftApi.lyrics("Sparks Fly");
-console.info(result);
+console.info(result); // I see sparks fly whenever you smile
