@@ -1,5 +1,6 @@
 // Author: Andrew Jarombek
 // Date: 10/27/2017
+// Add to our graph database of Fairfield County CT
 
 // Create people that will be placed on the map
 CREATE (aj:Person {name: 'Andy J.'}),
@@ -51,7 +52,7 @@ CREATE (stan:Pizza {name: 'Stanziato’s Wood Fired Pizza', price: 2, rating: 4.
 
 // This undos the previous mistake
 MATCH (s:Settlement) 
-WITH s.name as name, collect(s) AS instances
+WITH s.name as name, collect(s) as instances
 WHERE size(instances) > 1
 UNWIND tail(instances) as dups
 MATCH (dups)-[r:LOCATED_IN]-(pizza)

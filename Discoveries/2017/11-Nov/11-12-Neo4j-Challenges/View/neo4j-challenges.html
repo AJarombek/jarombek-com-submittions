@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<!-- Author: Andrew Jarombek
+     Date: 11/6/2017 -->
+<html>
+    <head>
+        <meta chartset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Challenges with Neo4j Graph Creation</title>
+        <link rel="stylesheet" href="../../../../../blog-discover.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,700' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Roboto:500,700,400' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
+            integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link href="../../../../../prism.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="col-md-12 discoveryBody">
+            <div class="col-md-12 discoveryContent">
+                <p class="date">November 12th, 2017</p>
+                <br>
+                <h4>Challenges with Neo4j Graph Creation</h4>
+                <br>
+                <div class="container aknowledge">
+                    <p>Assumed Knowledge:</p>
+                    <p>Graph Databases <span class="badge badge-default">Basic</span></p>
+                    <p>Neo4j <span class="badge badge-default">Basic</span></p>
+                    <p>Cypher Query Language <span class="badge badge-default">Basic</span></p>
+                </div><br>
+                <div id="discoveryText" class="container">
+                    <p>
+                        In my last discovery post on graph databases and Neo4j I 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2017/11-Nov/11-6-Neo4j-Create/View/neo4j-create.html">created a graph</a>
+                         that represented a map of Fairfield County Connecticut.  I created nodes 
+                        for all the towns/cities and edges between the settlements that shared borders.  In this discovery I will add to this graph and show some of the 
+                        challenges I faced along the way.  Let’s dive in!
+                    </p>
+                    <p>
+                        First let’s populate this graph with some people (after all, a settlement needs to have citizens!).
+                    </p>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-clike" title="Cypher" contenteditable="true" spellcheck="false">CREATE (aj:Person {name: 'Andy J.'}),
+    (tc:Person {name: 'Tom C.'}),
+    (js:Person {name: 'Joe S.'}),
+    (bf:Person {name: 'Ben F.'})</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Now what if I wanted to undo this action of creating people.  The first option I have is to simply delete all of the people from the graph:
+                    </p>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-clike" title="Cypher" contenteditable="true" spellcheck="false">MATCH (p:Person) DELETE p</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        But maybe I only want to delete specific people from the graph.  The first thing that came to my head was to simply match on a certain name such 
+                        as <code>MATCH (p:Person {name: ‘Andy J.’})</code>.  In this case I would delete all nodes with label people and where property name equals ‘Andy J.’.  
+                        You may be seeing the potential issue here.  What if there are two people with the name ‘Andy J’?  Then Cypher will delete both of the vertices!  
+                        In a large graph like this that is a very likely scenario.  What you can do instead is delete the vertex by looking up its node id.  Each vertex and 
+                        edge in the graph has a unique node id.  That means if I delete a vertex by its id I know only one vertex will be deleted.  You can get a nodes id with 
+                        the Cypher <code>id()</code> function<sup>1</sup>.
+                    </p>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-clike" title="Cypher" contenteditable="true" spellcheck="false">MATCH (p:Person) WHERE id(p) = 62 DETACH DELETE p</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        In this example I found that the node I wanted to delete had an id of 62 and then searched all nodes with label people for it.  The pair of keywords 
+                        here that I haven’t used before are <code>DETACH DELETE</code>.  In order to delete a node in Cypher you also have to delete its relationships, so 
+                        <code>DETACH DELETE</code> removes both of them<sup>2</sup>.
+                    </p>
+                    <p>
+                        Now if have all four of our people vertices back in the graph, we can create a relationship between them and the settlements they are citizens of:
+                    </p>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-clike" title="Cypher" contenteditable="true" spellcheck="false">MATCH (greenwich:Town {name: 'Greenwich'}),
+    (sherman:Town {name: 'Sherman'}),
+    (fairfield:Town {name: 'Fairfield'}),
+    (easton:Town {name: 'Easton'})
+CREATE (aj:Person {name: 'Andy J.'}),
+    (aj)-[:LIVES_IN]->(greenwich),
+    (tc:Person {name: 'Tom C.'}),
+    (tc)-[:LIVES_IN]->(fairfield),
+    (js:Person {name: 'Joe S.'}),
+    (js)-[:LIVES_IN]->(easton),
+    (bf:Person {name: 'Ben F.'}),
+    (bf)-[:LIVES_IN]->(sherman)</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        We now have a populated map!  Fairfield County still seems a bit boring however.  Let’s populate it will some of the top rated pizza places in the 
+                        county.  I want to create a vertex pizza and give it a <code>:LOCATED_IN</code> relationship to a settlement:
+                    </p>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-clike" title="Cypher" contenteditable="true" spellcheck="false">CREATE (stan:Pizza {name: 'Stanziato’s Wood Fired Pizza', price: 2, rating: 4.5}),
+        (stan)-[:LOCATED_IN]->(:Settlement {name: 'Danbury'}),
+        (bw:Pizza {name: 'Brick + Wood', price: 2, rating: 4.5}),
+        (bw)-[:LOCATED_IN]->(:Settlement {name: 'Fairfield'}),
+        ...</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        When I first ran this code I really thought it would work!  However instead of connecting the newly created pizza places to existing settlements, Cypher 
+                        created new settlements as well!  Now we have duplicate cities in our graph that we need to delete.  The following query will do the job<sup>3</sup>:
+                    </p>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-clike" title="Cypher" contenteditable="true" spellcheck="false">MATCH (s:Settlement) 
+WITH s.name as name, collect(s) as instances
+WHERE size(instances) > 1
+UNWIND tail(instances) as dups
+MATCH (dups)-[r:LOCATED_IN]-(pizza)
+DELETE r, dups, pizza</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Let’s walk through this.  First we are going to query the graph for all settlements.  Then we want to basically set up a table with two columns.  
+                        The first column will be the name of the settlement and the second column will be a list of all the settlement vertices with that name.  The list of names 
+                        is created when we write <code>WITH s.name as name</code>. The <code>WITH</code> clause is used to manipulate our data (in this case the settlement 
+                        vertices information) before we pass it on to the next line in our query<sup>4</sup>.  The <code>AS</code> keyword simply creates an alias for the column.  
+                        We then create the list of all the settlement vertices with a given name with Cypher’s <code>collect()</code> function.  You can think of this entire line 
+                        of code as an implicit <code>GROUP BY</code> statement (like that seen in SQL – Cypher has no explicit <code>GROUP BY</code>).
+                    </p>
+                    <p>
+                        Now the line <code>WHERE size(instances) > 1</code> filters our list for only settlement names that have more than one vertex.  After all the goal of this 
+                        is to delete all the duplicates! The next line, <code>UNWIND tail(instances) as dups</code> transforms our list back into rows in a table<sup>5</sup>.  
+                        This <code>UNWIND</code> operation will happen for each <code>instances</code> list we encounter.  Now we see if the row (which is a settlement) has a 
+                        <code>LOCATED_IN</code> relationship to a vertex with label <code>:Pizza</code>.  If so this is the duplicated data.  In the final line, <code></code> we 
+                        delete the settlement, relationship, and pizza place from the graph.  The graph is successfully cleaned up!
+                    </p>
+                    <p>
+                        Let’s again create pizza places and relate them to a town without creating duplicates:
+                    </p>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-clike" title="Cypher" contenteditable="true" spellcheck="false">CREATE (p1:Pizza {name: 'Stanziato’s Wood Fired Pizza', price: 2, rating: 4.5})
+WITH p1
+MATCH (s1:Settlement {name: 'Danbury'})
+MERGE (p1)-[:LOCATED_IN]->(s1)</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        First we create the pizza place and pass its variable to the <code>MATCH</code> statement through the <code>WITH</code> clause.  This shows that you can also 
+                        use <code>WITH</code> for strictly variable passing without performing any manipulations on it.  Now instead of creating a new settlement we <code>MATCH</code> 
+                        an existing one and then <code>MERGE</code> the <code>LOCATED_IN</code> relationship. <code>MERGE</code> will only create the new relationship if it does not 
+                        already exist.  If the relationship does not exist it acts the same as <code>CREATE</code>.
+                    </p>
+                    <p>
+                        So we now have a complete graph with settlements, people, and places to eat.  One thing that is important to mention before finishing this discovery is indexes.  
+                        In Neo4j, just like in SQL, we can create indexes to speed up vertex lookup speeds<sup>6</sup>.  This is important when we are searching for a specific item 
+                        in the graph, such as a person with name Tom.
+                    </p>
+                    <p>
+                        Since we are often going to query settlements and pizza places by their names we can create indexes on those labels and properties like so:
+                    </p>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-clike" title="Cypher" contenteditable="true" spellcheck="false">CREATE INDEX ON :Settlement(name)
+CREATE INDEX ON :Pizza(name)</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Now we are fully ready to query the graph database (which I will have in another discovery soon!).  The code used for this discovery can be found 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2017/11-Nov/11-12-Neo4j-Challenges/Source/neo4j-additions.cql">HERE</a>.  
+                    </p>
+                    <div class="container tags">
+                        <p>
+                            Tags: <span class="badge badge-default">Neo4j</span> <span class="badge badge-default">Cypher Query Langauge</span> 
+                                <span class="badge badge-default">Graph Database</span> <span class="badge badge-default">NoSQL</span> <span class="badge badge-default">SQL</span>
+                        </p>
+                    </div>
+                    <div class="container sources">
+                        <p>[1] "What's the Cypher script to delete a node by ID?", September 20th, 2016, https://stackoverflow.com/questions/28144751/whats-the-cypher-script-to-delete-a-node-by-id</p>
+                        <p>[2] "DETACH DELETE Neo4j 2.3.x/Cypher", October 15th, 2015, https://stackoverflow.com/questions/33139903/detach-delete-neo4j-2-3-x-cypher</p>
+                        <p>[3] "How to delete duplicate nodes and their relationships in neo4j with cypher?", https://gist.github.com/jruts/fe782ff2531d509784a24b655ad8ae76</p>
+                        <p>[4] "WITH", https://neo4j.com/docs/developer-manual/current/cypher/clauses/with/</p>
+                        <p>[5] "UNWIND", https://neo4j.com/docs/developer-manual/current/cypher/clauses/unwind/</p>
+                        <p>[6] Ian Robinson, Jim Webber & Emil Eifrem, Graph Databases (Beijing: O'Reilly, 2015), 47</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../../../../../prism.js"></script>
+    </body>
+</html>

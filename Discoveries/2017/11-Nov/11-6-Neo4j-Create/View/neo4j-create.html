@@ -36,7 +36,7 @@
                     </p>
                     <p>
                         Without going into too much detail, the largest draw to graph databases is storing relationships between data and the 
-                        speed at which you can query related data points (or in graph terms nodes/verticies). Relationships are first class citizens
+                        speed at which you can query related data points (or in graph terms nodes/vertices). Relationships are first class citizens
                         in graph databases which allows you to query related data by traversing the relationship itself.  This is contrasted with a 
                         typical relational database solution where you have to find relationships through foreign keys or combine two tables of data 
                         with a very slow SQL JOIN operation<sup>1</sup>.  Our same slow query in a RDBMS (Relational DataBase Management System) is extremely quick
@@ -56,10 +56,10 @@
                     <p>
                         We use the <code>CREATE</code> statement to build a vertex and pass it a label <code>:State</code> and a property <code>name</code>.  The label 
                         is used for grouping, in this case all states will have the label <code>:State</code>. You can also name the vertex along with supply additional 
-                        key->value information in the verticies properties.
+                        key->value information in the vertices properties.
                     </p>
                     <p>
-                        You can also create multiple verticies from a single <code>CREATE</code> statement.  I will utilize this to populate the counties towns and cities:
+                        You can also create multiple vertices from a single <code>CREATE</code> statement.  I will utilize this to populate the counties towns and cities:
                     </p>
                     <figure>
                         <pre class="line-numbers">
@@ -101,7 +101,7 @@ CREATE (:Town {name: 'Bethel'}),
                         first class entities' - they are treated and can be queried just like a vertex!  This is extremely powerful.
                     </p>
                     <p>
-                        You may have noticied that in this query we match for multiple verticies.  In this case, we want all the verticies where the label is State or Settlement.  Then
+                        You may have noticied that in this query we match for multiple vertices.  In this case, we want all the vertices where the label is State or Settlement.  Then
                         we create the relationship "settlement is in state".  Since the only state in the database is Connecticut, this simple query will give us the intended result.
                     </p>
                     <p>
