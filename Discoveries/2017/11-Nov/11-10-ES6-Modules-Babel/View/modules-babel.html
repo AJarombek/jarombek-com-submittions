@@ -118,7 +118,7 @@ npm install babel-preset-env --save-dev</code>
                     </figure>
                     <p>
                         Now when I got to this point I thought “great I’m done! Let’s run the code!”  Unfortunately I forgot to actually tell Babel which files to convert to ES5.
-                        On way to do this is like so:
+                        One way to do this is like so:
                     </p>
                     <figure>
                         <pre class="command-line" data-prompt="$">
@@ -127,7 +127,7 @@ npm install babel-preset-env --save-dev</code>
                     </figure>
                     <p>
                         I am telling Babel to take main.js and transpile it to a file of the same name in a folder called es5 (note: <code>npx</code> is not a typo – install 
-                        it with <code>npm install –g npx</code> to simplify Babel commands.
+                        it with <code>npm install –g npx</code> to simplify Babel commands).
                     </p>
                     <p>
                         There is however a better way of doing this.  You can actually ask Babel to watch your ES6 files for changes.  When a change is made, the code is 
@@ -140,12 +140,12 @@ npx babel taylorSwift.js --watch --out-file es5/taylorSwift.js &</code>
                         </pre>
                     </figure>
                     <p>
-                        You can see I added the ampersand to the end of these commands to place these tasks in the background.  This is so the bash shell would not be blocked 
+                        You can see I added the ampersand to the end of these commands to place these tasks in the background.  This is so the bash shell will not be blocked 
                         and I can continue to execute commands in one window.  You can kill these background tasks at any time with their job number<sup>3</sup>:
                     </p>
                     <figure>
                         <pre class="command-line" data-prompt="$">
-                            <code class="language-bash" title="Bash" contenteditable="true" spellcheck="false"># Kill the task be job number (in this case 1)
+                            <code class="language-bash" title="Bash" contenteditable="true" spellcheck="false"># Kill the task by job number (in this case 1)
 kill %1</code>
                         </pre>
                     </figure>
@@ -168,7 +168,7 @@ I see sparks fly whenever you smile</code>
                         </pre>
                     </figure>
                     <p>
-                        Whew that was a lot of work to just see some sparks fly using ES6!  Obviously it is not practical to transpile ES6 code for such a small piece of code, but for 
+                        Whew that was a lot of work to just see some sparks fly using ES6!  Obviously it is not practical to transpile ES6 code for such a small codebase, but for larger 
                         projects you don’t want to be held back from newer JavaScript versions because of the environment you are using.  I will be using Babel for many projects in 
                         the future.  You can find all the code in this demo 
                         <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2017/11-Nov/11-10-ES6-Modules-Babel/Source ">HERE</a>.
