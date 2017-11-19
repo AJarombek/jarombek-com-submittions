@@ -9,7 +9,7 @@ console.info(this);
 /* In Node this code runs as: */
 
 (function (exports, require, module, __filename, __dirname) {
-console.info(this);
+    console.info(this);
 });
 
 // The global object in node is called 'global' and has propeties about the current architecute you can look at 

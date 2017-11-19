@@ -2,9 +2,9 @@
 // Date: 11/14/2017
 // Look at the global object (window) in the browser
 
-console.info(this);
+console.info(this); // window object
 
-console.info(window);
+console.info(window); // window object
 
 this.prompt("What is your name?");
 
@@ -17,5 +17,5 @@ newWindow.document.write("<p>Hello</p>");
 // window object has click listener variables that you can assign functions 
 // to.  onclick() is called when the user clicks on the window.
 newWindow.onclick = function click() {
-newWindow.close();
+    newWindow.close();
 };
