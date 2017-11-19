@@ -30,21 +30,21 @@ int main() {
     strcpy(ben.first, "Ben");
     strcpy(ben.last, "Fis.");
  
-person people[] = {andrew, thomas, joe, ben};
- 
-// Get the length of the people array
-int size = sizeof(people) / sizeof(people[0]);
- 
-for (int i = 0; i < size; i++) {
-    printf("%d - %s %s \n", i + 1, people[i].first, people[i].last);
-}
-printf("\n");
- 
-qsort(people, size, sizeof(people[0]), compare);
- 
-for (int i = 0; i < size; i++) {
-    printf("%d - %s %s \n", i + 1, people[i].first, people[i].last);
-}
+    person people[] = {andrew, thomas, joe, ben};
+    
+    // Get the length of the people array
+    int size = sizeof(people) / sizeof(people[0]);
+    
+    for (int i = 0; i < size; i++) {
+        printf("%d - %s %s \n", i + 1, people[i].first, people[i].last);
+    }
+    printf("\n");
+    
+    qsort(people, size, sizeof(people[0]), compare);
+    
+    for (int i = 0; i < size; i++) {
+        printf("%d - %s %s \n", i + 1, people[i].first, people[i].last);
+    }
 }
 
 static int compare(const void *a, const void *b) {

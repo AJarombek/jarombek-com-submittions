@@ -5,7 +5,7 @@
     <head>
         <meta chartset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Closure & Lexical Scope in JavaScript Modules</title>
+        <title>Sorting Lists with Comparison Functions</title>
         <link rel="stylesheet" href="../../../../../blog-discover.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,700' rel='stylesheet' type='text/css'>
@@ -17,103 +17,182 @@
     <body>
         <div class="col-md-12 discoveryBody">
             <div class="col-md-12 discoveryContent">
-                <p class="date">November 9th, 2017</p>
+                <p class="date">November 14th, 2017</p>
                 <br>
-                <h4>Closure & Lexical Scope in JavaScript Modules</h4>
+                <h4>Sorting Lists with Comparison Functions</h4>
                 <br>
                 <div class="container aknowledge">
                     <p>Assumed Knowledge:</p>
+                    <p>Java <span class="badge badge-warning">Intermediate</span></p>
+                    <p>Java 8 <span class="badge badge-warning">Intermediate</span></p>
                     <p>JavaScript <span class="badge badge-warning">Intermediate</span></p>
-                    <p>API <span class="badge badge-default">Basic</span></p>
+                    <p>Swift <span class="badge badge-warning">Intermediate</span></p>
+                    <p>PHP <span class="badge badge-warning">Intermediate</span></p>
+                    <p>Python <span class="badge badge-default">Basic</span></p>
+                    <p>C <span class="badge badge-warning">Intermediate</span></p>
                 </div><br>
                 <div id="discoveryText" class="container">
                     <p>
-                        In JavaScript there are many module patterns that can be used to create APIs and separate concerns in code (as of ES6 there is actually 
-                        syntax for modules in the specification).  In the following code I have created an API using the revealing module pattern.  The name comes 
-                        from the return statement at the end of the module - it 'reveals' functions to outside code.
+                        In this discovery I will look at sorting lists in different programming languages for non-trivial objects.  The languages I will 
+                        look at are my core languages: Java, JavaScript, Swift, Python, PHP, and C.  I’ve used all these languages in larger projects and 
+                        wish to stay proficient in them.  I will post snippets of the code in each language but you can also check out the 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2017/11-Nov/11-14-Sorting-Lists/Source">full examples</a>.  
+                        Let’s get started!
                     </p>
+                    <h5>Java</h5>
                     <figure>
                         <pre class="line-numbers">
-                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">var taylorSwiftApi = function() {
-  var lyric = {
-    sparks: "I see sparks fly whenever you smile",
-    mine: "You are the best thing thats ever been mine",
-    dec: "I go back to Decemeber all the time",
-    other: "I'm sorry, taylor can't pick up the phone right now"
-  }
- 
-  function lyrics(song) {
-    switch(song.toLowerCase()) {
-        case "sparks fly":
-        return lyric.sparks;
-        case "mine":
-        return lyric.mine;
-        case "back to december":
-        return lyric.dec;
-        default:
-        return lyric.other;
-    }
-  }
-  
-  return {
-    lyrics: lyrics
-  }
-}();</code>
-                        </pre>
-                    </figure>
-                    <p>
-                        This module shows Taylor Swift lyrics for songs that the user enters (because who doesn’t enjoy some T-Swift!)  The return statement is the public 
-                        API revealed to outside code.  All interior details, such as the <code>lyric</code> variable, are hidden.  This pattern harnesses the power of 
-                        closure in JavaScript!
-                    </p>
-                    <p>
-                        Closure has been defined as “when a function is able to remember and access its lexical scope even when that function is executing outside its lexical scope
-                        <sup>1</sup>.”
-                    </p>
-                    <p>
-                        Okay cool, so even when we call <code>taylorSwiftApi.lyrics()</code> later in the code it will be aware of the interior <code>lyric</code> variable!  But what is 
-                        this 'lexical scope' I see in the definition?
-                    </p>
-                    <p>
-                        Lexical scope is when the physical structure of the program you write determines the scope.  Because of this the scope in which you define a function in JavaScript 
-                        will always be that functions scope.  This scope is immutable and can’t be changed.
-                    </p>
-                    <p>
-                        Maybe lexical scope and closure will be easier to understand with an example of us calling the Taylor Swift API:
-                    </p>
-                    <figure>
-                        <pre class="line-numbers" data-start="27">
-                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">var lyric = {
-  sparks: "I was enchanted to meet you"
-};
+                            <code class="language-java" title="Java" contenteditable="true" spellcheck="false">List<Person> list = Arrays.asList(new Person("Andrew", "Jar."), new Person("Thomas", "Cau."),
+                new Person("Joe", "Smi."), new Person("Ben", "Fis."));
 
-let result = taylorSwiftApi.lyrics("Sparks Fly");
-console.info(result); // I see sparks fly whenever you smile</code>
+list = list.stream()
+        .sorted(Comparator.comparing(Person::getLast))
+        .collect(toList());</code>
                         </pre>
                     </figure>
                     <p>
-                        You can see that in the global scope we define another variable named lyric with a different (and as Swift fans know – incorrect) value.  The question is when we call 
-                        <code>taylorSwiftApi.lyrics()</code> which <code>lyric.sparks</code> variable will the API find?  In this case it will be the one defined in <code>taylorSwiftApi</code> because of 
-                        a closure that was created over the lexical scope of the API.  The function <code>taylorSwiftApi.lyrics()</code> was defined in the API functions lexical scope, so that 
-                        scope can’t change!
+                        You may have expected the Java code to be messy and verbose with iterators and complex comparison functions.  With Java 8 it is short 
+                        and concise thanks to streams and the comparator API.  Also with the short-hand lambda syntax (called a method reference) we can simply 
+                        write <code>Person::getLast</code> instead of <code>(p) -> p.getLast()</code>.  Most of the Java code in the full example is for creating 
+                        the Person POJO.
+                    </p>
+                    <h5>JavaScript</h5>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">let people = [
+  {first: "Andrew", last: "Jar."},
+  {first: "Thomas", last: "Cau."},
+  {first: "Joe", last: "Smi."},
+  {first: "Ben", last: "Fis."}
+];
+
+console.info(people);
+
+people.sort(function(a, b) {
+    return a.last > b.last ? 1 : 0;
+});
+
+console.info(people);</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        The JavaScript version is even simpler.  We just pass a call back function to <code>sort()</code> and it uses this function when making comparisons.
                     </p>
                     <p>
-                        As I briefly mentioned in the beginning of this discovery there is support for modules in the JavaScript spec as of ES6.  I will look at this Taylor Swift API using these 
-                        modules in the future.  You can find all the code for this discovery 
-                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2017/11-Nov/11-9-JS-Closure-Modules/Source/module.js">HERE</a>.
+                        One thing that was strange when executing this code is that both <code>console.info()</code> calls produced the sorted array even though the first 
+                        <code>console.info()</code> occurs before people is even sorted.  This is because depending on the environment console calls can be asynchronous.  
+                        Therefore we may not get the results at the time we expect.  You can’t always trust <code>console</code>!
+                    </p>
+                    <h5>Swift</h5>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-swift" title="Swift" contenteditable="true" spellcheck="false">struct Person {
+let first: String 
+let last: String 
+}
+
+var list = [Person(first: "Andrew", last: "Jar."), Person(first: "Thomas", last: "Cau."),
+   Person(first: "Joe", last: "Smi."), Person(first: "Ben", last: "Fis.")]
+
+list.sort {
+    $0.last < $1.last
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        I really like the Swift implementation for sorting.  In general I prefer using classes over structs in Swift (just a personal preference!), 
+                        but in a simple case like this one a struct makes perfect sense.
                     </p>
                     <p>
-                        A final note: there is another type of scoping called dynamic scope.  This is used in shell scripts such as Bash and PowerShell.  In these scripting languages the scope is 
-                        determined by the executing programs location on the call stack<sup>2</sup>.  This may be a fun topic to explore in the future!
+                        If you don’t know much Swift the sorting operation may look a bit confusing.  The <code>sort()</code> method of the Array type is passed a Swift 
+                        closure (not to be confused with a 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2017/11-Nov/11-9-JS-Closure-Modules/View/closure-modules.html">closure in JavaScript</a>
+                        ) which is basically a callback function.  Since the Swift compiler knows that the 
+                        <code>sort()</code> function takes a closure you can use the parameter shorthand which are represented as <code>$1</code> and <code>$2</code> 
+                        (<code>$1</code> being the first parameter, <code>$2</code> being the second, etc.)<sup>1</sup>.  We also utilize trailing closure syntax which can be used 
+                        when the closure is the last parameter of the function.  What trailing closure syntax allows us to do is remove the functions parenthesis, and as 
+                        you can see <code>sort()</code> uses no parenthesis<sup>2</sup>!  All these tricks are fun to look into and allow for very concise Swift code.
+                    </p>
+                    <h5>PHP</h5>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-php" title="PHP" contenteditable="true" spellcheck="false">$array = array(new Person('Andrew', 'Jar.'), new Person("Thomas", "Cau."),
+                new Person("Joe", "Smi."), new Person("Ben", "Fis."));
+
+function comparator($a, $b) {
+  return $a->last < $b->last ? -1 : 1; 
+}
+
+uasort($array, 'comparator');</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        The PHP solution may be my least favorite.  We create the <code>People</code> object and an array of <code>People</code>.  <code>uasort()</code> is used 
+                        for user defined comparisons where argument one is the array and argument two is the string name of the comparison function we defined.  Why can’t we treat 
+                        our comparison function as a first class citizen and pass it as a variable to the second <code>uasort()</code> argument?  Ugly.
+                    </p>
+                    <h5>Python</h5>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-python" title="Python" contenteditable="true" spellcheck="false">people = [{"first":"Andrew", "last":"Jar."}, 
+    {"first":"Thomas", "last":"Cau."},
+    {"first":"Joe", "last":"Smi."},
+    {"first":"Ben", "last":"Fis."}]
+
+def last(item):
+    return item["last"]
+
+# reverse optional argument can be removed
+people.sort(key=last, reverse=False)</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        As you probably guessed, the winner for most concise comparison sort goes to Python.  Thanks to optional arguments, the <code>sort()</code> function is really sleek!
+                    </p>
+                    <h5>C</h5>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-clike" title="C" contenteditable="true" spellcheck="false">   person people[] = {andrew, thomas, joe, ben};
+ 
+    // Get the length of the people array
+    int size = sizeof(people) / sizeof(people[0]);
+    
+    for (int i = 0; i < size; i++) {
+        printf("%d - %s %s \n", i + 1, people[i].first, people[i].last);
+    }
+    printf("\n");
+    
+    qsort(people, size, sizeof(people[0]), compare);
+    
+    for (int i = 0; i < size; i++) {
+        printf("%d - %s %s \n", i + 1, people[i].first, people[i].last);
+    }
+}
+
+static int compare(const void *a, const void *b) {
+    person *pA = (person *) a;
+    person *pB = (person *) b;
+    
+    return strcmp(pA->last, pB->last);
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        As you also likely guessed, the C code is by far the most involved.  Not shown is how we implement People in C as type defined structs.  This makes the 
+                        sorting much easier (I originally tried sorting lists of lists of lists, but the pointers got out of control and I couldn’t figure it out!).  I utilized 
+                        the standard libraries <code>qsort()</code> function and passed in a comparison function<sup>3</sup>.
                     </p>
                     <div class="container tags">
                         <p>
-                            Tags: <span class="badge badge-default">JavaScript</span> <span class="badge badge-default">API</span>
+                            Tags: <span class="badge badge-default">Java</span> <span class="badge badge-default">Java 8</span> <span class="badge badge-default">JavaScript</span>
+                            <span class="badge badge-default">Swift</span> <span class="badge badge-default">PHP</span> <span class="badge badge-default">Python</span>
+                            <span class="badge badge-default">C</span> <span class="badge badge-default">Sorting</span>
                         </p>
                     </div>
                     <div class="container sources">
-                        <p>[1] Kyle Simpson, You Don't Know JavaScript: Scope & Closures (Beijing: O'Reilly, 2014), 48</p>
-                        <p>[2] "Static (Lexical) Scoping vs Dynamic Scoping (Pseudocode)", March 14th, 2014, https://stackoverflow.com/questions/22394089/static-lexical-scoping-vs-dynamic-scoping-pseudocode</p>
+                        <p>[1] Matthew Mathias & John Gallagher, Swift Programming: The Big Nerd Ranch Guide (Atlanta, GA: Big Nerd Ranch, 2016), 130</p>
+                        <p>[2] Ibid., 131</p>
+                        <p>[3] "C Program to Sort an array of names or strings", http://www.geeksforgeeks.org/c-program-sort-array-names-strings/</p>
                     </div>
                 </div>
             </div>

@@ -13,7 +13,7 @@ var list = [Person(first: "Andrew", last: "Jar."), Person(first: "Thomas", last:
 print(list)
 
 list.sort {
-$0.last < $1.last
+    $0.last < $1.last
 }
 
 print(list)
