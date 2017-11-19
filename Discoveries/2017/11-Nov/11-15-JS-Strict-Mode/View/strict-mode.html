@@ -5,7 +5,7 @@
     <head>
         <meta chartset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Closure & Lexical Scope in JavaScript Modules</title>
+        <title>JavaScript Strict Mode</title>
         <link rel="stylesheet" href="../../../../../blog-discover.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,700' rel='stylesheet' type='text/css'>
@@ -17,103 +17,92 @@
     <body>
         <div class="col-md-12 discoveryBody">
             <div class="col-md-12 discoveryContent">
-                <p class="date">November 9th, 2017</p>
+                <p class="date">November 15th, 2017</p>
                 <br>
-                <h4>Closure & Lexical Scope in JavaScript Modules</h4>
+                <h4>JavaScript Strict Mode</h4>
                 <br>
                 <div class="container aknowledge">
                     <p>Assumed Knowledge:</p>
                     <p>JavaScript <span class="badge badge-warning">Intermediate</span></p>
-                    <p>API <span class="badge badge-default">Basic</span></p>
                 </div><br>
                 <div id="discoveryText" class="container">
                     <p>
-                        In JavaScript there are many module patterns that can be used to create APIs and separate concerns in code (as of ES6 there is actually 
-                        syntax for modules in the specification).  In the following code I have created an API using the revealing module pattern.  The name comes 
-                        from the return statement at the end of the module - it 'reveals' functions to outside code.
+                        One JavaScript feature I have used before but never fully known the details of is strict mode.  Strict mode restricts certain 
+                        features and leniencies in the language<sup>1</sup>.  In a way it protects the developer from things that happen implicitly in JavaScript 
+                        (that only an experience dev would be aware of).  In a 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2017/11-Nov/11-11-JS-This/View/js-this.html">previous discovery</a>
+                         I looked at how strict mode disallows <code>this</code> 
+                        to be set to the global scope when invoking a function.  What else does strict mode have to offer?
+                    </p>
+                    <p>
+                        Certain things that silently fail in JavaScript will now throw errors under strict mode.  This includes setting properties to 
+                        primitives and assigning values to keywords.
                     </p>
                     <figure>
                         <pre class="line-numbers">
-                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">var taylorSwiftApi = function() {
-  var lyric = {
-    sparks: "I see sparks fly whenever you smile",
-    mine: "You are the best thing thats ever been mine",
-    dec: "I go back to Decemeber all the time",
-    other: "I'm sorry, taylor can't pick up the phone right now"
-  }
- 
-  function lyrics(song) {
-    switch(song.toLowerCase()) {
-        case "sparks fly":
-        return lyric.sparks;
-        case "mine":
-        return lyric.mine;
-        case "back to december":
-        return lyric.dec;
-        default:
-        return lyric.other;
-    }
-  }
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">try {
+    undefined = "defined!";
+} catch(e) {
+    console.error('Strict mode disallows assigning values to keywords');
+    console.error(e);
+}
   
-  return {
-    lyrics: lyrics
-  }
-}();</code>
+try {
+    false.not = true;
+} catch(e) {
+    console.error('Strict mode disallows setting properties for primitive values');
+    console.error(e);
+} </code>
                         </pre>
                     </figure>
                     <p>
-                        This module shows Taylor Swift lyrics for songs that the user enters (because who doesn’t enjoy some T-Swift!)  The return statement is the public 
-                        API revealed to outside code.  All interior details, such as the <code>lyric</code> variable, are hidden.  This pattern harnesses the power of 
-                        closure in JavaScript!
-                    </p>
-                    <p>
-                        Closure has been defined as “when a function is able to remember and access its lexical scope even when that function is executing outside its lexical scope
-                        <sup>1</sup>.”
-                    </p>
-                    <p>
-                        Okay cool, so even when we call <code>taylorSwiftApi.lyrics()</code> later in the code it will be aware of the interior <code>lyric</code> variable!  But what is 
-                        this 'lexical scope' I see in the definition?
-                    </p>
-                    <p>
-                        Lexical scope is when the physical structure of the program you write determines the scope.  Because of this the scope in which you define a function in JavaScript 
-                        will always be that functions scope.  This scope is immutable and can’t be changed.
-                    </p>
-                    <p>
-                        Maybe lexical scope and closure will be easier to understand with an example of us calling the Taylor Swift API:
+                        Strict mode also disallows duplicate parameter names for functions.  It also used to restrict duplicate property names on an object, 
+                        but this restriction has been lifted as of ES6 (either a bug or poor design choice).
                     </p>
                     <figure>
-                        <pre class="line-numbers" data-start="27">
-                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">var lyric = {
-  sparks: "I was enchanted to meet you"
-};
-
-let result = taylorSwiftApi.lyrics("Sparks Fly");
-console.info(result); // I see sparks fly whenever you smile</code>
+                        <pre class="line-numbers">
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">// Strict mode does not throw an error for duplicate property names
+var andy = {
+    name: "Andy J",
+    name: "whoops"
+    /* Strict mode disallows duplicate parameter names for functions
+    func: function(a, b, a) {
+    console.info(a + b + c);
+    }*/
+};</code>
                         </pre>
                     </figure>
                     <p>
-                        You can see that in the global scope we define another variable named lyric with a different (and as Swift fans know – incorrect) value.  The question is when we call 
-                        <code>taylorSwiftApi.lyrics()</code> which <code>lyric.sparks</code> variable will the API find?  In this case it will be the one defined in <code>taylorSwiftApi</code> because of 
-                        a closure that was created over the lexical scope of the API.  The function <code>taylorSwiftApi.lyrics()</code> was defined in the API functions lexical scope, so that 
-                        scope can’t change!
+                        One final feature we will look at is the restriction of creating a new variable when assigning a value to a variable without the 
+                        <code>var</code>, <code>let</code>, or <code>const</code> keyword.
+                    </p>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">try {
+    hey = "hello"
+} catch(e) {
+    console.error('Strict mode disallows assigning to undeclared variables');
+    console.error(e);
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Without strict mode forgetting the <code>var</code> or <code>let</code> variable is “forgiving.”  If the variable has not yet been defined, 
+                        JavaScript creates a new global variable with the name provided.  In my opinion this should be considered a syntax mistake by the developer 
+                        and throw an error.  That is exactly what happens in strict mode.
                     </p>
                     <p>
-                        As I briefly mentioned in the beginning of this discovery there is support for modules in the JavaScript spec as of ES6.  I will look at this Taylor Swift API using these 
-                        modules in the future.  You can find all the code for this discovery 
-                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2017/11-Nov/11-9-JS-Closure-Modules/Source/module.js">HERE</a>.
-                    </p>
-                    <p>
-                        A final note: there is another type of scoping called dynamic scope.  This is used in shell scripts such as Bash and PowerShell.  In these scripting languages the scope is 
-                        determined by the executing programs location on the call stack<sup>2</sup>.  This may be a fun topic to explore in the future!
+                        Strict mode has other features as well that can come in useful (such as throwing errors when trying to assign values to immutable properties) 
+                        but the ones I went over have the largest impact on my code.  You can find the code used in this discovery 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2017/11-Nov/11-15-JS-Strict-Mode/Source/strict-mode.js">HERE</a>.
                     </p>
                     <div class="container tags">
                         <p>
-                            Tags: <span class="badge badge-default">JavaScript</span> <span class="badge badge-default">API</span>
+                            Tags: <span class="badge badge-default">JavaScript</span>
                         </p>
                     </div>
                     <div class="container sources">
-                        <p>[1] Kyle Simpson, You Don't Know JavaScript: Scope & Closures (Beijing: O'Reilly, 2014), 48</p>
-                        <p>[2] "Static (Lexical) Scoping vs Dynamic Scoping (Pseudocode)", March 14th, 2014, https://stackoverflow.com/questions/22394089/static-lexical-scoping-vs-dynamic-scoping-pseudocode</p>
+                        <p>[1] "Strict mode", https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode</p>
                     </div>
                 </div>
             </div>
