@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<!-- Author: Andrew Jarombek
+     Date: 11/6/2017 -->
+<html>
+    <head>
+        <meta chartset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>JavaScript Arrow Functions</title>
+        <link rel="stylesheet" href="../../../../../blog-discover.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,700' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Roboto:500,700,400' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
+            integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link href="../../../../../prism.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="col-md-12 discoveryBody">
+            <div class="col-md-12 discoveryContent">
+                <p class="date">November 20th, 2017</p>
+                <br>
+                <h4>JavaScript Arrow Functions</h4>
+                <br>
+                <div class="container aknowledge">
+                    <p>Assumed Knowledge:</p>
+                    <p>JavaScript <span class="badge badge-warning">Intermediate</span></p>
+                    <p>ECMAScript 6 <span class="badge badge-default">Basic</span></p>
+                </div><br>
+                <div id="discoveryText" class="container">
+                    <p>
+                        One JavaScript feature I have used before but never fully known the details of is strict mode.  Strict mode restricts certain 
+                        features and leniencies in the language<sup>1</sup>.  In a way it protects the developer from things that happen implicitly in JavaScript 
+                        (that only an experience dev would be aware of).  In a 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2017/11-Nov/11-11-JS-This/View/js-this.html">previous discovery</a>
+                         I looked at how strict mode disallows <code>this</code> 
+                        to be set to the global scope when invoking a function.  What else does strict mode have to offer?
+                    </p>
+                    <p>
+                        Certain things that silently fail in JavaScript will now throw errors under strict mode.  This includes setting properties to 
+                        primitives and assigning values to keywords.
+                    </p>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">try {
+    undefined = "defined!";
+} catch(e) {
+    console.error('Strict mode disallows assigning values to keywords');
+    console.error(e);
+}
+  
+try {
+    false.not = true;
+} catch(e) {
+    console.error('Strict mode disallows setting properties for primitive values');
+    console.error(e);
+} </code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Strict mode also disallows duplicate parameter names for functions.  It also used to restrict duplicate property names on an object, 
+                        but this restriction has been lifted as of ES6 (either a bug or poor design choice).
+                    </p>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">// Strict mode does not throw an error for duplicate property names
+var andy = {
+    name: "Andy J",
+    name: "whoops"
+    /* Strict mode disallows duplicate parameter names for functions
+    func: function(a, b, a) {
+    console.info(a + b + c);
+    }*/
+};</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        One final feature we will look at is the restriction of creating a new variable when assigning a value to a variable without the 
+                        <code>var</code>, <code>let</code>, or <code>const</code> keyword.
+                    </p>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">try {
+    hey = "hello"
+} catch(e) {
+    console.error('Strict mode disallows assigning to undeclared variables');
+    console.error(e);
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Without strict mode forgetting the <code>var</code> or <code>let</code> variable is “forgiving.”  If the variable has not yet been defined, 
+                        JavaScript creates a new global variable with the name provided.  In my opinion this should be considered a syntax mistake by the developer 
+                        and throw an error.  That is exactly what happens in strict mode.
+                    </p>
+                    <p>
+                        Strict mode has other features as well that can come in useful (such as throwing errors when trying to assign values to immutable properties) 
+                        but the ones I went over have the largest impact on my code.  You can find the code used in this discovery 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2017/11-Nov/11-15-JS-Strict-Mode/Source/strict-mode.js">HERE</a>.
+                    </p>
+                    <div class="container tags">
+                        <p>
+                            Tags: <span class="badge badge-default">JavaScript</span>
+                        </p>
+                    </div>
+                    <div class="container sources">
+                        <p>[1] "Strict mode", https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../../../../../prism.js"></script>
+    </body>
+</html>
