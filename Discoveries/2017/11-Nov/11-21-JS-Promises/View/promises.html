@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<!-- Author: Andrew Jarombek
+     Date: 11/6/2017 -->
+<html>
+    <head>
+        <meta chartset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>JavaScript Async: Converting Callbacks to Promises</title>
+        <link rel="stylesheet" href="../../../../../blog-discover.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,700' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Roboto:500,700,400' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
+            integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link href="../../../../../prism.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="col-md-12 discoveryBody">
+            <div class="col-md-12 discoveryContent">
+                <p class="date">November 21th, 2017</p>
+                <br>
+                <h4>JavaScript Async: Converting Callbacks to Promises</h4>
+                <br>
+                <div class="container aknowledge">
+                    <p>Assumed Knowledge:</p>
+                    <p>JavaScript <span class="badge badge-warning">Intermediate</span></p>
+                    <p>ECMAScript 6 <span class="badge badge-default">Basic</span></p>
+                </div><br>
+                <div id="discoveryText" class="container">
+                    <p>
+                        In many programming languages arrow functions are added to allow for concise one liners and decreased verbosity.  Less lines of code 
+                        is one of the things that made the Java 8 release with lambdas so appealing.  In ES6 JavaScript also added arrow functions to write 
+                        shorter, more readable code.  In JavaScript however these new functions aren’t as universally praised due to some quirks.
+                    </p>
+                    <p>
+                        In JavaScript I have 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2017/11-Nov/11-11-JS-This/View/js-this.html">looked at</a>
+                         <code>this</code> and how it is set dynamically at runtime instead of lexically depending on the scope 
+                        code is written in.  I also went over how many JavaScript users (including myself!) are easily confused by how <code>this</code> works 
+                        in the language.  Arrow functions look to ‘fix’ these confusions by implementing a lexical <code>this</code>.  Now the value of 
+                        <code>this</code> in an arrow function depends on what <code>this</code> is equal to at the time it was written (instead of where it is 
+                        called).  This leads to confusing behavior if you are expecting arrow functions to act like normal function definitions.  Let’s look at 
+                        an example.
+                    </p>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">'use strict';
+
+function mult() {
+this.x = 50;
+  
+  var x2Arrow = () => { 
+    console.info(this); 
+    return this.x * 2
+  };
+  
+  var x2 = function times2() { 
+    console.info(this); 
+    return this.x * 2
+  };
+  
+  return {x2, x2Arrow};
+}
+
+var m = new mult();</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        In this example we have a function <code>mult()</code> which creates an API for multiplying the <code>this</code> value by two.  Since we use 
+                        the constructor call (with the <code>new</code> keyword) <code>this</code> is assigned with the newly created object, in this case the returned 
+                        object.  Now let’s look at what happens when we call these functions:
+                    </p>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">m.x2Arrow(); // this -> mult {x: 50}, return -> 100
+m.x2(); // this -> {x2: function(), x2Arrow: function()}, return -> NaN</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Why does the regular function definition return <code>NaN</code>? Remember that <code>this</code> is defined as the return object of <code>mult()</code>, 
+                        which contains two properties: <code>x2</code> and <code>x2Arrow</code>.  Notice there is no <code>x</code> property defined, so <code>this.x</code> equals 
+                        <code>undefined</code>.  Multiplying a number by <code>undefined</code> in JavaScript equals <code>NaN</code>.
+                    </p>
+                    <p>
+                        But why does the arrow function maintain the correct <code>this.x</code> value and return the intended result?  Because of lexical <code>this</code>, the 
+                        <code>this</code> reference in <code>x2Arrow</code> is the value that was held by <code>this</code> in the function definitions scope (<code>this.x = 50</code>).  
+                        Lexical scoped <code>this</code> values cannot be changed even when called later in the code in different scopes.  Let’s put this claim to the test by trying to 
+                        explicitly set <code>this</code>:
+                    </p>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">m.x2Arrow.call({x: 5}); // this -> mult {x: 50}, return -> 100
+m.x2.call({x: 5}); // this => {x: 5}, return -> 10</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        As you can see the arrow function was not effected by our explicit <code>this</code> binding!  Very cool (and a bit confusing).  Some claim that arrow functions 
+                        fix some of JavaScript’s flaws<sup>1</sup> (in this case confusing <code>this</code> rules).  Others say it breaks expected behavior in the language<sup>2</sup>.  I think if you aren’t 
+                        using <code>this</code> in your code arrow functions can be a great way to increase readability.  Just be careful if the code gets in the hands of developers 
+                        who aren’t aware of JavaScript’s quirks!
+                    </p>
+                    <p>
+                        You can find the full example code 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2017/11-Nov/11-20-JS-Arrow-Function/Source/arrow-functions.js">HERE</a>.
+                    </p>
+                    <div class="container tags">
+                        <p>
+                            Tags: <span class="badge badge-default">JavaScript</span> <span class="badge badge-default">ECMAScript 6</span>
+                        </p>
+                    </div>
+                    <div class="container sources">
+                        <p>[1] John Resig, Bear Bibeault, & Josip Maras, Secrets of the JavaScript Ninja (Shelter Island, NY: Manning, 2016), 83</p>
+                        <p>[2] Kyle Simpson, You Don't Know JavaScript: this & Object Prototypes (Beijing: O'Reilly, 2014), 33</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../../../../../prism.js"></script>
+    </body>
+</html>
