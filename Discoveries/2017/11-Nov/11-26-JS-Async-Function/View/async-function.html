@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<!-- Author: Andrew Jarombek
+     Date: 11/6/2017 -->
+<html>
+    <head>
+        <meta chartset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>JavaScript Async: Converting Callbacks to Promises</title>
+        <link rel="stylesheet" href="../../../../../blog-discover.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,700' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Roboto:500,700,400' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
+            integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link href="../../../../../prism.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="col-md-12 discoveryBody">
+            <div class="col-md-12 discoveryContent">
+                <p class="date">November 21th, 2017</p>
+                <br>
+                <h4>JavaScript Async: Converting Callbacks to Promises</h4>
+                <br>
+                <div class="container aknowledge">
+                    <p>Assumed Knowledge:</p>
+                    <p>JavaScript <span class="badge badge-warning">Intermediate</span></p>
+                    <p>ECMAScript 6 <span class="badge badge-default">Basic</span></p>
+                    <p>Asynchronous Programming <span class="badge badge-default">Basic</span></p>
+                </div><br>
+                <div id="discoveryText" class="container">
+                    <p>
+                        Today I am looking at Promises in JavaScript and how we can use them to write easier to follow and less error prone 
+                        asynchronous code.  Before I talk about Promises lets make a async call in JavaScript the traditional way; with callbacks.  
+                        I won't be using any fancy JavaScript framework tomato my async http request, just the simple on <code>XMLHttpRequest</code> 
+                        object (which is as poorly named as AJAX, it can be used for much more than XML!)<sup>1</sup>.
+                    </p>
+                    <p>
+                        I made a custom google search API which is actually really easy and fun to create<sup>2</sup>!  It searches certain websites for cat 
+                        related posts (and is appropriately called meowmeow)!  Who wouldn't love that?  So in my code I want to get the article names of the 
+                        top 10 searches of my custom meow search.  Here is how you would do that with the <code>XMLHttpRequest</code> and callback function:
+                    </p>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">var httpRequest = new XMLHttpRequest();
+                                
+httpRequest.open('GET', 'https://www.googleapis.com/customsearch/#', true);
+httpRequest.send();
+
+httpRequest.onreadystatechange = function() {
+    
+    if (httpRequest.status === 200 && httpRequest.readyState === 4) {
+        var json = JSON.parse(httpRequest.response);
+        
+        for (let item of json.items) {
+            console.info(item.title);
+        }
+    }
+}</code>
+                        </pre>
+                    </figure>
+                    <figure>
+                        <img src="results.png">
+                    </figure>
+                    <p>
+                        I won't go into how the <code>XMLHttpRequest</code> object works in this post but you can see that the callback function is placed in 
+                        the <code>onreadystatechange</code> function.  This gets even uglier because <code>onreadystatechange</code> is called multiple times 
+                        for each request.  This is why we must check if the <code>readyState === 4</code>, in which 4 represents the request being 
+                        done<sup>3</sup>.
+                    </p>
+                    <p>
+                        There are some obvious issues with this callback function approach.  What happens if the request errors out?  In this code we have no 
+                        error handling so the result of an unsuccessful call to our google search is unclear.  Also what if we need to make another asynchronous 
+                        call after this request is completed?  In this case you would need nested callback functions which quickly becomes ugly and hard to 
+                        follow, commonly referred to as callback hell.
+                    </p>
+                    <p>
+                        These are just a few of the reasons to move away from callbacks and to a more elegant solution - promises!  A promise object is a value 
+                        that currently does not exist but is guaranteed to exist in the future.  With promises we can have error handling for asynchronous code 
+                        and hide some of the asynchronous details inside the promise definition.  Let's look at how the <code>XMLHttpRequest</code> will look 
+                        using promises:
+                    </p>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">function httpMeow() {
+    return new Promise(function (resolve, reject) {
+        var httpRequest = new XMLHttpRequest();
+    
+        httpRequest.open('GET', 'https://www.googleapis.com/customsearch/v1?key=AIzaSyA2QIPJoGYMx_DuQH6wDqNG3AHXG7bcb94' + 		
+                        '&cx=005720647135116730303:chkg-pnyocg&q=meow&prettyPrint=false', true);
+        httpRequest.onload = function success() {
+            if (httpRequest.status === 200) {
+            resolve(httpRequest.response);
+            } else {
+            reject("no meow was heard :(");
+            }
+        };
+        httpRequest.onerror = function error() {
+            reject("no meow was heard :(");
+        };
+        httpRequest.send();
+    });
+}
+    
+httpMeow().then(function(response) {
+    var json = JSON.parse(response);
+    
+    for (let item of json.items) {
+    console.info(item.title);
+    }
+}, function(err) {
+    console.info(err);
+});</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        You will notice that this code is broken up into two parts.  First we have the <code>httpMeow()</code> function which returns a 
+                        <code>Promise</code> object.  You can think of <code>httpMeow()</code> as a reusable function to execute our http requests, hiding 
+                        the <code>XMLHttpRequest</code> details from outer code.  With the promise you can either reject or resolve the currently non-existing 
+                        value.  This is represented in our code by the <code>resolve()</code> and <code>reject()</code> functions in the promise.
+                    </p>
+                    <p>
+                        The second part of the code interacts with the created promise.  Every <code>Promise</code> object has a <code>then()</code> function 
+                        which is called once the promise value exists.  You can see <code>then()</code> is supplied two functions, the first which is called 
+                        when the promise is resolved, the second when it is rejected.  You can see this solution is nice since we don't need to know the details 
+                        of the promise, just supply it the details of what to do on success and failure.
+                    </p>
+                    <p>
+                        The <code>next()</code> function also has the benefit of returning a Promise<sup>4</sup>.  This means that we can chain promises, like 
+                        that shown in the pseudocode below:
+                    </p>
+                    <figure>
+                        <pre class="line-numbers">
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">httpMeow()
+    .then(/* Get all the article titles */)
+    .then(/* Get all the article dates */)
+    .then(/* Get all the article URLs */);</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        You can imagine all the possibilities with chained promises (and escaping callback hell!).  Other <code>Promise</code> object functions 
+                        include <code>all()</code> and <code>race()</code>, which resolve or reject the promised value after all promises are completed or the 
+                        first completes respectively<sup>5</sup>.  You can look at all the code from this discovery 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2017/11-Nov/11-21-JS-Promises/Source">HERE</a>.
+                    </p>
+                    <div class="container tags">
+                        <p>
+                            Tags: <span class="badge badge-default">JavaScript</span> <span class="badge badge-default">ECMAScript 6</span> 
+                            <span class="badge badge-default">Asynchronous Programming</span> <span class="badge badge-default">Promises</span>
+                        </p>
+                    </div>
+                    <div class="container sources">
+                        <p>[1] "Why is it called XMLHttpRequest?", Aug. 22nd, 2012, https://stackoverflow.com/questions/12067185/why-is-it-called-xmlhttprequest</p>
+                        <p>[2] "What is Google Custom Search?", https://developers.google.com/custom-search/</p>
+                        <p>[2] "XMLHttpRequest.readyState", https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState</p>
+                        <p>[4] John Resig, Bear Bibeault, & Josip Maras, Secrets of the JavaScript Ninja (Shelter Island, NY: Manning, 2016), 155</p>
+                        <p>[5] "Promise", https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../../../../../prism.js"></script>
+    </body>
+</html>
