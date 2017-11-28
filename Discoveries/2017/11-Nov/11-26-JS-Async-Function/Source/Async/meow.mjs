@@ -3,13 +3,13 @@
 
 import * as http from './meowHttp';
 
-async function search() {
+(async function search() {
     let catResult = await http.search();
     print(catResult);
 
     let meowResult = await http.search('meow');
     print(meowResult);
-}
+})();
 
 function print(result) {
     for (let item of result.items) {
