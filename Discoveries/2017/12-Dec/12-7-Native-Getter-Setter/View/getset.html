@@ -5,7 +5,7 @@
     <head>
         <meta chartset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Native Getters & Setters</title>
+        <title>Native Getters &amp Setters</title>
         <link rel="stylesheet" href="../../../../../blog-discover.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,700' rel='stylesheet' type='text/css'>
@@ -19,139 +19,72 @@
             <div class="col-md-12 discoveryContent">
                 <p class="date">December 7th, 2017</p>
                 <br>
-                <h4>Native Getters & Setters</h4>
+                <h4>Native Getters &amp Setters</h4>
                 <br>
                 <div class="container aknowledge">
                     <p>Assumed Knowledge:</p>
                     <p>JavaScript <span class="badge badge-warning">Intermediate</span></p>
+                    <p>Java <span class="badge badge-default">Basic</span></p>
                 </div><br>
                 <div id="discoveryText" class="container">
                     <p>
-                        In a previous posts I looked at Promises and Generators in JavaScript.  I mentioned that these two new ES6 features can be especially 
-                        powerful when combined.  I do think that Promises on their own are very useful, however I am not yet sold on Generators.  Now we can 
-                        see how Generators can potentially be used in production level code.
-                    </p>
-                    <p>
-                        When combining Promises and Generators, we can create a function that handles asynchronous tasks (let us call it <code>async</code>).  
-                        This function takes one parameter - a generator function.  Each <code>yield</code> statement in the generator passes a promise, which 
-                        when resolved with a value calls the generators iterator.  Therefore each asynchronous task in the <code>async</code> function moves 
-                        on to the next task in sequential order when the promise is completed.  Let's look at some pseudocode:
+                        In many languages I have worked with creating getters and setters for private class variables is a common practice.  In Java getters 
+                        and setters are implemented as two functions which can be called directly on an object instance.  They are commonly used in the POJO 
+                        structure.  In JavaScript getters and setters have native support in the language itself.  You can create these getters and setters 
+                        with the <code>get</code> and <code>set</code> keywords.  They are commonly used for computing properties, as shown in the next example.
                     </p>
                     <figure>
                         <pre>
-                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">function async(generator) {
-    var iterator = generator();
-    await(iterator.next())
-
-    function await(promise) {
-        promise.then(function() {
-            await(iterator.next());
-        })
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">var person = {
+    _first: 'Andy',
+    _last: 'Jarombek',
+    get full() {
+        console.info('Accessing Full Name');
+        // Use ES6 template literals
+        return `${this._first} ${this._last}`;
     }
-}</code>
+};</code>
                         </pre>
                     </figure>
                     <p>
-                        This code lacks all the error handling and other technicalities that would be seen in production code, but displays the basic ideas of 
-                        the <code>async</code> function.  Now lets look at some pseudocode of how <code>async()</code> would be called using some made up 
-                        functions that execute HTTP GET calls.
+                        You can also use setters to perform validation on incoming data.  In the dynamically typed JavaScript language we can implement a 
+                        strictly typed variable<sup>1</sup>:
                     </p>
                     <figure>
                         <pre>
-                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">async(function *tasks() {
-    yield httpGet("www.example.com/search/1");
-    yield httpGet("www.example.com/search/2");
-    yield httpGet("www.example.com/search/3");
-})</code>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">var person = {
+    _first: 'Andy',
+    _last: 'Jarombek',
+    set first(str) {
+        console.info('Setting First Name');
+        if (typeof str === 'string' || str instanceof String) {
+            var s = str.toLowerCase();
+            this._first = s.charAt(0).toUpperCase() + s.slice(1);
+        } else {
+            throw new TypeError('First Name Must be a String');
+        }
+    }
+};</code>
                         </pre>
                     </figure>
                     <p>
-                        With our reusable <code>async</code> function, this is now how simple our asynchronous code can be!  Even better, it is laid out in a 
-                        synchronous manner, no promises or dreaded callbacks to deal with!  All of the <code>Promise</code> code is extracted out.  So why am I 
-                        only showing pseudocode and not the real thing?  This is because in ECMAScript 2017 (or following the old naming convention ES8) this 
-                        pattern has gotten even easier with a standardized <code>async</code> function<sup>1</sup> which is created using the <code>async</code> and 
-                        <code>await</code> keywords.
+                        You can see that we can perform any sort of logic inside our getters and setters.  To make things even nicer we don't have to call a function to 
+                        use our native getters and setters.  We just have to assign a value or access a property just like any normal object property!
                     </p>
                     <p>
-                        In my discovery on promises I created a google search API for cat posts.  I am going to use this example again except this time using an 
-                        ES2017 <code>async</code> function.  I will use Node 9 so that I won't have to transpile my code with Babel.  One thing that Node 9 
-                        (the newest version of Node.js as of November 2017) does not currently support is ES6 modules by default, so I have to use the 
-                        <code>--experimental-modules</code> flag when running my code to enable them<sup>2</sup>.  I also have to use the .mjs extension for my JavaScript 
-                        files so Node.js knows that they are modules.  These files are hilariously referred to as Micheal Jackson Scripts.  Hopefully the .mjs 
-                        files are just for the experimental version and not here to stay - I would miss those .js files (and it doesn't seem like an elegant 
-                        solution)!
-                    </p>
-                    <p>
-                        Now let's get to the code.  Our first stop is the meowHttp module which creates a promise for our google search<sup>3</sup>.  This module will be 
-                        imported into the main JavaScript file and used in the <code>async</code> function:
-                    </p>
-                    <figure>
-                        <pre class="line-numbers">
-                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">import {default as https} from 'https';
-                                
-export function search(query = 'cat') {
-
-    const url = 'https://www.googleapis.com/customsearch/v1?key=AIzaSyA2QIPJoGYMx_DuQH6wDqNG3AHXG7bcb94' + 		
-                '&cx=005720647135116730303:chkg-pnyocg&q=' + query + '&prettyPrint=false';
-
-    return new Promise(function (resolve, reject) {
-
-        https.get(url, res => {
-            res.setEncoding('utf-8');
-            let response = '';
-
-            res.on('data', data => {
-                response += data;
-            });
-
-            res.on('end', () => {
-                resolve(JSON.parse(response));
-            });
-        });
-    });
-}</code>
-                        </pre>
-                    </figure>
-                    <p>
-                        Let's put this module to work with our ES2017 <code>async</code> function:
-                    </p>
-                    <figure>
-                        <pre class="line-numbers">
-                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">import * as http from './meowHttp';
-                                
-(async function search() {
-    let catResult = await http.search();
-    print(catResult);
-
-    let meowResult = await http.search('meow');
-    print(meowResult);
-})();</code>
-                        </pre>
-                    </figure>
-                    <p>
-                        If you compare this code with the previous Promise and Generator code you can see that the <code>async</code> and <code>await</code> 
-                        keywords and simply syntactic sugar for our <code>async()</code> and <code>await()</code> functions.  Now this is a truly elegant solution 
-                        that allows asynchronous code to be written in an easy to understand synchronous manner.  All of the synchronous code is separated out in 
-                        our imported modules <code>search()</code> function.  In this code the <code>print()</code> function displays the names of the articles 
-                        from the API, and the result of running the code is as follows:
-                    </p>
-                    <figure>
-                        <img src="results.png">
-                    </figure>
-                    <p>
-                        Now you can see how powerful the ES2017 <code>async</code> function is!  Although you don't actually work with the details of combined Promises 
-                        and Generators in ES2017, it is still good to know what is going on behind the scenes!  You can find all the code from this discovery 
-                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2017/11-Nov/11-26-JS-Async-Function/Source/Async">HERE</a>.
+                        Out of all the other languages I use, the only other one with native getter and setter support like JavaScript is Swift<sup>2</sup>.  You can check out the 
+                        full getter and setter code in both languages 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2017/12-Dec/12-7-Native-Getter-Setter/Source">HERE</a>.
                     </p>
                     <div class="container tags">
                         <p>
-                            Tags: <span class="badge badge-default">JavaScript</span>
+                            Tags: <span class="badge badge-default">JavaScript</span> <span class="badge badge-default">Java</span> 
+                            <span class="badge badge-default">Swift</span> <span class="badge badge-default">Getter &amp Setter</span>
                         </p>
                     </div>
                     <div class="container sources">
-                        <p>[1] "async function", https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function</p>
-                        <p>[2] "Node.js v9.2.0 Documentation: ECMAScript Modules", https://nodejs.org/api/esm.html#esm_enabling</p>
-                        <p>[3] "Node.js v9.2.0 Documentation: HTTPS", https://nodejs.org/api/https.html</p>
+                        <p>[1] John Resig, Bear Bibeault, &amp Josip Maras, Secrets of the JavaScript Ninja (Shelter Island, NY: Manning, 2016), 207</p>
+                        <p>[2] Matthew Mathias &amp John Gallagher, Swift Programming: The Big Nerd Ranch Guide (Atlanta, GA: Big Nerd Ranch, 2016), 194</p>
                     </div>
                 </div>
             </div>
