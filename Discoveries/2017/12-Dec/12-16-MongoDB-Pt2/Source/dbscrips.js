@@ -1,6 +1,6 @@
 // Author: Andrew Jarombek
-// Date: 12/17/2017
-//  More MongoDB JavaScript Shell commands for the christmas tree database
+// Date: 12/16/2017
+// More MongoDB JavaScript Shell commands for the christmas tree database
 
 db.tree.findOne({type:"douglas", grade:"7-8ft", height:"7' 3\""})
 /*{
