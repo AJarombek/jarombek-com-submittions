@@ -68,7 +68,25 @@ db.user.insert({
 db.user.findOne()
 
 // You can find nested properties by using the dot notation
-db.user.find({'plan.date': new Date("2017-12-25")}, {'plan.date': 1, 'plan.miles': 1}).pretty()
+db.user.find({'plan.date': new Date("2017-12-25")}, {'plan.miles': 1}).pretty()
 
-// You can put an index on an array elements (and even a property on an object in an array!)
+// You can put an index on array elements (and even a property of an object in an array!)
 db.user.createIndex({'plan.date': 1})
+
+db.user.find({}, {_id: 1, plan: {$slice: 1}}).pretty()
+
+db.user.find({name: "Andrew Jarombek"}, {'prs.track': 1})
+
+// Delete the first element of the plan array
+db.user.update({}, {$pop: {'plan': -1}})
+
+// Add an element to the array if it does not already exist
+db.user.update({}, {$addToSet: {'plan': {date: new Date("2017-12-27"), miles: 2}}})
+
+db.user.findAndModify({
+    query: {},
+    update: {
+        $addToSet: {'plan': {date: new Date("2017-12-28"), miles: 4.1}}
+    },
+    'new': true
+})
