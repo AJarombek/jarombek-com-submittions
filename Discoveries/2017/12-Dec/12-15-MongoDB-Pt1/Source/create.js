@@ -92,7 +92,7 @@ bulkTreeInsert();
 // Insert 1000 trees
 bulkTreeInsert(1000);
 
-bd.tree.count() // 1003
+db.tree.count() // 1003
 
 // Get the number of trees returned by the find() query
 db.tree.find({type:"frazier", grade:"6-7ft"}).count()
