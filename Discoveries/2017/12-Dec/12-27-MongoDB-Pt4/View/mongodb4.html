@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<!-- Author: Andrew Jarombek
+     Date: 12/12/2017 -->
+<html>
+    <head>
+        <meta chartset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Learning MongoDB Part IV: Aggregation Framework</title>
+        <link rel="stylesheet" href="../../../../../blog-discover.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,700' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Roboto:500,700,400' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
+            integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link href="../../../../../prism.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="col-md-12 discoveryBody">
+            <div class="col-md-12 discoveryContent">
+                <p class="date">December 27th, 2017</p>
+                <br>
+                <h4>Learning MongoDB Part IV: Aggregation Framework</h4>
+                <br>
+                <div class="container aknowledge">
+                    <p>Assumed Knowledge:</p>
+                    <p>MongoDB <span class="badge badge-default">Basic</span></p>
+                    <p>JavaScript <span class="badge badge-default">Basic</span></p>
+                    <p>Document Database <span class="badge badge-default">Basic</span></p>
+                    <p>Relational Database <span class="badge badge-default">Basic</span></p>
+                </div><br>
+                <div id="discoveryText" class="container">
+                    <p>
+                        For more complex queries and data manipulation in MongoDB, we can use the aggregation framework.  First introduced in MongoDB V2.2 
+                        (the current version as of this writing is V3.6) the aggregation framework creates a pipeline of operations to perform on documents<sup>1</sup>.  Inside the pipeline we can do operations such as sorting, filtering, and grouping documents similar to a SQL 
+                        <code>GROUP BY</code> clause.  You can even manipulate grouped data inside the pipeline, creating entirely new collections in the 
+                        process.  Lets use our tree database used in the 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2017/12-Dec/12-15-MongoDB-Pt1/View/mongodb1.html">first</a> and 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2017/12-Dec/12-16-MongoDB-Pt2/View/mongodb2.html">second</a> 
+                        MongoDB discoveries to explore this framework. 
+                    </p>
+                    <p>
+                        If you remember each tree has a type and a grade specifying the height of the tree.  Let's say we wanted to find the total number of 
+                        trees in each grade with type frazier fir.  The aggregation function would be like so:
+                    </p>
+                    <figure>
+                        <pre class="command-line" data-prompt=">" data-output="2-17">
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">db.tree.aggregate([
+    {$match: {type: 'frazier'}},
+    {$group: {
+        _id: '$grade', 
+        count: {$sum:1}
+    }},
+    {$sort: {count: -1}}
+])
+
+{ "_id" : "9-10ft", "count" : 71 }
+{ "_id" : "10+ft", "count" : 70 }
+{ "_id" : "6-7ft", "count" : 68 }
+{ "_id" : "7-8ft", "count" : 67 }
+{ "_id" : "5-6ft", "count" : 63 }
+{ "_id" : "3-4ft", "count" : 61 }
+{ "_id" : "8-9ft", "count" : 61 }
+{ "_id" : "4-5ft", "count" : 58 }</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        You can see that the <code>aggregate()</code> function takes an array of pipeline steps.  So we first match on type frazier, group by 
+                        the grade and get a count of documents in that group, and finally sort by the count with the <code>$match</code>, <code>$group</code>, 
+                        and <code>$sort</code> operators respectively.
+                    </p>
+                    <p>
+                        You can also group on more than one property by adding it to the <code>_id</code> object.  In the next example we group on both type and 
+                        grade.  Also since we are matching on the entire collection, we can exclude the <code>$match</code> step from the pipeline.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">db.tree.aggregate([
+    {$group: {
+        _id: {type: '$type', grade: '$grade'}, 
+        count: {$sum:1}
+    }},
+    {$sort: {count: -1}}
+])</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        You can also combine multiple <code>$group</code> operations in an aggregation pipeline.  In the next pipeline we are going to get 
+                        all the tree statistics - count, expenses, revenue, and profits.  Since we don't want the result of this aggregation to go to waste, 
+                        we are going to save its result to a collection with the <code>$out</code> operator.  We just need to specify the name of the 
+                        collection to save to, in this case <code>treestat</code>.  We also use the <code>$project</code> operator to structure and pick the 
+                        properties that we want in the collection.  All properties specified in the <code>$project</code> step are passed to the next step in 
+                        the pipeline.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">db.tree.aggregate([
+    {$group: {
+        _id: {
+            type: '$type', 
+            grade: '$grade', 
+            source: '$source_price', 
+            sell: '$sell_price'
+        }, 
+        count: {$sum:1},
+        expenses: {$sum: '$source_price'},
+        revenue: {$sum: '$sell_price'}
+    }},
+    {$group: {
+        _id: {
+            type: '$_id.type', 
+            grade: '$_id.grade', 
+            source: '$_id.source', 
+            sell: '$_id.sell', 
+            count: '$count', 
+            expenses: '$expenses', 
+            revenue: '$revenue'
+        },
+        profit: {$sum: {$subtract: ['$revenue', '$expenses']}}
+    }},
+    {$sort: {profit: -1}},
+    {$project: {
+        _id: {
+            type: '$_id.type', 
+            grade: '$_id.grade'
+        },
+        count: '$_id.count', 
+        expenses: '$_id.expenses', 
+        revenue: '$_id.revenue',
+        profit: '$profit'
+    }},
+    {$out: 'treestat'}
+])</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        One important thing to note about the <code>$out</code> operator is that it completely replaces the existing collection with the 
+                        result of our aggregation<sup>2</sup>.  This means that you could accidentally wipe out an entire collection such as <code>tree</code>.  
+                        Then our database would be ruined!
+                    </p>
+                    <p>
+                        Let's now get the tree count, expenses, revenue, and profits for all trees using our newly created tree stat collection:
+                    </p>
+                    <figure>
+                            <pre class="command-line" data-prompt=">" data-output="2-17">
+                                <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">db.treestat.aggregate([
+    {$group: {
+        _id: 'all_trees',
+        total_trees: {$sum: '$count'},
+        total_expenses: {$sum: '$expenses'},
+        total_revenue: {$sum: '$revenue'},
+        total_profit: {$sum: '$profit'}
+    }}
+])
+
+{ 
+    "_id" : "all_trees", 
+    "total_trees" : 1001, 
+    "total_expenses" : 10220.5, 
+    "total_revenue" : 62245, 
+    "total_profit" : 52024.5 
+}</code>
+                            </pre>
+                        </figure>
+                    <p>
+                        Hopefully this has begun to show the power of the aggregation framework.  You can even use the framework to create a kind of pseudo <code>JOIN</code> 
+                        operation between collections<sup>3</sup>!  You can find the source code for this discovery 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2017/12-Dec/12-27-MongoDB-Pt4/Source/dbscripts.js">HERE</a>.
+                    </p>
+                    <div class="container tags">
+                        <p>
+                            Tags: <span class="badge badge-default">MongoDB</span> <span class="badge badge-default">JavaScript</span> <span class="badge badge-default">Relational Database</span>
+                            <span class="badge badge-default">NoSQL</span> <span class="badge badge-default">Document Database</span>
+                        </p>
+                    </div>
+                    <div class="container sources">
+                        <p>[1] Kyle Banker, Peter Bakkum, Shaun Verch, Douglas Garrett &amp; Tom Hawkins, MongoDB In Action, 2nd ed (Shelter Island, NY: Manning, 2016), 121</p>
+                        <p>[2] Ibid., 140</p>
+                        <p>[3] Ibid., 129</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../../../../../prism.js"></script>
+    </body>
+</html>
