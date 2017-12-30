@@ -8,8 +8,7 @@
         <title>Learning MongoDB Part I: Creating the Database</title>
         <link rel="stylesheet" href="../../../../../blog-discover.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,700' rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Roboto:500,700,400' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/fantasque-sans-mono" type="text/css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
             integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
         <link href="../../../../../prism.css" rel="stylesheet" />
@@ -186,46 +185,46 @@
                     <figure>
                         <pre class="line-numbers">
                             <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">function bulkTreeInsert(number=1) {
-let types = [
-    {type: "frazier", grade: "3-4ft", feet: 3, source: 7, sell: 25},
-    {type: "frazier", grade: "4-5ft", feet: 4, source: 7.50, sell: 30},
-    {type: "frazier", grade: "5-6ft", feet: 5, source: 8, sell: 45},
-    {type: "frazier", grade: "6-7ft", feet: 6, source: 9.50, sell: 55},
-    {type: "frazier", grade: "7-8ft", feet: 7, source: 10.50, sell: 65},
-    {type: "frazier", grade: "8-9ft", feet: 8, source: 12, sell: 85},
-    {type: "frazier", grade: "9-10ft", feet: 9, source: 15, sell: 115},
-    {type: "frazier", grade: "10+ft", feet: 10, source: 20, sell: 140},
-    {type: "balsam", grade: "5-6ft", feet: 5, source: 7, sell: 30},
-    {type: "balsam", grade: "6-7ft", feet: 6, source: 8, sell: 40},
-    {type: "balsam", grade: "7-8ft", feet: 7, source: 9, sell: 50},
-    {type: "balsam", grade: "8-9ft", feet: 8, source: 10, sell: 65},
-    {type: "balsam", grade: "9-10ft", feet: 9, source: 11.50, sell: 80},
-    {type: "douglas", grade: "5-6ft", feet: 5, source: 7.50, sell: 40},
-    {type: "douglas", grade: "6-7ft", feet: 6, source: 8.50, sell: 50},
-    {type: "douglas", grade: "7-8ft", feet: 7, source: 10, sell: 60}
-];
+    let types = [
+        {type: "frazier", grade: "3-4ft", feet: 3, source: 7, sell: 25},
+        {type: "frazier", grade: "4-5ft", feet: 4, source: 7.50, sell: 30},
+        {type: "frazier", grade: "5-6ft", feet: 5, source: 8, sell: 45},
+        {type: "frazier", grade: "6-7ft", feet: 6, source: 9.50, sell: 55},
+        {type: "frazier", grade: "7-8ft", feet: 7, source: 10.50, sell: 65},
+        {type: "frazier", grade: "8-9ft", feet: 8, source: 12, sell: 85},
+        {type: "frazier", grade: "9-10ft", feet: 9, source: 15, sell: 115},
+        {type: "frazier", grade: "10+ft", feet: 10, source: 20, sell: 140},
+        {type: "balsam", grade: "5-6ft", feet: 5, source: 7, sell: 30},
+        {type: "balsam", grade: "6-7ft", feet: 6, source: 8, sell: 40},
+        {type: "balsam", grade: "7-8ft", feet: 7, source: 9, sell: 50},
+        {type: "balsam", grade: "8-9ft", feet: 8, source: 10, sell: 65},
+        {type: "balsam", grade: "9-10ft", feet: 9, source: 11.50, sell: 80},
+        {type: "douglas", grade: "5-6ft", feet: 5, source: 7.50, sell: 40},
+        {type: "douglas", grade: "6-7ft", feet: 6, source: 8.50, sell: 50},
+        {type: "douglas", grade: "7-8ft", feet: 7, source: 10, sell: 60}
+    ];
 
-for (let i = 0; i < number; i++) {
+    for (let i = 0; i < number; i++) {
 
-    // Get a random index in the types array
-    let random = Math.floor(Math.random() * 16);
+        // Get a random index in the types array
+        let random = Math.floor(Math.random() * 16);
 
-    // Get a random number for inches between 0-11
-    let inches = Math.floor(Math.random() * 11);
+        // Get a random number for inches between 0-11
+        let inches = Math.floor(Math.random() * 11);
 
-    let selected = types[random];
-    let tree = {
-        type: selected["type"],
-        height: `${selected["feet"]}' ${inches}"`,
-        source_price: selected["source"],
-        sell_price: selected["sell"],
-        grade: selected["grade"],
-        sold: false,
-        buyer_id: undefined
-    };
+        let selected = types[random];
+        let tree = {
+            type: selected["type"],
+            height: `${selected["feet"]}' ${inches}"`,
+            source_price: selected["source"],
+            sell_price: selected["sell"],
+            grade: selected["grade"],
+            sold: false,
+            buyer_id: undefined
+        };
 
-    db.tree.insert(tree)
-}
+        db.tree.insert(tree)
+    }
 }</code>
                         </pre>
                     </figure>

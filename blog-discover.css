@@ -1,2 +1,117 @@
-body{width:1000px;margin:auto !important}.discoveryBody{width:100%;background-color:#ddd;margin:0 auto}.discoveryContent{width:85% !important;height:100%;margin:0 auto}.date{font-weight:bold;font-size:14px;width:100%;text-align:right;color:#bbb;padding-top:10px}h4{text-align:center;color:#333}p{color:#333}.aknowledge p{font-weight:bold;font-size:12px;margin-bottom:0px}.tags p{font-weight:bold;font-size:18px;margin-bottom:20px}.sources p{font-weight:bold;font-size:14px;margin-bottom:10px}.badge-default{background-color:#aaa}#discovertText{padding-top:20px}a{font-weight:bold;color:#777 !important}sup{font-weight:bold;color:#777 !important}pre,code{font-family:monospace, monospace}pre{overflow:auto;background-color:#ddd !important}pre>code{display:block;padding:1em;word-wrap:normal}code[class*="language-"],pre[class*="language-"]{line-height:2 !important;-moz-tab-size:2 !important;-o-tab-size:2 !important;tab-size:2 !important}pre[class*="language-"]>code{border-left:5px solid #0b631f !important;box-shadow:-1px 0px 0px 0px #0b631f !important}pre>code[class]::before{content:attr(title);display:block;font-size:small;font-style:bold;color:#aaa;float:right}
+@font-face {
+  font-family: SylexiadSans;
+  src: url("SylexiadSansThin.otf") format("opentype"); }
+@font-face {
+  font-family: SylexiadSans;
+  font-weight: bold;
+  src: url("SylexiadSansThin-Bold.otf") format("opentype"); }
+@font-face {
+  font-family: SylexiadSans;
+  font-style: italic;
+  src: url("SylexiadSansThin-Italic.otf") format("opentype"); }
+html {
+  background-image: url("blizzard.png") !important; }
+
+body {
+  width: 1000px;
+  margin: auto !important;
+  font-family: 'SylexiadSans', Helvetica, sans-serif !important;
+  font-weight: normal;
+  font-style: normal;
+  letter-spacing: 0.3px; }
+
+.discoveryBody {
+  width: 100%;
+  border: 1px solid #ececec;
+  margin: 0 auto; }
+
+.discoveryContent {
+  width: 85% !important;
+  height: 100%;
+  margin: 0 auto; }
+
+.date {
+  font-weight: bold;
+  font-size: 14px;
+  width: 100%;
+  text-align: right;
+  color: #bbb;
+  padding-top: 10px; }
+
+h4 {
+  text-align: center;
+  color: #333;
+  font-size: 2.25rem !important; }
+
+h5 {
+  padding-top: 10px;
+  font-size: 2rem !important; }
+
+p {
+  color: #333;
+  font-size: 20px; }
+
+.aknowledge p {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 0px; }
+
+.tags p {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 20px; }
+
+.sources p {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 10px; }
+
+.badge-default {
+  background-color: #aaa; }
+
+#discoveryText {
+  padding-top: 20px; }
+
+a {
+  font-weight: bold;
+  color: #777 !important; }
+
+sup {
+  font-weight: bold;
+  color: #777 !important; }
+
+pre, code {
+  font-family: 'FantasqueSansMonoBold' !important;
+  font-weight: normal;
+  font-style: normal; }
+
+pre {
+  overflow: auto;
+  background-color: white !important;
+  padding: 0px !important; }
+
+pre > code {
+  display: block;
+  padding: 1em !important;
+  word-wrap: normal;
+  background-image: url("triangles.png") !important; }
+
+code[class*="language-"], pre[class*="language-"] {
+  line-height: 2 !important;
+  -moz-tab-size: 2 !important;
+  -o-tab-size: 2 !important;
+  tab-size: 2 !important; }
+
+pre[class*="language-"] > code {
+  border-left: 5px solid #0b631f !important;
+  box-shadow: -1px 0px 0px 0px #0b631f !important; }
+
+pre > code[class]::before {
+  content: attr(title);
+  display: block;
+  font-size: small;
+  font-style: bold;
+  color: #aaa;
+  float: right; }
+
 /*# sourceMappingURL=blog-discover.css.map */

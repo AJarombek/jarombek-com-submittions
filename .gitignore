@@ -1,3 +1,7 @@
 prism.js
 prism.css
 Discoveries/2017/11-Nov/11-26-JS-Async-Function/Source/Async/node_modules
+*.otf
+.sass-cache/*
+blizzard.png
+triangles.png
