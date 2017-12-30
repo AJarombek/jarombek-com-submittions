@@ -7,6 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Creating a Node.js and MongoDB REST API Prototype</title>
         <link rel="stylesheet" href="../../../blog-discover.css">
+        <link rel="stylesheet" href="style/nodejs-mongodb.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/fantasque-sans-mono" type="text/css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
@@ -48,11 +49,39 @@
                         prototypes with technologies you want to use in a production project it is a great idea!
                     </p>
                     <p>
-                        My planned production web stacks will be either MEAN (MongoDB, Express, Angular, Node.js) or MERN (MongoDB, Express, React.js, 
-                        Node.js).  You will notice that three of these technologies are present in both stacks - MongoDB, Express, and Node.js.  We will 
+                        My planned production web stacks will be either MEAN (MongoDB, Express, <strong>Angular</strong>, Node.js) or MERN (MongoDB, Express, <strong>React.js</strong>, 
+                        Node.js).  You will notice that three of these technologies are present in both stacks - <strong>MongoDB, Express, and Node.js</strong>.  We will 
                         be using all three to build the prototype today!
                     </p>
                     <h5>Prototype Structure</h5>
+                    <p>
+                        The prototype is a REST API that lets users look at songs and artists.  They can also comment on songs.  MongoDB stores this 
+                        information in a database called <code>music_api</code>.  Databases in MongoDB are simply namespaces, which is much different than 
+                        their Relational Database equivalents.  In a RDBMS you need a username and password among other items to connect to a certain 
+                        database.  MongoDB does not have this requirement. 
+                    </p>
+                    <p>
+                        The data is then stored in collections of documents including songs, artists, and end users.
+                    </p>
+                    <figure id="mongo-image">
+                        <img src="mongodb.png">
+                    </figure>
+                    <p>
+                        The Node.js run-time environment and Express web application framework then expose a REST API to users so they can query, create, 
+                        update, and delete items in the database (all CRUD operations).  
+                    </p>
+                    <figure id="restapi-image">
+                        <img src="restapi.png">
+                    </figure>
+                    <p>
+                        For the prototype most of the functionality surrounds viewing and manipulating songs, however in a full application the uses would 
+                        be expanded.  This could include creating and updating users, rating songs, user-to-user interactivity, etc.  Now let's look at some 
+                        insteresting aspects of the prototype and certain challenges that I faced while creating it.
+                    </p>
+                    <h5>Using Mongoose</h5>
+                    <p>
+                        
+                    </p>
                     <figure>
                         <pre class="command-line" data-prompt=">" data-output="2">
                             <code class="language-bash" title="Bash" contenteditable="true" spellcheck="false">use xmas</code>
