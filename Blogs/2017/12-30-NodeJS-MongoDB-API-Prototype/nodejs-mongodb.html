@@ -278,7 +278,7 @@ const SongSchema = new Schema({
                     </figure>
                     <h5>Text Search</h5>
                     <p>
-                        Text searching is how search engines take user input and return a list or results.  The full picture of how it works is beyond the 
+                        Text searching is how search engines take user input and return a list of results.  The full picture of how it works is beyond the 
                         scope of this blog (although it would make for a fun discovery some day!) but just know that MongoDB allows for a barebones version of 
                         text searching.  You can implement a text search by defining an index of type <code>’text’</code> on a property (most likely you will 
                         define it on a string but you could even place it on an array)<sup>6</sup>.  MongoDB will do the rest of the work for you.  Weights 
@@ -363,11 +363,90 @@ const SongSchema = new Schema({
                         </pre>
                     </figure>
                     <h5>Gulp</h5>
+                    <p>
+                        The final major piece of this prototype was the build automation tool I used - gulp.  Gulp allows you to build your project in stages 
+                        using tasks defined as JavaScript functions<sup>11</sup>.  I am still trying to get a hang of gulp but I made a build file that watches 
+                        for any file changes and automatically restarts the Express server with the changes applied.  In the process, gulp uses babel to transpile 
+                        all the ES6+ files into ES5 and moves these transpiled files into a new directory.  I also move all my EJS files into this new directory.  
+                        The code is very hackish (as I don’t know gulp well) but gets the job done!
+                    </p>
                     <figure>
-                        <pre class="command-line" data-prompt=">" data-output="2">
-                            <code class="language-bash" title="Bash" contenteditable="true" spellcheck="false">use xmas</code>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">
+// The main task called.  We first execute the 'watch' task and then run a script 
+// to start the server
+gulp.task('default', ['watch'], () => {
+    nodemon({
+        script: './dist/app.js',
+        ext: 'js',
+        env: {
+            PORT: 3000
+        },
+        ignore: [
+            './node_modules/**',
+            './dist/**/*.js',
+            './dist/**/*.map',
+            './package.json',
+            './package-lock.json',
+            './dbscripts/**'
+        ]
+
+    }).on('restart', () => {
+        // Nodemon will restart the server when any of the src files change
+        console.info('Restarting Server with Changes');
+    });
+});
+
+// The 'watch' task will wait for changes in the source files and when they occur invoke
+// the 'transpile' task.
+gulp.task('watch', ['transpile', 'move'], () => {
+    livereload.listen();
+    gulp.watch('./src/**/*.js', ['transpile']);
+    gulp.watch('./src/view/**/*.ejs', ['move']);
+});
+
+// The transpile task invokes babel to convert ES6+ code into ES5
+gulp.task('transpile', () => {
+    gulp.src('./src/**/*.js')
+        .pipe(sourcemaps.init())
+        .pipe(babel({
+            presets: ['env']
+        }))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('./dist'))
+        .pipe(livereload());
+});
+
+// The move task takes out ejs files used for xml generation and puts them in the dist folder
+gulp.task('move', () => {
+    gulp.src('./src/view/**/*.ejs')
+        .pipe(gulp.dest('./dist/view'));
+});</code>
                         </pre>
                     </figure>
+                    <p>
+                        Now all I have to do to run my server is enter one command in bash:
+                    </p>
+                    <figure>
+                        <pre class="command-line" data-prompt="$">
+                            <code class="language-bash" title="Bash" contenteditable="true" spellcheck="false">gulp</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Gulp made my life a lot easier in this project.  Combining gulp which restarted my server on all changes and using WebStorm IDE 
+                        which automatically saves files, I never had to save a file or restart my server throughout development.  I could put 100% of my 
+                        focus on developing!
+                    </p>
+                    <h5>Conclusions</h5>
+                    <p>
+                        This MongoDB and Node.js prototype was very enjoyable to make and has really made the full JavaScript stack grow on me.  There are 
+                        still many unexplored areas of Node.js development for me but it is clear why the server side environment was such a game changer.  
+                        I look forward to adding on a client side framework into the mix in the future!
+                    </p>
+                    <p>
+                        The code for the prototype is available on my 
+                        <a href="https://github.com/AJarombek/nodejs-mongodb-api-prototype">GitHub</a>. 
+                    </p>
                     <div class="container tags">
                         <p>
                             Tags: <span class="badge badge-default">MongoDB</span> <span class="badge badge-default">Node.js</span> <span class="badge badge-default">Express</span>
@@ -386,6 +465,7 @@ const SongSchema = new Schema({
                         <p>[8] "Mongoose - Search for text in three fields based on score or weightage", https://stackoverflow.com/questions/32063998/mongoose-search-for-text-in-three-fields-based-on-score-or-weightage</p>
                         <p>[9] "The 'Basic' HTTP Authentication Scheme", https://tools.ietf.org/html/rfc7617</p>
                         <p>[10] "express-basic-auth", https://www.npmjs.com/package/express-basic-auth</p>
+                        <p>[11] Young., 73</p>
                     </div>
                 </div>
             </div>
