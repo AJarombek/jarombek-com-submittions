@@ -236,7 +236,9 @@ const SongSchema = new Schema({
                     <p>
                         This is a bit messy as you are mixing JavaScript and a markup language together.  A more elegant solution would be to use a tempting 
                         language to generate the XML.  The template language I used is EJS (embedded javascript templating) which mixes JavaScript with HTML 
-                        similarly to JSP for Java or PHP (which I used in my saintsxctf.com website)<sup>5</sup>.  We then use this template to create the 
+                        similarly to JSP for Java or PHP (which I used in my 
+                        <a href="https://github.com/AJarombek/saints-xctf">saintsxctf.com website</a>
+                        )<sup>5</sup>.  We then use this template to create the 
                         markup on the server using JavaScript before sending it to the client.
                     </p>
                     <figure>
@@ -276,8 +278,91 @@ const SongSchema = new Schema({
                     </figure>
                     <h5>Text Search</h5>
                     <p>
-
+                        Text searching is how search engines take user input and return a list or results.  The full picture of how it works is beyond the 
+                        scope of this blog (although it would make for a fun discovery some day!) but just know that MongoDB allows for a barebones version of 
+                        text searching.  You can implement a text search by defining an index of type <code>’text’</code> on a property (most likely you will 
+                        define it on a string but you could even place it on an array)<sup>6</sup>.  MongoDB will do the rest of the work for you.  Weights 
+                        can also be placed on properties to specify how important a certain field is for a search<sup>7</sup>.
                     </p>
+                    <p>
+                        Remember how I said practically anything you wanted to do in MongoDB you can also do in Node.js using Mongoose?  You can implement 
+                        a text search and its necessary indexes as well<sup>8</sup>!  Here are the indexes which are placed on the <code>SongSchema</code>:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">SongSchema.index(
+    {
+        'title': 'text',
+        'album': 'text',
+        'artist': 'text',
+        'best_lyric': 'text'
+    },
+    {
+        'weights': {
+            'title': 10,
+            'album': 5,
+            'artist': 8,
+            'best_lyric': 2
+        }
+    }
+);</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Then you can perform the text search using Mongoose:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">searchRouter.route('/:query')
+    .get((req, res) => {
+
+        // Perform a text search and sort based on the text score.
+        // The score is calculated by the indexes placed in the database
+        Song.find({ "$text": {"$search": req.params.query}})
+            .select({"score": {"$meta": "textScore"}})
+            .sort({"score": {"$meta": "textScore"}}).exec()
+            .then((songs) => {
+                res.format({
+                    'application/json': () => {
+                        res.json(songs);
+                    },
+                    'application/xml': () => {
+                        res.render('xml/songs', {songs: songs});
+                    }
+                });
+            })
+            .catch((err) => {
+                res.status(500).send(err);
+            });
+    });</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Now a text search can be executed on the song collection.  When a text string is entered, it will be matched on values in the song 
+                        <code>title</code>, <code>artist</code>, <code>album</code>, and <code>best_lyric</code> fields.  When I search the word ‘faith’, it 
+                        matches a Mariah Carey song with a matching lyric:
+                    </p>
+                    <figure id="xmlresponsetext-image">
+                        <img src="xmlresponsetext.png">
+                    </figure>
+                    <h5>Basic Auth</h5>
+                    <p>
+                        I also found a really nice library to add basic auth to my endpoints.  Basic auth works by using the HTTP requests 
+                        <code>Authorization</code> header to check for a base64 encoded credential string.  This credential string before being encoded has 
+                        the form &lt;username&gt;:&lt;password&gt; followed by the unicode pound sign (U+00A3)<sup>9</sup>.
+                    </p>
+                    <p>
+                        All you need to do to implement basic auth in an express app is pass the module a JSON object of usernames and passwords to accept<sup>10</sup>.  
+                        This is yet another example of how user made npm modules can make Node.js development easy.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">app.use(basicAuth({
+    users: {'a': 'j'}
+}));</code>
+                        </pre>
+                    </figure>
+                    <h5>Gulp</h5>
                     <figure>
                         <pre class="command-line" data-prompt=">" data-output="2">
                             <code class="language-bash" title="Bash" contenteditable="true" spellcheck="false">use xmas</code>
@@ -296,6 +381,11 @@ const SongSchema = new Schema({
                         <p>[3] Alex Young, Bradley Meck, Mike Cantelon, Node.js In Action, 2nd ed (Shelter Island, NY: Manning, 2017), 156</p>
                         <p>[4] Young., 157</p>
                         <p>[5] Young., 158</p>
+                        <p>[6] Kyle Banker, Peter Bakkum, Shaun Verch, Douglas Garrett &amp; Tom Hawkins, MongoDB In Action, 2nd ed (Shelter Island, NY: Manning, 2016), 252</p>
+                        <p>[7] Banker., 255</p>
+                        <p>[8] "Mongoose - Search for text in three fields based on score or weightage", https://stackoverflow.com/questions/32063998/mongoose-search-for-text-in-three-fields-based-on-score-or-weightage</p>
+                        <p>[9] "The 'Basic' HTTP Authentication Scheme", https://tools.ietf.org/html/rfc7617</p>
+                        <p>[10] "express-basic-auth", https://www.npmjs.com/package/express-basic-auth</p>
                     </div>
                 </div>
             </div>
