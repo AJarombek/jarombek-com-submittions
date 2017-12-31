@@ -50,7 +50,7 @@
                     </p>
                     <p>
                         My planned production web stacks will be either MEAN (MongoDB, Express, <strong>Angular</strong>, Node.js) or MERN (MongoDB, Express, <strong>React.js</strong>, 
-                        Node.js).  You will notice that three of these technologies are present in both stacks - <strong>MongoDB, Express, and Node.js</strong>.  We will 
+                        Node.js).  You will notice that three of these technologies are present in both stacks - <strong>MongoDB, Express,</strong> and <strong>Node.js</strong>.  We will 
                         be using all three to build the prototype today!
                     </p>
                     <h5>Prototype Structure</h5>
@@ -74,7 +74,7 @@
                         <img src="restapi.png">
                     </figure>
                     <p>
-                        For the prototype most of the functionality surrounds viewing and manipulating songs, however in a full application the uses would 
+                        For the prototype most of the functionality surrounds viewing and manipulating songs, however in a full application these uses would 
                         be expanded.  This could include creating and updating users, rating songs, user-to-user interactivity, etc.  Now let's look at some 
                         insteresting aspects of the prototype and certain challenges that I faced while creating it.
                     </p>
@@ -86,7 +86,7 @@
                         some additional capabilities which make it desirable.  
                     </p>
                     <p>
-                        First of Mongoose allows you to perform set strict schema rules for your MongoDB objects.  As previously mentioned MongoDB is 
+                        First off Mongoose allows you to set strict schema rules for your MongoDB objects.  As previously mentioned MongoDB is 
                         schema-less so this stricter model can help restrict what exactly a user can place in a document.  You can also create nested schemas 
                         for complex JSON documents.  For example, my song collection schema contains a nested schema for a list of comments.
                     </p>
@@ -132,7 +132,7 @@ const SongSchema = new Schema({
                         database, only the properties seen in the schema will be persisted to MongoDB.
                     </p>
                     <p>
-                        Also there is a comments properties which takes an array of type <code>CommentSchema</code>.  This <code>CommentSchema</code> can then 
+                        Also there is a comments property which takes an array of type <code>CommentSchema</code>.  This <code>CommentSchema</code> can 
                         be defined similarly to how I implemented <code>SongSchema</code>.
                     </p>
                     <figure>
@@ -164,11 +164,13 @@ const SongSchema = new Schema({
                     </figure>
                     <h5>Switching to Promises</h5>
                     <p>
-                        Mongoose allows you to perform any query, update, insert, or delete operations on a Schema.  By default however, Mongoose uses callbacks 
-                        to perform these operations.  We want to avoid callbacks as they can become ugly once nested database calls need to be made (commonly 
-                        known as callback hell).  Luckily Mongoose allows us to use ES6 Promises instead<sup>2</sup>.  One of the first things I did when creating my API 
+                        Mongoose allows you to perform any query, update, insert, or delete operation on a Schema.  By default however, Mongoose uses callbacks 
+                        to perform these operations.  We want to avoid callbacks as they become ugly and hard to read once nested database calls need to be made (commonly 
+                        known as callback hell).  Luckily Mongoose allows us to use 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/tree/master/Discoveries/2017/11-Nov/11-21-JS-Promises">ES6 Promises</a> 
+                        instead<sup>2</sup>.  One of the first things I did when creating my API 
                         calls was to replace all the callbacks I could with Promises.  Here is some code that performs a <code>find</code> operation on the 
-                        <code>Song</code> schema and then returns it to as a HTTP response.
+                        <code>Song</code> schema and then returns it to as a HTTP response using a promise.
                     </p>
                     <figure>
                         <pre>
@@ -191,13 +193,12 @@ const SongSchema = new Schema({
                     </figure>
                     <h5>Using EJS to Return XML</h5>
                     <p>
-                        You may have noticed in that last code sample the <code>res.format()</code> function which returns the song data as an HTTP response.  
+                        You may have noticed in the last code sample the <code>res.format()</code> function which returns the song data as an HTTP response.  
                         This function also returns either JSON or XML depending on the MIME type specified in the HTTP requests <code>Accept</code> header.  
-                        Normally I wouldn’t think the development work to return both notations to be worth it but Express made it so easy to implement
-                        <sup>3</sup>!
+                        Normally I don't think the development work needed to return both notations would be worth it but Express made it so easy to implement<sup>3</sup>!
                     </p>
                     <p>
-                        There are two ways to implement the conversion to XML.  One option is to perform it in our JavaScript itself<sup>4</sup>.
+                        There are two ways to implement the conversion to XML.  One option is to perform it in JavaScript itself<sup>4</sup>.
                     </p>
                     <figure>
                         <pre>
@@ -285,7 +286,7 @@ const SongSchema = new Schema({
                         can also be placed on properties to specify how important a certain field is for a search<sup>7</sup>.
                     </p>
                     <p>
-                        Remember how I said practically anything you wanted to do in MongoDB you can also do in Node.js using Mongoose?  You can implement 
+                        Remember how I said practically anything you wanted to do in MongoDB can be done in Node.js using Mongoose?  You can implement 
                         a text search and its necessary indexes as well<sup>8</sup>!  Here are the indexes which are placed on the <code>SongSchema</code>:
                     </p>
                     <figure>
@@ -338,7 +339,7 @@ const SongSchema = new Schema({
                         </pre>
                     </figure>
                     <p>
-                        Now a text search can be executed on the song collection.  When a text string is entered, it will be matched on values in the song 
+                        Now a text search can be executed on the song collection.  When a text string is entered, it will be matched on values in the songs 
                         <code>title</code>, <code>artist</code>, <code>album</code>, and <code>best_lyric</code> fields.  When I search the word ‘faith’, it 
                         matches a Mariah Carey song with a matching lyric:
                     </p>
@@ -364,7 +365,7 @@ const SongSchema = new Schema({
                     </figure>
                     <h5>Gulp</h5>
                     <p>
-                        The final major piece of this prototype was the build automation tool I used - gulp.  Gulp allows you to build your project in stages 
+                        The final major piece of this prototype was the build automation tool - gulp.  Gulp allows you to build your project in stages 
                         using tasks defined as JavaScript functions<sup>11</sup>.  I am still trying to get a hang of gulp but I made a build file that watches 
                         for any file changes and automatically restarts the Express server with the changes applied.  In the process, gulp uses babel to transpile 
                         all the ES6+ files into ES5 and moves these transpiled files into a new directory.  I also move all my EJS files into this new directory.  
@@ -433,15 +434,15 @@ gulp.task('move', () => {
                         </pre>
                     </figure>
                     <p>
-                        Gulp made my life a lot easier in this project.  Combining gulp which restarted my server on all changes and using WebStorm IDE 
+                        Gulp made my life a lot easier in this project.  Combining gulp which restarted my server on all changes and the WebStorm IDE 
                         which automatically saves files, I never had to save a file or restart my server throughout development.  I could put 100% of my 
                         focus on developing!
                     </p>
                     <h5>Conclusions</h5>
                     <p>
                         This MongoDB and Node.js prototype was very enjoyable to make and has really made the full JavaScript stack grow on me.  There are 
-                        still many unexplored areas of Node.js development for me but it is clear why the server side environment was such a game changer.  
-                        I look forward to adding on a client side framework into the mix in the future!
+                        still many unexplored areas of Node.js development for me but it is clear why this server side environment was such a game changer.  
+                        I look forward to adding on a client side framework in the future!
                     </p>
                     <p>
                         The code for the prototype is available on my 
