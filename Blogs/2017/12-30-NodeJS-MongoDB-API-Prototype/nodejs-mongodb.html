@@ -281,7 +281,7 @@ const SongSchema = new Schema({
                     <p>
                         Text searching is how search engines take user input and return a list of results.  The full picture of how it works is beyond the 
                         scope of this blog (although it would make for a fun discovery some day!) but just know that MongoDB allows for a barebones version of 
-                        text searching.  You can implement a text search by defining an index of type <code>’text’</code> on a property (most likely you will 
+                        text searching.  You can implement a text search by defining an index of type <code>'text'</code> on a property (most likely you will 
                         define it on a string but you could even place it on an array)<sup>6</sup>.  MongoDB will do the rest of the work for you.  Weights 
                         can also be placed on properties to specify how important a certain field is for a search<sup>7</sup>.
                     </p>
@@ -340,7 +340,7 @@ const SongSchema = new Schema({
                     </figure>
                     <p>
                         Now a text search can be executed on the song collection.  When a text string is entered, it will be matched on values in the songs 
-                        <code>title</code>, <code>artist</code>, <code>album</code>, and <code>best_lyric</code> fields.  When I search the word ‘faith’, it 
+                        <code>title</code>, <code>artist</code>, <code>album</code>, and <code>best_lyric</code> fields.  When I search the word 'faith', it 
                         matches a Mariah Carey song with a matching lyric:
                     </p>
                     <figure id="xmlresponsetext-image">
@@ -369,7 +369,7 @@ const SongSchema = new Schema({
                         using tasks defined as JavaScript functions<sup>11</sup>.  I am still trying to get a hang of gulp but I made a build file that watches 
                         for any file changes and automatically restarts the Express server with the changes applied.  In the process, gulp uses babel to transpile 
                         all the ES6+ files into ES5 and moves these transpiled files into a new directory.  I also move all my EJS files into this new directory.  
-                        The code is very hackish (as I don’t know gulp well) but gets the job done!
+                        The code is very hackish (as I don't know gulp well) but gets the job done!
                     </p>
                     <figure>
                         <pre>
