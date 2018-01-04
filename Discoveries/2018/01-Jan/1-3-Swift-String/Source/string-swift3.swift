@@ -11,7 +11,7 @@ hello.characters.count
 // The characters object is a collection of Character objects
 let chars: String.CharacterView = hello.characters
 
-// You can peform operations on the characters collection just like any other
+// You can peform operations on the characters collection just like any other collection
 chars.forEach {
     char -> Void in
     

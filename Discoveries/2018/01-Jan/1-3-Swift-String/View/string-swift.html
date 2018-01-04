@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!-- Author: Andrew Jarombek
+     Date: 12/12/2017 -->
+<html>
+    <head>
+        <meta chartset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Strings in Swift 3 &amp; 4</title>
+        <link rel="stylesheet" href="../../../../../blog-discover.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/fantasque-sans-mono" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
+            integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link href="../../../../../prism.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="col-md-12 discoveryBody">
+            <div class="col-md-12 discoveryContent">
+                <p class="date">January 3rd, 2017</p>
+                <br>
+                <h4>Strings in Swift 3 &amp; 4</h4>
+                <br>
+                <div class="container aknowledge">
+                    <p>Assumed Knowledge:</p>
+                    <p>Swift <span class="badge badge-warning">Intermediate</span></p>
+                </div><br>
+                <div id="discoveryText" class="container">
+                    <p>
+                        Yesterday I began to fix some bugs in my website 
+                        <a href="https://github.com/AJarombek/saints-xctf">saintsxctf.com</a> 
+                        and its corresponding native iOS and Android apps (because as we know a 
+                        codebase is never complete).  I was looking at the Swift code for my iOS app and found a bug where I incorrectly selected a substring 
+                        from a base64 encoded image.  Luckily the fix was easy to implement, but viewing the code made me remember just how confusing the String 
+                        structure was in Swift.
+                    </p>
+                    <p>
+                        You would think something as simple as a string would be straightforward, but in Swift there were a few quirks.  I wrote the code in Xcode 
+                        8 and Swift 3 this fall.  Since then Xcode 9 and Swift 4 have released, making <code>String</code> a bit less confusing.  I will dive into strings in 
+                        Swift 3 and then look at how the code has changed with Swift 4.
+                    </p>
+                    <h5>Swift 3</h5>
+                    <p>
+                        The first quirk of strings in Swift 3 is obvious when you try to get the length of a string.  There is no length or count variable on the 
+                        <code>String</code> structure.  Instead each <code>String</code> has a <code>characters</code> variable of type <code>CharacterView</code> 
+                        which is a collection of all the characters in the string.  You can use the <code>characters</code> object to get the strings size or iterate 
+                        over all the characters.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-swift" title="Swift" contenteditable="true" spellcheck="false">var hello = "hello my name is andy 😺"
+                                
+hello.characters.count // 23
+
+// The characters object is a collection of Character objects
+let chars: String.CharacterView = hello.characters
+
+// You can peform operations on the characters collection just like any other collection
+chars.forEach {
+    char -> Void in
+    
+    print(char)
+}</code>
+                        </pre>
+                    </figure>
+                    <div class="container tags">
+                        <p>
+                            Tags: <span class="badge badge-default">Swift</span> <span class="badge badge-default">Swift 3</span> <span class="badge badge-default">Swift 4</span>
+                        </p>
+                    </div>
+                    <div class="container sources">
+                        <p>[1] Kyle Banker, Peter Bakkum, Shaun Verch, Douglas Garrett &amp; Tom Hawkins, MongoDB In Action, 2nd ed (Shelter Island, NY: Manning, 2016), 121</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../../../../../prism.js"></script>
+    </body>
+</html>
