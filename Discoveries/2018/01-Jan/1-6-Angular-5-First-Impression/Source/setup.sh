@@ -18,3 +18,5 @@ ng serve
 # ng serve throws an error in safari so perform this instead
 # https://github.com/angular/angular-cli/issues/8400
 ng serve --aot --no-sourcemap
+
+ng generate directive valid-dev

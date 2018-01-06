@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 // Angular uses annotations as metadata
 @Component({
   selector: 'developer',
-  template: '<p>Hello {{dev}}</p>'
+  templateUrl: 'app.component.html'
 })
 export class DeveloperComponent {
   dev: string;
