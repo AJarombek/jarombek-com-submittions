@@ -8,7 +8,7 @@ var hello = "hello my name is andy 😺"
 
 hello.characters.count
 
-// The characters object is a collection of Character objects
+// The characters struct is a collection of Character objects
 let chars: String.CharacterView = hello.characters
 
 // You can peform operations on the characters collection just like any other collection
@@ -40,3 +40,15 @@ let end: String.Index = runDescription.index(runDescription.startIndex, offsetBy
 let range: Range<String.Index> = start..<end
 
 runDescription.substring(with: range) // 2.12
+
+// Unicode scalars
+let e1 = "\u{00EB}" // "ë"
+let e2 = "\u{0065}\u{0308}" // "ë"
+
+if e1 == e2 {
+    print("They are equal!")
+}
+
+if e1.characters.count == e2.characters.count {
+    print("They both have a length of 1!")
+}
