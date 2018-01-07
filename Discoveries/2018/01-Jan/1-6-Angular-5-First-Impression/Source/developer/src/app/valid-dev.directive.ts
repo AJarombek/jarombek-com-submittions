@@ -9,7 +9,6 @@ import { Directive, ElementRef, Renderer2 } from '@angular/core';
 export class ValidDevDirective {
   renderer: any;
   element: any;
-  validDev: any = /$[a-zA-Z0-9]+^/;
 
   constructor(renderer: Renderer2, element: ElementRef) {
     this.renderer = renderer;
@@ -18,6 +17,7 @@ export class ValidDevDirective {
     this.style('#ccc')
   }
 
+  // When the value in the input field changes, check its contents
   onInput(event) {
     let value: string = event.target.value;
 
