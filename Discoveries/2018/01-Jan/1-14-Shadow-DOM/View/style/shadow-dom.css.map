@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,gBAAiB,GACb,MAAM,EAAE,KAAK;;AAGjB,WAAY,GACR,MAAM,EAAE,KAAK;;AAGjB,6BAA8B,GAC1B,KAAK,EAAE,KAAK,EACZ,MAAM,EAAE,iBAAiB,EACzB,MAAM,EAAE,MAAM,EACd,aAAa,EAAE,IAAI;;AAGvB,GAAI,GACA,UAAU,EAAE,IAAI,EAChB,WAAW,EAAE,IAAI",
+"sources": ["../shadow-dom.scss"],
+"names": [],
+"file": "shadow-dom.css"
+}
