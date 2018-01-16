@@ -13,11 +13,11 @@ public class Main {
 
         // Calculate the total number of miles run
         Calculate totalMilesCalculator = new Calculate((double[]... array) -> DoubleStream.of(array[0]).sum());
-        System.out.println(totalMilesCalculator.exec(miles));
+        System.out.println(totalMilesCalculator.exec(miles)); // 23.22
 
         // Calculate the avg feel
         Calculate avgFeelCalculator = new Calculate((double[]... array) -> DoubleStream.of(array[0]).average().getAsDouble());
-        System.out.println(avgFeelCalculator.exec(feel));
+        System.out.println(avgFeelCalculator.exec(feel)); // 6.33
 
         // Calculate the avg feel for each mile run
         Calculate avgFeelByMilesCalculator = new Calculate((double[]... array) -> {
@@ -28,6 +28,6 @@ public class Main {
                                     .sum();
             return milesXfeel / totalMiles;
         });
-        System.out.println(avgFeelByMilesCalculator.exec(miles, feel));
+        System.out.println(avgFeelByMilesCalculator.exec(miles, feel)); // 6.22
     }
 }
