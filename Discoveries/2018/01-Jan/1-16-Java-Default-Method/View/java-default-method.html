@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<!-- Author: Andrew Jarombek
+     Date: 12/12/2017 -->
+<html>
+    <head>
+        <meta chartset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Java 8 Default Method</title>
+        <link rel="stylesheet" href="../../../../../blog-discover.css">
+        <link rel="stylesheet" href="style/java-default-method.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/fantasque-sans-mono" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
+            integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link href="../../../../../prism.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="col-md-12 discoveryBody">
+            <div class="col-md-12 discoveryContent">
+                <p class="date">January 16th, 2018</p>
+                <br>
+                <h4>Java 8 Default Method</h4>
+                <br>
+                <div class="container aknowledge">
+                    <p>Assumed Knowledge:</p>
+                    <p>Java <span class="badge badge-warning">Intermediate</span></p>
+                    <p>Java 8 <span class="badge badge-warning">Intermediate</span></p>
+                    <p>Inheritance <span class="badge badge-default">Basic</span></p>
+                </div><br>
+                <div id="discoveryText" class="container">
+                    <p>
+                        Java was originally designed to not support multiple inheritance of implemented methods.  Because of this, you could only extend one 
+                        class.  However, you could simulate multiple inheritance by implementing multiple interfaces.  The only catch here was that the methods 
+                        defined in the interfaces had no body and had to be created in the implementing class.
+                    </p>
+                    <p>
+                        This design avoided many issues that come with multiple inheritance such as the diamond problem.  However, there were some issues 
+                        that came with using interfaces for an API as well.
+                    </p>
+                    <p>
+                        Let's say you needed to change an API that uses an interface.  If you add a new method definition to an interface, this also means that 
+                        all classes that implement this interface have to also implement the new method.  If you have control over the implementing class this 
+                        is an easy fix, but it is a very real possibility that someone else has a class that implements your interface.  This will break 
+                        existing code!  
+                    </p>
+                    <p>
+                        Java 8 has a fix for this called default methods.  Now interfaces can add bodies to methods specified with the <code>default</code> 
+                        keyword.  If this method does not exist in the implementing class, the default method in the interface is called instead!  Now existing 
+                        code will not break on interface changes!
+                    </p>
+                    <p>
+                        But wait!  What is the difference between an abstract class and an interface with default methods?  Although both can now have method 
+                        bodies, there are still other differences between the two.  First off a class can still only extend one abstract class but can implement 
+                        multiple interfaces with default methods.  Second abstract classes can have instance variables while an interface still does not have 
+                        this ability<sup>1</sup>.
+                    </p>
+                    <p>
+                        Okay so now that one concern is answered, but what about multiple inheritance?  Can't you now inherit methods with multiple 
+                        implementations?  This is true, so now Java has added some rules to deal with situations where a class has multiple method bodies to 
+                        choose from.
+                    </p>
+                    <p>
+                        First off, if one of the method bodies comes from a class and the rest come from default methods, the classes implementation is picked.  
+                        Second, multiple default methods exist on different levels of the inheritance chain, the implementation in the interface closest to the 
+                        class along the chain is picked.  If neither of these conditions are met, the class has to explicitly select which method body to 
+                        use<sup>2</sup>.
+                    </p>
+                    <p>
+                        Now lets look at an example that shows the new default methods and what occurs in a diamond problem scenario.  The interface hierarchy 
+                        represents animals:
+                    </p>
+                    <figure id="diamond-uml-image">
+                        <img src="diamond-uml.png">
+                    </figure>
+                    <p>
+                        Here is the code for each entity in the diagram (side note: you can also specify <code>static</code> method implementations in interfaces with Java 8):
+                    </p>
+                    <p>
+                        Animal.java
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-java" title="Java" contenteditable="true" spellcheck="false">public interface Animal {
+                                    
+    String aboutMe();
+
+    /**
+     * Default method will be called if this method doesn't exist in the implemented class
+     * @return the age of the animal
+     */
+    default int age() {
+        return 0;
+    }
+
+    /**
+     * In Java 8 interfaces can have static methods
+     * @return a description of this animal
+     */
+    static String info() {
+        return "I am an animal";
+    }
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        LivingAnimal.java
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-java" title="Java" contenteditable="true" spellcheck="false">public interface LivingAnimal extends Animal {
+    void run();
+    void walk();
+    void sleep();
+    void eat();
+
+    default String status() {
+        return "I am a living animal!";
+    }
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Pet.java
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-java" title="Java" contenteditable="true" spellcheck="false">public interface Pet extends Animal {
+    String owner();
+
+    default String status() {
+        return "I am a pet!";
+    }
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Cat.java
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-java" title="Java" contenteditable="true" spellcheck="false">public class Cat implements LivingAnimal, Pet {
+                                    
+    private String name;
+    private String owner;
+
+    public Cat(String name) {
+        this.name = name;
+    }
+
+    public Cat(String name, String owner) {
+        this.name = name;
+        this.owner = owner;
+    }
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Main.java
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-java" title="Java" contenteditable="true" spellcheck="false">public class Main {
+                                    
+    public static void main(String... args) {
+        Cat snickers = new Cat("Snickers", "Caroline D");
+
+        int age = snickers.age();
+        System.out.println(age);
+
+        String status = snickers.status();
+        System.out.println(status);
+    }
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        When we try to run the code right now, we get the following error:
+                    </p>
+                    <figure id="error-message-image">
+                        <img src="error-message.png">
+                    </figure>
+                    <p>
+                        The reason for the error is that we forgot to explicitly select which method body to implement in Cat.java for <code>status()</code>.  
+                        Let's fix this issue and explicitly call the <code>Pet</code> interface implementation<sup>3</sup>:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-java" title="Java" contenteditable="true" spellcheck="false">...
+
+@Override
+public String status() {
+    return Pet.super.status();
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Now when we run the code we get the result of age = 0 and status = 'I am a pet!'.
+                    </p>
+                    <p>
+                        For some of us this may be the expected result.  For others with diamond problem experience an error may be expected.  Although I don't 
+                        really know C++ (yet...) I know that having diamond inheritance like this example will cause an error.  The reason why Java doesn't 
+                        complain here has to do with the way Java is implemented.  Instead of both <code>LivingAnimal</code> and <code>Pet</code> having a copy 
+                        of the default method specified in <code>Animal</code> as they would in C++, Java knows that there is actually only one existence of 
+                        the default method <code>age()</code><sup>4</sup>.  Therefore no conflict exists!
+                    </p>
+                    <p>
+                        Working with API's got a lot easier to deal with in Java 8.  You can check out all the code for this discovery 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2018/01-Jan/1-15-Java-Default-Method/View/java-default-method.html">here</a>.
+                    </p>
+                    <div class="container tags">
+                        <p>
+                            Tags: <span class="badge badge-default">Java</span> <span class="badge badge-default">Java 8</span> <span class="badge badge-default">Inheritance</span>
+                        </p>
+                    </div>
+                    <div class="container sources">
+                        <p>[1] Raoul-Gabriel Urma, Mario Fusco &amp; Alan Mycroft, Java 8 In Action (Shelter Island, NY: Manning, 2015), 214</p>
+                        <p>[2] Ibid., 219</p>
+                        <p>[3] Ibid., 222</p>
+                        <p>[4] Ibid., 223</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../../../../../prism.js"></script>
+    </body>
+</html>
