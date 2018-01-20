@@ -14,6 +14,9 @@ channel = connection.channel()
 channel.exchange_declare(exchange='topic_log', exchange_type='topic', passive=False,
                          durable=True, auto_delete=False)
 
+# Turn on confirm mode in the channel
+channel.confirm_delivery()
+
 routing_key = sys.argv[1] if len(sys.argv) > 2 else 'default'
 message = ' '.join(sys.argv[2:]) or 'default'
 
@@ -23,13 +26,18 @@ msg_props = pika.BasicProperties()
 msg_props.content_type = 'text/plain'
 msg_props.delivery_mode = 2
 
-# Publish to the channel
+# Publish to the channel and check for publisher confirms
 # exchange -- the exchange to publish to
 # routing_key -- the routing key to bind to
 # properties -- basic properties of the message
 # body -- the message contents
-channel.basic_publish(exchange='topic_log', routing_key=routing_key,
-                      properties=msg_props, body=message)
+if channel.basic_publish(exchange='topic_log', routing_key=routing_key, properties=msg_props,
+                         body=message):
+    print("Confirm Received!")
+else:
+    print("Message Received!")
+
+
 print(" [x] Sent %r:%r" % (routing_key, message))
 
 connection.close()

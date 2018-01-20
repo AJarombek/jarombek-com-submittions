@@ -29,8 +29,8 @@ queue_name = result.method.queue
 # Use command line arguments to get the binding keys
 binding_keys = sys.argv[1:]
 if not binding_keys:
-    sys.stderr.write("Usage: %s [binding_key]...\n" % sys.argv[0])
-    sys.exit(1)
+    # Bind a queue to an exchange and match to all routing keys ('#' operator)
+    channel.queue_bind(exchange='topic_log', queue=queue_name, routing_key='#')
 
 # Bind this channel to potentially many queues
 for binding_key in binding_keys:

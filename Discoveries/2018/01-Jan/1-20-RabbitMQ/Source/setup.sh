@@ -26,3 +26,17 @@ rabbitmqctl status
 python3 --version # 3.6.0
 
 sudo pip3 install pika
+
+# Add a new RabbitMQ user to consume messages
+rabbitmqctl add_user running-log-consumer iconsume
+
+# Add a new RabbitMQ user to produce messages
+rabbitmqctl add_user running-log-producer iproduce
+
+# List all the users on the RabbitMQ server
+rabbitmqctl list_users
+
+# Listing users ...
+# running-log-producer	[]
+# running-log-consumer	[]
+# guest	[administrator]
