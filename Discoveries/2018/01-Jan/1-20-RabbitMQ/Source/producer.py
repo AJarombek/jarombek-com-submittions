@@ -2,16 +2,23 @@
 
 import pika
 import sys
+from cred import Cred
 
 # Author: Andrew Jarombek
 # Date: 1/18/2018
 # Producer for a RabbitMQ topic exchange
 
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+cred = Cred('producer')
+
+# Set the connection parameters for the channel
+credentials = pika.PlainCredentials(cred.USERNAME, cred.PASSWORD)
+connection_params = pika.ConnectionParameters(cred.SERVER, virtual_host=cred.VHOST, credentials=credentials)
+
+connection = pika.BlockingConnection(connection_params)
 channel = connection.channel()
 
 # Declare the topic_log exchange
-channel.exchange_declare(exchange='topic_log', exchange_type='topic', passive=False,
+channel.exchange_declare(exchange=cred.EXCHANGE, exchange_type='topic', passive=False,
                          durable=True, auto_delete=False)
 
 # Turn on confirm mode in the channel

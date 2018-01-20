@@ -40,3 +40,14 @@ rabbitmqctl list_users
 # running-log-producer	[]
 # running-log-consumer	[]
 # guest	[administrator]
+
+# Set users permissions to vhost "/": Read, Write, Configure
+# "" means no permission, ".*" means permissions granted to all queues and exchanges
+rabbitmqctl set_permissions running-log-consumer ".*" "" ".*"
+rabbitmqctl set_permissions running-log-producer "" ".*" ".*"
+
+# List all of the users and their permissions
+rabbitmqctl list_permissions
+
+# Look at all queues
+rabbitmqctl list_queues
