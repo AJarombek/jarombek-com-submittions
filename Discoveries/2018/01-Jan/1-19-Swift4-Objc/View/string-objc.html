@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!-- Author: Andrew Jarombek
+     Date: 12/12/2017 -->
+<html>
+    <head>
+        <meta chartset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Swift 4 @objc Annotation</title>
+        <link rel="stylesheet" href="../../../../../blog-discover.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/fantasque-sans-mono" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
+            integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link href="../../../../../prism.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="col-md-12 discoveryBody">
+            <div class="col-md-12 discoveryContent">
+                <p class="date">January 19th, 2018</p>
+                <br>
+                <h4>Swift 4 @objc Annotation</h4>
+                <br>
+                <div class="container aknowledge">
+                    <p>Assumed Knowledge:</p>
+                    <p>Swift <span class="badge badge-warning">Intermediate</span></p>
+                </div><br>
+                <div id="discoveryText" class="container">
+                    <p>
+                        Today I updated my iOS app <a href="https://github.com/AJarombek/saints-xctf-ios">SaintsXCTF</a> 
+                        from Swift 3 to Swift 4.  The process could not have been easier, with many of the automated 
+                        conversions consisting of API changes and String struct upgrades.  There was however one change that had me confused - many of my 
+                        functions were given a <code>@objc</code> annotation.  So what is this mysterious annotation and why was it added to so many of my 
+                        methods?
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-swift" title="Swift" contenteditable="true" spellcheck="false">@objc func womensXC(_ sender: UIView) {
+    os_log("Go to Women's Cross Country Page", log: logTag, type: .debug)
+    loadGroup(withGroupname: "wmensxc")
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        The <code>@objc</code> annotation allows for functions to interact with Objective-C code<sup>1</sup>.  Since many of Apple's APIs are 
+                        built in Objective-C, many of my functions were actually interacting non-Swift code without me even knowing!  This communication between 
+                        Swift and Objective-C is called Interoperability and lets you use Objective-C code in Swift and vice versa<sup>2</sup>.
+                    </p>
+                    <p>
+                        Now why is Swift 4 enforcing the <code>@objc</code> annotation when Swift 3 didn't?  It looks like Swift compiler used to infer the 
+                        <code>@objc</code> annotation for you, so you did not have to manually include it in your code<sup>3</sup>.  That has now changed in 
+                        Swift 4.  
+                    </p>
+                    <p>
+                        One of the reasons listed for enforcing the <code>@objc</code> annotation is that in Swift 3 it was never obvious if the annotation 
+                        would be inferred by the compiler.  I would argue however that having to use it in my code is more of a burden than a feature.  Now I 
+                        am even more dependent on an IDE than before, since I often do not know if I am interacting with an Apple API written in Objective-C.  
+                        Some of my favorite languages are the ones that you can just write in a text editor (one of Java's major weak points in my opinion is 
+                        that you are tied to an IDE), and Swift has now taken another step further away from that simplistic nature.
+                    </p>
+                    <div class="container tags">
+                        <p>
+                            Tags: <span class="badge badge-default">Swift</span> <span class="badge badge-default">Swift 3</span> <span class="badge badge-default">Swift 4</span>
+                        </p>
+                    </div>
+                    <div class="container sources">
+                        <p>[1] "when to use @objc in swift code?", https://stackoverflow.com/questions/30795117/when-to-use-objc-in-swift-code</p>
+                        <p>[2] "Interacting with Objective-C APIs", https://developer.apple.com/library/content/documentation/Swift/Conceptual/BuildingCocoaApps/InteractingWithObjective-CAPIs.html</p>
+                        <p>[3] "What's New in Swift 4?", https://www.raywenderlich.com/163857/whats-new-swift-4#objc</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../../../../../prism.js"></script>
+    </body>
+</html>
