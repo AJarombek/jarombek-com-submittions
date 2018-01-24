@@ -9,8 +9,13 @@ import json
 # Date: 1/18/2018
 # Producer for a RabbitMQ topic exchange
 
+# The ArgumentParser API is used for specifying command line arguments
+# description - a text description shown when you use the --help argument
 parser = ArgumentParser(description='Upload a New Log')
 
+# Arguments that specify the routing keys
+# dest - the destination variable to hold an array of routing keys
+# const - the string that will be placed in the dest array if the argument is used
 parser.add_argument("-WXC", action="append_const", dest="routing_keys", const="womensxc",
                     default=[], help="use the woman's cross country routing key")
 parser.add_argument("-WTF", action="append_const", dest="routing_keys", const="womenstf",
@@ -22,6 +27,9 @@ parser.add_argument("-MTF", action="append_const", dest="routing_keys", const="m
 parser.add_argument("-ALUM", action="append_const", dest="routing_keys", const="alumni",
                     help="use the alumni routing key")
 
+# Specify all the command line arguments that specify running log JSON properties
+# The first argument is the command line short form, and the second argument is the long form
+# help - description displayed when you use the --help argument
 parser.add_argument("-n", "--name", help="the name of the runner")
 parser.add_argument("-d", "--distance", type=float, help="the distance run")
 parser.add_argument("-m", "--metric", choices=["miles", "kilometers", "meters"], help="the distance run metric")
@@ -30,8 +38,10 @@ parser.add_argument("-dt", "--date", help="the date of the run 'yyyy-mm-dd'")
 parser.add_argument("-l", "--location", help="the location of the run")
 parser.add_argument("-des", "--description", help="a description of the run")
 
+# Parse the command line arguments into the args object with the arguments as variables
 args = parser.parse_args()
 
+# Build the JSON object to send across Rabbit
 json_object = dict()
 json_object['name'] = args.name
 json_object['distance'] = args.distance
@@ -45,10 +55,11 @@ json_data = json.dumps(json_object)
 
 
 def build_routing_key(key_list):
-    length = len(key_list) - 1
+    """ Build up the routing key from a list of routes """
+
     str = ""
 
-    for i in range(length):
+    for i in range(len(key_list)):
         if i != 0:
             str += "."
 
@@ -57,7 +68,6 @@ def build_routing_key(key_list):
     return str
 
 routing_key = build_routing_key(args.routing_keys)
-print(routing_key)
 
 cred = Cred('producer')
 
@@ -90,7 +100,7 @@ if channel.basic_publish(exchange=cred.EXCHANGE, routing_key=routing_key, proper
                          body=json_data):
     print("Confirm Received!")
 else:
-    print("Message Received!")
+    print("Message Lost!")
 
 
 print(" [x] Sending %r:%r" % (routing_key, json_data))

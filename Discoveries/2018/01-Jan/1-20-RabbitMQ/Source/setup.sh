@@ -51,3 +51,20 @@ rabbitmqctl list_permissions
 
 # Look at all queues
 rabbitmqctl list_queues
+
+# Set up RabbitMQ consumers - the argument is the routing key to bind the consumer to
+python3 ./consumer.py womensxc.*
+python3 ./consumer.py womensxc.womenstf
+python3 ./consumer.py #
+
+# Set up a RabbitMQ producer
+
+# Ask for help with descriptions of the command line arguments
+python3 ./producer.py --help
+
+# An example producer
+python3 ./producer.py -MXC -MTF -ALUM --name Andy --distance 3.05 --metric miles \
+            --date 2018-01-24 --location "Riverside CT"
+
+# [x] Sending 'mensxc.menstf.alumni':'{"name": "Andy", "distance": 3.05, "metric": "miles", "time": null,
+#       "date": "2018-01-24", "location": "Riverside CT", "description": null}'
