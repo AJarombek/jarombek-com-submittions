@@ -32,7 +32,8 @@ parser.add_argument("-ALUM", action="append_const", dest="routing_keys", const="
 # help - description displayed when you use the --help argument
 parser.add_argument("-n", "--name", help="the name of the runner")
 parser.add_argument("-d", "--distance", type=float, help="the distance run")
-parser.add_argument("-m", "--metric", choices=["miles", "kilometers", "meters"], help="the distance run metric")
+parser.add_argument("-m", "--metric", choices=["miles", "kilometers", "meters"],
+                    help="the distance run metric")
 parser.add_argument("-t", "--time", help="the time taken on the run")
 parser.add_argument("-dt", "--date", help="the date of the run 'yyyy-mm-dd'")
 parser.add_argument("-l", "--location", help="the location of the run")

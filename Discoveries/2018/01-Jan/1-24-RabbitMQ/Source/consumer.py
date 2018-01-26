@@ -39,7 +39,7 @@ if not binding_keys:
     # Bind a queue to an exchange and match to all routing keys ('#' operator)
     channel.queue_bind(exchange=cred.EXCHANGE, queue=queue_name, routing_key='#')
 
-# Bind this channel to potentially many queues
+# Bind this queue name to potentially many binding keys
 for binding_key in binding_keys:
 
     # Bind a queue to a specific exchange
