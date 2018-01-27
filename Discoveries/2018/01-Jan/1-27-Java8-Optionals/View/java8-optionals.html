@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<!-- Author: Andrew Jarombek
+     Date: 1/26/2018 -->
+<html>
+    <head>
+        <meta chartset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Java 8 Optionals</title>
+        <link rel="stylesheet" href="../../../../../blog-discover.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/fantasque-sans-mono" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
+            integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link href="../../../../../prism.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="col-md-12 discoveryBody">
+            <div class="col-md-12 discoveryContent">
+                <p class="date">January 27th, 2018</p>
+                <br>
+                <h4>Java 8 Optionals</h4>
+                <br>
+                <div class="container aknowledge">
+                    <p>Assumed Knowledge:</p>
+                    <p>Java <span class="badge badge-warning">Intermediate</span></p>
+                    <p>Java 8 <span class="badge badge-warning">Intermediate</span></p>
+                </div><br>
+                <div id="discoveryText" class="container">
+                    <p>
+                        For anyone who has ever written code in Java (or most imperative and object oriented languages) you know the pain of dealing with 
+                        <code>null</code> values.  These <code>null</code> values are especially painful in Java since they throw a 
+                        <code>NullPointerException</code> whenever we want to perform operations on them.  When we see a <code>NullPointerException</code> in 
+                        our code, the usual fix is to perform a null check similar to the following code snippet:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-java" title="Java" contenteditable="true" spellcheck="false">String str = "Hello";
+                                    
+if (str != null) {
+    hello.toUpperCase();
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Now <code>null</code> has some other issues besides uglifying our code by littering it with null checks.  As nicely explained in a book 
+                        I was reading recently on Java 8, <code>null</code> actually doesn't follow the statically typed system that Java uses<sup>1</sup>.  It 
+                        is the wrong way of representing the absence of a value.
+                    </p>
+                    <p>
+                        Upgrades in Java 8 allow you to implement missing values in a statically typed manner with the <code>Optional&lt;T&gt;</code> class.  
+                        The <code>Optional</code> object wraps a value, and it can be either present or absent (<code>null</code>).  Now instead of performing 
+                        null checks, you can simply interact with the <code>Optional</code> class.
+                    </p>
+                    <p>
+                        In this discovery I am going to build an API for athletes in Java using the <code>Optional</code> method for null values.  There are a 
+                        couple of methods of the <code>Optional</code> class that we need to be familiar with before getting started:
+                    </p>
+                    <h6>static Optional&lt;T&gt; empty()</h6>
+                    <p>
+                        The <code>empty()</code> static method returns an empty <code>Optional</code> instance.  This is the equivalent of a <code>null</code> 
+                        value in a strictly typed setting.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-java" title="Java" contenteditable="true" spellcheck="false">// Represent an Optional with an absent value
+Optional<String> empty = Optional.empty();
+System.out.println(empty); // Optional.empty</code>
+                        </pre>
+                    </figure>
+                    <h6>static Optional&lt;T&gt; of(T value)</h6>
+                    <p>
+                        Wraps the argument value in the <code>Optional</code> object.  However, if you pass <code>null</code> to the <code>of()</code> static 
+                        method it will throw a <code>NullPointerException</code>.  Only use <code>of()</code> if you know that the value being passed is not 
+                        <code>null</code>.
+                    </p>
+                    <h6>static Optional&lt;T&gt; ofNullable(T value)</h6>
+                    <p>
+                        Performs the same operation as <code>of()</code> except if the value is absent no error will be thrown and an empty <code>Optional</code> 
+                        object will be returned.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-java" title="Java" contenteditable="true" spellcheck="false"></code>
+                        </pre>
+                    </figure>
+                    <div class="container tags">
+                        <p>
+                            Tags: <span class="badge badge-default">Java</span> <span class="badge badge-default">Java 8</span>
+                        </p>
+                    </div>
+                    <div class="container sources">
+                        <p>[1] Alvaro Videla &amp; Jason J.W. Williams, RabbitMQ In Action (Shelter Island, NY: Manning, 2012), 2</p>
+                        <p>[2] Ibid., 22</p>
+                        <p>[3] Ibid., 45</p>
+                        <p>[4] Ibid., 14</p>
+                        <p>[5] Ibid., 20</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../../../../../prism.js"></script>
+    </body>
+</html>
