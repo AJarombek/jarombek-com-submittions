@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<!-- Author: Andrew Jarombek
+     Date: 1/27/2018 -->
+<html>
+    <head>
+        <meta chartset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Angular 5 Routing &amp; Lazy Loading Modules</title>
+        <link rel="stylesheet" href="../../../../../blog-discover.css">
+        <link rel="stylesheet" href="angular-routing.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/fantasque-sans-mono" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
+            integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link href="../../../../../prism.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="col-md-12 discoveryBody">
+            <div class="col-md-12 discoveryContent">
+                <p class="date">January 27th, 2018</p>
+                <br>
+                <h4>Angular 5 Routing &amp; Lazy Loading Modules</h4>
+                <br>
+                <div class="container aknowledge">
+                    <p>Assumed Knowledge:</p>
+                    <p>Angular <span class="badge badge-default">Basic</span></p>
+                    <p>TypeScript <span class="badge badge-default">Basic</span></p>
+                    <p>JavaScript <span class="badge badge-default">Basic</span></p>
+                </div><br>
+                <div id="discoveryText" class="container">
+                    <p>
+                        I have recently started work on my Angular 5 framework prototype.  The project will be a single page web application that displays cat 
+                        pictures!  The page will have a number of tabs you can click on that will change the state of the application.  To start setting up the 
+                        application, I first set up all the routes in Angular for when users click on the tabs.
+                    </p>
+                    <p>
+                        First I set up an Angular component that has an HTML template for all the tabs.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-html" title="HTML" contenteditable="true" spellcheck="false">&lt;div&gt;
+&lt;header&gt;
+    &lt;div&gt;
+        &lt;a [routerLink]="['/']"&gt;MeowPics&lt;/a&gt;
+    &lt;/div&gt;
+    &lt;nav&gt;
+        &lt;ul&gt;
+            &lt;li&gt;
+                &lt;a [routerLink]="['/profile']"&gt;Profile&lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;a [routerLink]="['/profile/post']"&gt;Post&lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;a [routerLink]="['/about']"&gt;About&lt;/a&gt;
+            &lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/nav&gt;
+    &lt;div&gt;
+        &lt;div&gt;
+            &lt;a [routerLink]="['/login']"&gt;Login&lt;/a&gt;
+        &lt;/div&gt;
+        &lt;span&gt;  &lt;/span&gt;
+        &lt;div&gt;
+            &lt;a [routerLink]="['/signup']"&gt;Sign Up&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/header&gt;
+&lt;!-- Router Outlet is where the router will render the component --&gt;
+&lt;router-outlet&gt;&lt;/router-outlet&gt;
+&lt;/div&gt;</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        The code sets up <code>[routerLink]</code> properties that specify which path to route to.  Each of these routes is assigned an Angular 
+                        component as we will soon see.  When you click a route, its components template will be placed inside the 
+                        <code>&lt;router-outlet&gt;</code> element.
+                    </p>
+                    <p>
+                        The Angular component for this template is called <code>AppComponent</code> and is wrapped along with the router's components in a 
+                        module called <code>AppModule</code>.  The most important piece of this module is that it maps each route to the correct component:                            
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-typescript" title="TypeScript" contenteditable="true" spellcheck="false">export const routes: Routes = [
+    {path: '', component: HomeComponent},
+    {path: 'profile', loadChildren: './profile/profile.module#ProfileModule'},
+    {path: 'about', component: AboutComponent},
+    {path: 'profile/post', loadChildren: './profile/profile.module#ProfileModule'},
+    {path: 'login', component: LoginComponent},
+    {path: 'signup', component: SignupComponent}
+];
+
+/**
+ * @NgModule configures an Angular module, helping to organize the application into components
+ * In Angular 5 NgModules allow for Ahead-Of-Time Compilation, where the JavaScript and HTML 
+ * is compiled before the code is sent to the client
+ * declarations - items used in templates (ex. components, directives)
+ * imports - import other modules
+ * providers - services used in the module
+ * bootstrap - specifies the root component of the application as a bootstrap entry point
+ */
+@NgModule({
+    declarations: [
+        AppComponent,
+        HomeComponent,
+        AboutComponent,
+        LoginComponent,
+        SignupComponent
+    ],
+    imports: [
+        BrowserModule,
+        RouterModule.forRoot(routes)
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
+})
+export class AppModule { }</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        You can see that each route is assigned a HTTP path and an Angular component.  This <code>routes</code> variable is then used in the 
+                        <code>@NgModule</code> annotation with the <code>RouterModule</code>.  We use the <code>RouterModule.forRoot()</code> method because 
+                        <code>AppModule</code> is the root module.
+                    </p>
+                    <p>
+                        Most of the components assigned to routes are very simple.  However, you will notice that some have a <code>loadChildren</code> property 
+                        instead of <code>component</code>.  This is because these components are lazily loaded<sup>1,2</sup>.  They are not shipped with the 
+                        main application and are only loaded from the server when they need to be accessed.  
+                    </p>
+                    <p>
+                        The prototype project has two modules: the root module we have looked at already and a <code>ProfileModule</code> that contains 
+                        components that are only accessible by signed in users.  If you look closely at the <code>loadChildren</code> properties you can see 
+                        that they specify the path to the <code>ProfileModule</code> in the project.  This module will be lazily loaded when you follow either 
+                        of these paths.  Here you can see the code for the <code>ProfileModule</code> (and that it specifies its own sub-paths):
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-typescript" title="TypeScript" contenteditable="true" spellcheck="false">import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ProfileComponent } from './profile.component';
+import { PostComponent } from './post/post.component';
+import { RouterModule } from "@angular/router";
+
+// Define routing within the feature module
+export const routes = [
+    {path: '', component: ProfileComponent},
+    {path: 'post', component: PostComponent}
+];
+
+// Export both the ProfileComponent and PostComponent to outside the module
+@NgModule({
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes)
+    ],
+    declarations: [ProfileComponent, PostComponent],
+    exports: [ProfileComponent, PostComponent]
+})
+export class ProfileModule { }</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        You may be wondering what these components consist of.  Right now they are just placeholders that specify a simple template that 
+                        displays some text.  For example, here is the text for the <code>ProfileComponent</code>:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-html" title="HTML" contenteditable="true" spellcheck="false">&lt;p&gt;
+    Profile Component!
+&lt;/p&gt;</code>
+                        </pre>
+                    </figure>
+                    <h5>Lazy Loading In Action</h5>
+                    <p>
+                        Let's make sure that lazy loading is actually working.  When we first load the page, the <code>HomeComponent</code> is displayed as 
+                        expected and we can see in the developer tools all the files that were loaded with our application.
+                    </p>
+                    <figure id="prelazy-image">
+                        <img src="prelazy.png">
+                    </figure>
+                    <p>
+                        Now if I click on the Profile tab, we will load the <code>ProfileComponent</code>.  This component is lazily loaded.  As expected the 
+                        webpage displays ‘Profile Component!' and if we look at the developer tools, another file has been loaded!  This contains all the code 
+                        for the <code>ProfileModule</code> including the <code>ProfileComponent</code>.  Lazy loading confirmed!
+                    </p>
+                    <figure id="postlazy-image">
+                        <img src="postlazy.png">
+                    </figure>
+                    <p>
+                        I have just begun my journey on this Angular 5 prototype but am excited to continue to learn!  It is all a bit overwhelming at the 
+                        moment, but I know it will get easier from here.  You can check out the code from this discovery on 
+                        <a href="https://github.com/AJarombek/angular-nodejs-mongodb-prototype/releases/tag/v0.1">GitHub</a>.
+                    </p>
+                    <div class="container tags">
+                        <p>
+                            Tags: <span class="badge badge-default">Angular</span> <span class="badge badge-default">TypeScript</span> <span class="badge badge-default">JavaScript</span>
+                        </p>
+                    </div>
+                    <div class="container sources">
+                        <p>[1] "Angular Module Intro", https://blog.angular-university.io/angular2-ngmodule/</p>
+                        <p>[2] "Angular 2 lazy loading compiling error", https://github.com/angular/angular-cli/issues/6246</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../../../../../prism.js"></script>
+    </body>
+</html>
