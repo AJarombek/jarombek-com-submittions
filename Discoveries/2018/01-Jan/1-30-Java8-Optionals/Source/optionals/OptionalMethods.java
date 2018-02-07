@@ -14,7 +14,7 @@ public class OptionalMethods {
         Optional<String> empty = Optional.empty();
         System.out.println(empty); // Optional.empty
 
-        // If the Optional value is present, perform the Consumer lambda expression
+        // If the Optional value is present, perform the Consumer method reference
         Optional<String> present = Optional.of("I am not null!");
         present.ifPresent(System.out::println); // I am not null!
     }
