@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<!-- Author: Andrew Jarombek
+     Date: 1/30/2018 -->
+<html>
+    <head>
+        <meta chartset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Java 8 Completable Future</title>
+        <link rel="stylesheet" href="../../../../../blog-discover.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/fantasque-sans-mono" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
+            integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link href="../../../../../prism.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="col-md-12 discoveryBody">
+            <div class="col-md-12 discoveryContent">
+                <p class="date">Feburary 7th, 2018</p>
+                <br>
+                <h4>Java 8 Completable Future</h4>
+                <br>
+                <div class="container aknowledge">
+                    <p>Assumed Knowledge:</p>
+                    <p>Java <span class="badge badge-warning">Intermediate</span></p>
+                    <p>Java 8 <span class="badge badge-warning">Intermediate</span></p>
+                </div><br>
+                <div id="discoveryText" class="container">
+                    <p>
+                        This post is going to consist of first impressions of Java 8's new <code>CompletableFuture</code> class, which builds on top of the 
+                        <code>Future</code> class introduced in Java 5<sup>1</sup>.  A <code>CompletableFuture</code> represents an operation in progress that 
+                        when completed will contain a value<sup>2</sup>.  We can use this class to create asynchronous code that won't block during long running 
+                        tasks.  My initial impression is that a <code>CompletableFuture</code> is Java's version of a JavaScript <code>Promise</code> object.  
+                        You define an operation to perform once the value is resolved asynchronously, and if needed can chain these operations.
+                    </p>
+                    <p>
+                        I created a simple example API to test it out.  The API contains a list of programming languages that you can ask for information about.  
+                        The operation of getting a language takes a long time to complete (to simulate a possible long running network call) so we will use a 
+                        <code>CompletableFuture</code> to deal with its value once it arrives.  In the meantime, we will be able to perform other operations.
+                    </p>
+                    <p>
+                        Here is the APIs class:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-java" title="Java" contenteditable="true" spellcheck="false">public class LanguageAPI {
+
+    private static Random random =  new Random();
+    private Map<String, Language> languages;
+
+    public LanguageAPI() {
+
+        // Populate the languages map
+        languages = Stream.of(
+           new Language("Java", LocalDate.of(1995, Month.MAY, 23), "9.0", "Object Oriented"),
+           new Language("JavaScript", LocalDate.of(1995, Month.DECEMBER, 4), 
+                        "9.0", "Prototype Based"))
+           .collect(toMap(Language::getName, e -> e));
+    }
+
+    /**
+     * Get one of the languages stored in the API with a delay
+     * @param name - the name of the language
+     * @return - the language object
+     */
+    public Language getLanguage(String name) {
+        randomDelay();
+        return languages.get(name);
+    }
+
+    /**
+     * Create a random delay between 0-3 seconds
+     */
+    private void randomDelay() {
+        double delay = random.nextDouble() * 3_000;
+        System.out.println("The delay will be " + delay + " ms");
+        try {
+            Thread.sleep((long) delay);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        You can see that we initialize the API's language values in the constructor.  I also used Java 8's nice new Date and Time API to 
+                        specifies the languages creation date.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-java" title="Java" contenteditable="true" spellcheck="false">public class Language {
+                                    
+    private String name;
+    private LocalDate created;
+    private String version;
+    private String paradigm;
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Now to use this API on the client side:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-java" title="Java" contenteditable="true" spellcheck="false">public class APIClient {
+                                    
+    private static LanguageAPI languageAPI = new LanguageAPI();
+
+    /**
+     * Get a language asynchronously.  
+     * When the language object is finally received, print it
+     * @param name - the language name
+     * @return the CompletableFuture
+     */
+    public static CompletableFuture<Void> getLanguageAsync(String name) {
+
+        // Start up a new thread and perform the language APIs getLanguage() 
+        // method asynchronously
+        CompletableFuture<Language> futureLanguage = 
+            CompletableFuture.supplyAsync(() -> languageAPI.getLanguage(name));
+
+        // Print out the Language once the futures value is supplied
+        return futureLanguage.thenAccept(System.out::println);
+    }
+
+    public static void main(String... args) {
+
+        // Get the Java language asynchronously
+        CompletableFuture<Void> future = getLanguageAsync("Java");
+        System.out.println("Finding Java...");
+
+        // Wait for the future to complete before ending the Java process
+        future.join();
+    }
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Since the <code>getLanguage()</code> method takes so long to complete, I wrapped it in a <code>CompletableFuture</code>.  To do this I 
+                        use <code>CompletableFuture</code>'s <code>supplyAsync()</code> method.  This method accepts a <code>Supplier</code> that will be 
+                        asynchronously executed.  I will put the <code>getLanguage()</code> method in this <code>Supplier</code>.  Once the value is resolved 
+                        I will print out its value using the <code>thenAccept()</code> method.  The contents of this method are executed once the value exists, 
+                        so I pass it the <code>System.out::println</code> method reference.
+                    </p>
+                    <p>
+                        If you run this code, you will see that 'Finding Java...' will be printed out before the <code>Langauge</code> object is resolved and 
+                        printed.  Asynchronous code at work!
+                    </p>
+                    <figure>
+                        <pre class="command-line" data-prompt="$" data-output="1-6">
+                            <code class="language-bash" title="Bash" contenteditable="true" spellcheck="false">Finding Java...
+The delay will be 2083.7637884812107 ms
+Language(name=Java, created=1995-05-23, version=9.0, paradigm=Object Oriented)</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        I haven't tried more complex examples, but <code>CompletableFuture</code> does seem like a nice new addition to Java.  In the past when 
+                        I had to perform asynchronous code in Java I used Android libraries or the Spring framework, but I can see myself using 
+                        <code>CompletableFuture</code>s in my code in the future!  The code for this discovery is on 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2018/02-Feb/2-7-Java-Completable-Future/Source">GitHub</a>.
+                    </p>
+                    <div class="container tags">
+                        <p>
+                            Tags: <span class="badge badge-default">Java</span> <span class="badge badge-default">Java 8</span>
+                        </p>
+                    </div>
+                    <div class="container sources">
+                        <p>[1] Raoul-Gabriel Urma, Mario Fusco &amp; Alan Mycroft, Java 8 In Action (Shelter Island, NY: Manning, 2015), 251</p>
+                        <p>[2] Ibid., 252</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../../../../../prism.js"></script>
+    </body>
+</html>
