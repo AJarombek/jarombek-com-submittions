@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<!-- Author: Andrew Jarombek
+     Date: 1/30/2018 -->
+<html>
+    <head>
+        <meta chartset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>What Is Functional Programming in Java 8?</title>
+        <link rel="stylesheet" href="../../../../../blog-discover.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/fantasque-sans-mono" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
+            integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link href="../../../../../prism.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="col-md-12 discoveryBody">
+            <div class="col-md-12 discoveryContent">
+                <p class="date">Feburary 8th, 2018</p>
+                <br>
+                <h4>What Is Functional Programming in Java 8?</h4>
+                <br>
+                <div class="container aknowledge">
+                    <p>Assumed Knowledge:</p>
+                    <p>Java <span class="badge badge-warning">Intermediate</span></p>
+                    <p>Java 8 <span class="badge badge-warning">Intermediate</span></p>
+                </div><br>
+                <div id="discoveryText" class="container">
+                    <p>
+                        With all the functional additions to Java 8, I do think it is important to try to define what it means for a program to be 'functional.'  
+                        The end of the book I was reading, <a href="https://www.manning.com/books/java-8-in-action">Java 8 In Action</a>, tried to explain exactly that.
+                    </p>
+                    <p>
+                        It is hard however to fully explain functional programming with Java since it doesn't follow a pure functional style.  Instead Java 8 
+                        tries to take pieces of what makes functional programming great and incorporate it into Java's existing imperative and object oriented 
+                        paradigm.  
+                    </p>
+                    <p>
+                        My experience with functional programming is extremely limited.  The only true functional programming that I did was with 
+                        <a href="https://en.wikipedia.org/wiki/Racket_(programming_language)">Racket</a> back 
+                        during the winter of Junior year in college (a few months before I really got invested in programming and software development).  
+                        So I don't remember much!
+                    </p>
+                    <p>
+                        Functional programming, like mathematics, is focused around the function.  This function takes a variable number of arguments and 
+                        returns a variable number of results.  Most importantly however is that the function has zero side effects<sup>1</sup>.  This means that 
+                        each time the function is called with the same arguments, the same result will occur.  Also no variables of the program can be mutated.  
+                        They all must be effectively final.  You also can't output to a log file or throw exceptions<sup>2</sup>.  These are a lot of things 
+                        you can't do, but the result is a function that will not cause unexpected errors in the rest of your code.  It is very predictable.
+                    </p>
+                    <p>
+                        Functional style programming in Java is not quite this strict.  I don't think anyone will complain if your program outputs some 
+                        information to a log file for debugging.  However, reducing the variables your functions mutate and removing exceptions can be seen as 
+                        a beneficial practice.  Predictable functions are nice to work with and will help future developers who work on your code!
+                    </p>
+                    <p>
+                        Removing errors in your code can be very simple now with Java 8's <code>Optional</code> class!  I looked into optionals in detail in a 
+                        prior discovery post, but you could easily express an invalid condition in functions with optionals.  For example, the book I read 
+                        discusses a divide by zero scenario:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-java" title="Java" contenteditable="true" spellcheck="false">public class Functional {
+                                    
+    public static Optional<Double> divide(Double numerator, Double denominator) {
+
+        // Wrap arguments into optionals
+        Optional<Double> num = Optional.ofNullable(numerator);
+        Optional<Double> den = Optional.ofNullable(denominator);
+
+        // Return division result if arguments exist and the denominator isn't zero, 
+        // otherwise return empty optional
+        return (!num.isPresent() || !den.isPresent()) ?
+                Optional.empty() : (den.get() == 0) ?
+                Optional.empty() : Optional.of(num.get() / den.get());
+    }
+
+    public static void main(String... args) {
+        Optional<Double> success = divide(5.0, 2.0);
+        Optional<Double> fail = divide(5.0, 0.0);
+        Optional<Double> failBecauseNull = divide(null, 6.5);
+
+        success.ifPresent(System.out::println);
+
+        // Both of these Optionals will be empty
+        if (!fail.isPresent()) {
+            System.out.println("Can't Divide By Zero");
+        }
+
+        if (!failBecauseNull.isPresent()) {
+            System.out.println("Can't Pass an Empty Value");
+        }
+    }
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Here we first try to divide 5 by 2, then 5 by 0, and finally the dreaded <code>null</code> by 6.5.  With optionals, we do not have to 
+                        throw any errors here.  Instead the client of our APIs function simply checks the <code>Optional</code> for a value.  Our first valid 
+                        division will contain a result while the other two will return <code>Optional.empty</code>.  The output of this program is as follows:
+                    </p>
+                    <figure>
+                        <pre class="command-line" data-prompt="$" data-output="1-6">
+                            <code class="language-bash" title="Bash" contenteditable="true" spellcheck="false">2.5
+Can't Divide By Zero
+Can't Pass an Empty Value</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Functional programming also often utilizes recursion to avoid mutating variables.  The only issue in Java with recursion is that each 
+                        time a recursive function is called, a new stack frame is created<sup>3</sup>.  This can cause overflows for large operations.  Java 
+                        also does not have tail recursion optimizations in place, so you can't be smart and avoid stack frame creation<sip>4</sup>.
+                    </p>
+                    <p>
+                        
+                    </p>
+                    <div class="container tags">
+                        <p>
+                            Tags: <span class="badge badge-default">Java</span> <span class="badge badge-default">Java 8</span>
+                        </p>
+                    </div>
+                    <div class="container sources">
+                        <p>[1] Raoul-Gabriel Urma, Mario Fusco &amp; Alan Mycroft, Java 8 In Action (Shelter Island, NY: Manning, 2015), 295</p>
+                        <p>[2] Ibid., 296</p>
+                        <p>[3] Ibid., 302</p>
+                        <p>[4] Ibid., 303</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../../../../../prism.js"></script>
+    </body>
+</html>
