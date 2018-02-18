@@ -1,8 +1,12 @@
 #common-user-image img {
-    height: 236px;
+    height: 45.68px;
 }
 
-#common-user-image img {
+#bulk-insert-image img {
+    height: 100px;
+}
+
+#common-user-image img, #bulk-insert-image img {
     border: 2px solid #ececec;
     margin: 0 auto;
     margin-bottom: 20px;
