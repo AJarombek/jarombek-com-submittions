@@ -1,0 +1,14 @@
+#common-user-image img {
+    height: 236px;
+}
+
+#common-user-image img {
+    border: 2px solid #ececec;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+img {
+    margin-top: 15px;
+    margin-left: 60px;
+}

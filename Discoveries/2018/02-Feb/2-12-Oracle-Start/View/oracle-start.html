@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!-- Author: Andrew Jarombek
+     Date: 2/17/2018 -->
+<html>
+    <head>
+        <meta chartset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Oracle 12c Database Up &amp; Running</title>
+        <link rel="stylesheet" href="../../../../../blog-discover.css">
+        <link rel="stylesheet" href="style/common-user.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/fantasque-sans-mono" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
+            integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link href="../../../../../prism.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="col-md-12 discoveryBody">
+            <div class="col-md-12 discoveryContent">
+                <p class="date">Feburary 12th, 2018</p>
+                <br>
+                <h4>Oracle 12c Database Up &amp; Running</h4>
+                <br>
+                <div class="container aknowledge">
+                    <p>Assumed Knowledge:</p>
+                    <p>SQL <span class="badge badge-warning">Intermediate</span></p>
+                    <p>Relational Database <span class="badge badge-warning">Intermediate</span></p>
+                    <p>Oracle Database <span class="badge badge-default">Basic</span></p>
+                </div><br>
+                <div id="discoveryText" class="container">
+                    <p>
+                        I recently finished looking at Java 8 (which was the topic of recent discoveries) and now am doing a deep dive into the Oracle database.  
+                        Although I don't use Oracle a ton in my free time I use it a lot at work and it is the 
+                        <a href="http://pypl.github.io/DB.html">most popular database</a> at the moment.  Therefore it is good to know well!
+                    </p>
+                    <p>
+                        This discovery is going to follow me through the setup of my database.  I will skip the actually Oracle installation and configuration 
+                        (which was a challenge itself!) and skip straight to the moment I started typing SQL.
+                    </p>
+                    <p>
+                        A disclaimer before I begin.  A lot of my discoveries are about languages and technologies that I really love using.  In this case I 
+                        wouldn't say that I love Oracle but it is a good tool to have in the kit.  Just try installing an Oracle product and you will begin to 
+                        see why many get frustrated with this database!  One bright spot would be the PL/SQL language, which allows developers to add some 
+                        really cool functionality at the database layer of applications.  I won't be going into PL/SQL much this time around but definitely 
+                        will in the future!
+                    </p>
+                    <h5>Basic Administration</h5>
+                    <p>
+                        So to start out I installed Oracle (the only good installation guide was found on a non-Oracle backed blog post) and connected to my 
+                        database instance.  The first task I wanted to accomplish was create a user for my database schema.  In Oracle a user is an account for 
+                        a schema of the same name<sup>1</sup>.
+                    </p>
+                    <p>
+                        I started by creating a tablespace called <code>ANDY</code> that I would place all my tables in.  A tablespace in Oracle consists of 
+                        physical storage units for the database's data<sup>2</sup>.  It is a way to group the database at a storage level.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-sql" title="SQL" contenteditable="true" spellcheck="false">CREATE TABLESPACE ANDY;
+
+CREATE USER C##ANDYUSR IDENTIFIED BY orac1et3st DEFAULT TABLESPACE ANDY;
+GRANT ALL PRIVILEGES TO C##ANDYUSR;</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Next I create my user <code>C##ANDYUSR</code> and give it all privileges.  I also set its default tablespace to the one I just created.  
+                        You may be wondering what is up with the strange username?  The <code>C##</code> prefix defines a common user (contrasted with a local 
+                        user)<sup>3</sup>.  A common user can be used across all Oracle pluggable databases instead of being local to a single one.  You can 
+                        confirm that the user is a common user with the following query:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-sql" title="SQL" contenteditable="true" spellcheck="false">SELECT * FROM ALL_USERS WHERE USERNAME LIKE 'C##%';</code>
+                        </pre>
+                    </figure>
+                    <figure id="common-user-image">
+                        <img src="common-user.png">
+                    </figure>
+                    <p>
+
+                    </p>
+                    <figure>
+                        <pre class="command-line" data-prompt="$" data-output="1-6">
+                            <code class="language-bash" title="Bash" contenteditable="true" spellcheck="false"></code>
+                        </pre>
+                    </figure>
+                    <div class="container tags">
+                        <p>
+                            Tags: <span class="badge badge-default">SQL</span> <span class="badge badge-default">Relational Database</span> 
+                                <span class="badge badge-default">Oracle Database</span>
+                        </p>
+                    </div>
+                    <div class="container sources">
+                        <p>[1] Raoul-Gabriel Urma, Mario Fusco &amp; Alan Mycroft, Java 8 In Action (Shelter Island, NY: Manning, 2015), 295</p>
+                        <p>[2] Ibid., 296</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../../../../../prism.js"></script>
+    </body>
+</html>
