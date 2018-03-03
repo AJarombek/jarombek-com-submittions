@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<!-- Author: Andrew Jarombek
+     Date: 2/17/2018 -->
+<html>
+    <head>
+        <meta chartset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Oracle: Cool Intermediate SQL Queries</title>
+        <link rel="stylesheet" href="../../../../../blog-discover.css">
+        <link rel="stylesheet" href="style/oracle-queries.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/fantasque-sans-mono" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
+            integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link href="../../../../../prism.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="col-md-12 discoveryBody">
+            <div class="col-md-12 discoveryContent">
+                <p class="date">March 2nd, 2018</p>
+                <br>
+                <h4>Oracle: Cool Intermediate SQL Queries</h4>
+                <br>
+                <div class="container aknowledge">
+                    <p>Assumed Knowledge:</p>
+                    <p>SQL <span class="badge badge-warning">Intermediate</span></p>
+                    <p>Relational Database <span class="badge badge-warning">Intermediate</span></p>
+                    <p>Oracle Database <span class="badge badge-warning">Intermediate</span></p>
+                </div><br>
+                <div id="discoveryText" class="container">
+                    <p>
+                        In my previous <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2018/02-Feb/2-12-Oracle-Start/View">Oracle database discovery</a> 
+                        I got a database instance up and running plus set up my basic table structure.  The database held programming language information 
+                        and different books that I have read.  In this discovery I continue with that example and perform some interesting queries on the 
+                        database of intermediate difficulty.                        
+                    </p>
+                    <p>
+                        Now what do I mean by intermediate difficulty.  Obviously this definition will vary among developers, but I believe that intermediate 
+                        queries are ones beyond simple select statements with basic filters.  This discovery isn't really a tutorial on creating SQL queries 
+                        but more exploring different SQL syntax that was interesting to me!  I will start out pretty simple and then get more complex!
+                    </p>
+                    <h5>Fun Queries!</h5>
+                    <p>
+                        Often I perform queries with multiple <code>WHERE</code> conditions, chained by <code>AND</code> clauses.  If I wanted to find it a 
+                        column is between two different values, I can use the <code>BETWEEN</code> clause.  This mill make my intentions more clear and reduce 
+                        my queries <code>AND</code> clauses.  The following query looks for books between two dates:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-sql" title="SQL" contenteditable="true" spellcheck="false">SELECT * FROM books WHERE released
+BETWEEN to_date('2014-08-01', 'YYYY-mm-dd')
+AND to_date('2014-08-31', 'YYYY-mm-dd');</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        <code>WHERE</code> clauses can also look for soft varchar matches, where only a portion of a string has to match a columns value.  In this 
+                        case you can use the <code>LIKE</code> clause which can be chained with a string value.  The <code>%</code> wildcard is used to match any 
+                        number of characters.  The following query searches for books with titles containing the word 'Java':
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-sql" title="SQL" contenteditable="true" spellcheck="false">SELECT * FROM books WHERE title LIKE '%Java%';</code>
+                        </pre>
+                    </figure>
+                    <span class="code-span">
+ISBN           TITLE              RELEASED   STARTED   FINISHED  EDITION TIME_READING
+-------------- ------------------ ---------- --------- --------- ------- ------------
+9781617291999  Java 8 in Action   01-AUG-14  10-OCT-17 08-FEB-18         121
+                    </span>
+                    <p>
+                        The current table structure of this database forms a many to many relationship.  Here is the ER diagram:
+                    </p>
+                    <figure id="image">
+                        <img src="Database-ER.png">
+                    </figure>
+                    <p>
+                        In the following query I perfromed an inner join across this many to many relationship to get a book, the language that it is about, and the 
+                        date that language was created.  Inner joins only return rows when the columns in the <code>JOIN ON</code> clause have non-null 
+                        values<sup>1</sup>.  Therefore, no row will be returned for a language that has no corresponding book.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-sql" title="SQL" contenteditable="true" spellcheck="false">SELECT b.isbn, b.title, bl.name, l.created
+FROM books b
+INNER JOIN book_languages bl ON b.isbn = bl.isbn
+INNER JOIN languages l ON bl.name = l.name
+ORDER BY b.title;</code>
+                        </pre>
+                    </figure>
+                    <span class="code-span">
+           ISBN TITLE                      NAME       CREATED
+--------------- -------------------------- ---------- --------------
+  9781491901946 AngularJS: Up and Running  JavaScript 04-DEC-95
+  9781617291999 Java 8 in Action           Java       23-MAY-95
+  9780071799355 Oracle Database 12c SQL    SQL        01-JAN-74
+  9780071799355 Oracle Database 12c SQL    PL/SQL     01-JAN-92
+  9781617291203 Spring In Action           Java       23-MAY-95
+                    </span>
+                    <p>
+                        Sometimes you may want to make a SQL query that doesn't actually return the data in a table, but instead different values depending on the 
+                        underlying structure.  The following query does exactly that.  Depending on whether a book has a <code>time_reading</code> value, we will 
+                        return 'Finished Reading' or 'Not Completed' (note: the <code>time_reading</code>column is a virtual column that is only generated when both 
+                        a <code>finished</code>and <code>started</code>date exist).  This operation is performed with the <code>nvl2()</code> function, which for its 
+                        first argument takes a column.  If this column is not null, the second argument is returned, otherwise the third is returned.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-sql" title="SQL" contenteditable="true" spellcheck="false">SELECT title, nvl2(time_reading, 'Finished Reading', 'Not Completed') still_reading,
+  CASE WHEN time_reading > 100 THEN 'Long Read'
+    WHEN time_reading > 25 THEN 'Moderate Read'
+    ELSE 'Short Read' END duration
+FROM books;</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        If you want to perform more complex if-else logic then checking for null values, you can use a <code>CASE</code> statement<sup>2</sup>.  
+                        Here I check if the time spent reading the book is greater than certain values, and if so return a different string.  Here is the result 
+                        of this query:
+                    </p>
+                    <span class="code-span">
+TITLE                       STILL_READING     DURATION
+--------------------------- ----------------- -------------
+Java 8 in Action            Finished Reading  Long Read
+Oracle Database 12c SQL     Finished Reading  Moderate Read
+AngularJS: Up and Running   Not Completed     Short Read
+Jump Start: Bootstrap       Finished Reading  Short Read
+Spring In Action            Finished Reading  Short Read
+                    </span>
+                    <p>
+                        The next query is going to look at hierarchical data.  This data forms parent child relationships in a tree structure.  Now the current three 
+                        tables we have in the database don't have any hierarchical data.  Let's change that by creating a new table called <code>language_hierarchy</code> 
+                        which stores data about languages and other languages that influenced them.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-sql" title="SQL" contenteditable="true" spellcheck="false">-- Both name and influenced_by fields come from the language tables name column
+CREATE TABLE language_hierarchy(
+    name VARCHAR2(63),
+    influnced_by VARCHAR2(63),
+    CONSTRAINT language_hierarchy_name_fk
+    FOREIGN KEY (name) REFERENCES languages(name) ON DELETE CASCADE,
+    CONSTRAINT language_hierarchy_inf_by_fk
+    FOREIGN KEY (influnced_by) REFERENCES languages(name) ON DELETE CASCADE
+);</code>
+                        </pre>
+                    </figure>
+                    <span class="code-span">
+NAME          INFLUNCED_BY
+------------- --------------
+Java          C
+C
+JavaScript    Java
+JavaScript    C
+JavaScript    Python
+SQL
+PL/SQL        SQL
+HTML
+XML
+CSS
+Sass          CSS
+Swift         Python
+PHP           C
+PHP           Java
+Python        C
+Python        Java
+TypeScript    Java
+TypeScript    JavaScript
+JSON          JavaScript
+                    </span>
+                    <p>
+                        Now we can display the hierarchical nature of this data using the <code>CONNECT BY PRIOR</code> and <code>START WITH</code> clauses.  
+                        <code>START WITH</code> defines a row to start the hierarchical analysis at (it does not have to be the root node in the graph).  In 
+                        the following query we start with the language 'C' since so many modern day languages were influenced by it.  The <code>CONNECT BY 
+                        PRIOR</code> defines the parent child relationship.  Let's say we have two rows where the <code>name</code> column in row #1 equals 
+                        the <code>influenced_by</code> column in row #2.  The <code>CONNECT BY PRIOR name = influnced_by</code> statement defines that row 
+                        #1 is the child node and has a relationship with parent node row #2.                            
+                    </p>
+                    <p>
+                        Here is the full query:                            
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-sql" title="SQL" contenteditable="true" spellcheck="false">SELECT LEVEL, lpad(' ', 2 * LEVEL -1) || name AS language
+FROM language_hierarchy
+START WITH name = 'C'
+CONNECT BY PRIOR name = influnced_by;</code>
+                        </pre>
+                    </figure>
+                    <span class="code-span">
+    LEVEL LANGUAGE
+--------- -----------------------
+        1 C
+        2   Java
+        3     JavaScript
+        4       JSON
+        4       TypeScript
+        3     PHP
+        3     Python
+        4       JavaScript
+        5         JSON
+        5         TypeScript
+        4       Swift
+        3     TypeScript
+        2   JavaScript
+        3     JSON
+        3     TypeScript
+        2   PHP
+        2   Python
+        3     JavaScript
+        4       JSON
+        4       TypeScript
+        3     Swift
+                    </span>
+                    <p>
+                        You may be wondering about the <code>LEVEL</code> column.  This is a pseudo column which indicates the level at which we are at in the 
+                        tree<sup>3</sup>.  We use this <code>LEVEL</code> column along with the <code>lpad()</code> function to add tabs to the front of the 
+                        language name depending on the tree depth.  In this example we started at the root column of the tree and navigated downwards, but you 
+                        can also traverse the tree upwards from a child node.  You can do this by simply switching the columns in the <code>CONNECT BY</code> 
+                        clause<sup>4</sup>.  In the following query I started at the language 'Java' and traversed the tree upwards.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-sql" title="SQL" contenteditable="true" spellcheck="false">SELECT LEVEL, lpad(' ', 2 * LEVEL -1) || name AS language
+FROM language_hierarchy
+START WITH name = 'Java'
+CONNECT BY PRIOR influnced_by = name;</code>
+                        </pre>
+                    </figure>
+                    <span class="code-span">
+    LEVEL LANGUAGE
+--------- -----------------------
+        1 Java
+        2   C
+                    </span>
+                    <p>
+                        Let say I want to group my time reading by the language I am reading about.  I can do this by joining the <code>books</code> and 
+                        <code>book_languages</code> tables on the language name. I also use the aggregate function <code>sum()</code> on the <code>time_reading</code> column.  
+                        This is a pretty simple use case of the <code>GROUP BY</code> clause.  Now let's say I also want a row in the result set that totals all the time spent 
+                        reading.  This is where the <code>ROLLUP</code> clause comes in.  You use <code>ROLLUP</code> in conjunction with the <code>GROUP BY</code> clause which 
+                        will return a row with the subtotal for the grouping<sup>5</sup>:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-sql" title="SQL" contenteditable="true" spellcheck="false">-- In this scenario you could also use the CUBE clause to the same effect.
+SELECT l.name, sum(b.time_reading) FROM books b
+    INNER JOIN book_languages l ON b.isbn = l.isbn
+GROUP BY ROLLUP(l.name);</code>
+                        </pre>
+                    </figure>
+                    <span class="code-span">
+NAME          SUM(B.TIME_READING)
+------------- -------------------
+Java          134
+JavaScript
+PL/SQL        26
+SQL           26
+              186
+                    </span>
+                    <p>
+                        Now if you wanted to make the result table more pretty it would be nice for the name column for the subtotal row to display a name like 'Total Days'.  
+                        We can implement this behavior with the help of the <code>grouping()</code> function.  This function accepts a column and returns 1 if the column value is 
+                        null and 0 if a value exists<sup>6</sup>.  In this example we can use the <code>grouping()</code> function along with the <code>CASE</code> clause to 
+                        populate the <code>name</code> column with a value when it would usually be <code>null</code>.                            
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-sql" title="SQL" contenteditable="true" spellcheck="false">SELECT
+  CASE grouping(l.name)
+    WHEN 1 THEN '*Total Days'
+    ELSE l.name
+    END AS name,
+  sum(b.time_reading) AS total_time_reading
+  FROM books b
+  INNER JOIN book_languages l ON b.isbn = l.isbn
+GROUP BY ROLLUP(l.name);</code>
+                        </pre>
+                    </figure>
+                    <span class="code-span">
+NAME          TOTAL_TIME_READING
+------------- -------------------
+Java          134
+JavaScript
+PL/SQL        26
+SQL           26
+*Total Days   186
+                    </span>
+                    <p>
+                        There are a ton more cool queries to explore in Oracle, and next time I plan on exploring analytic functions.  You can check out all 
+                        the code for this discovery on 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2018/03-Mar/3-2-Oracle-Queries/Source">GitHub</a>.
+                    </p>
+                    <div class="container tags">
+                        <p>
+                            Tags: <span class="badge badge-default">SQL</span> <span class="badge badge-default">Relational Database</span> 
+                                <span class="badge badge-default">Oracle Database</span>
+                        </p>
+                    </div>
+                    <div class="container sources">
+                        <p>[1] Jason Price, Oracle Database 12c SQL (New York: McGraw-Hill Education, 2013), 51</p>
+                        <p>[2] Ibid., 206</p>
+                        <p>[3] Ibid., 210</p>
+                        <p>[4] Ibid., 213</p>
+                        <p>[5] Ibid., 222</p>
+                        <p>[6] Ibid., 226</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../../../../../prism.js"></script>
+    </body>
+</html>

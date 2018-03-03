@@ -19,6 +19,8 @@ h6 { padding-top: 10px; padding-bottom: 10px; font-size: 1.5rem !important; colo
 
 p { color: #333; font-size: 20px; }
 
+.code-span { white-space: pre; font-family: 'FantasqueSansMonoBold' !important; font-weight: normal; font-style: normal; color: #444; }
+
 .aknowledge p { font-weight: bold; font-size: 14px; margin-bottom: 0px; }
 
 .tags p { font-weight: bold; font-size: 18px; margin-bottom: 20px; }

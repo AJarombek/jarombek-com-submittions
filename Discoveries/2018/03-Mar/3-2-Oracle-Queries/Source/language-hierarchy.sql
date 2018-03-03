@@ -4,7 +4,7 @@
 
 DROP TABLE language_hierarchy CASCADE CONSTRAINTS;
 
--- Both name and influenced_by fields come from the languages name column
+-- Both name and influenced_by fields come from the language tables name column
 CREATE TABLE language_hierarchy(
   name VARCHAR2(63),
   influnced_by VARCHAR2(63),
