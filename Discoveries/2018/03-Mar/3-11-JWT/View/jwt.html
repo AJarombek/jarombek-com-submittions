@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!-- Author: Andrew Jarombek
+     Date: 2/17/2018 -->
+<html>
+    <head>
+        <meta chartset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>What I Have Learned About JSON Web Tokens</title>
+        <link rel="stylesheet" href="../../../../../blog-discover.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/fantasque-sans-mono" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
+            integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link href="../../../../../prism.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="col-md-12 discoveryBody">
+            <div class="col-md-12 discoveryContent">
+                <p class="date">March 11th, 2018</p>
+                <br>
+                <h4>What I have Learned About JSON Web Tokens</h4>
+                <br>
+                <div class="container aknowledge">
+                    <p>Assumed Knowledge:</p>
+                    <p>JavaScript <span class="badge badge-default">Basic</span></p>
+                    <p>Angular <span class="badge badge-default">Basic</span></p>
+                    <p>Node.js <span class="badge badge-default">Basic</span></p>
+                    <p>Express <span class="badge badge-default">Basic</span></p>
+                    <p>JSON <span class="badge badge-default">Basic</span></p>
+                </div><br>
+                <div id="discoveryText" class="container">
+                    <p>
+                        For my 
+                        <a href="https://github.com/AJarombek/mean-client-prototype">MEAN stack prototype</a>, 
+                        I had to implement a way for users to be authenticated.  For example, if a user wanted to create a new post, I had 
+                        to make sure that they were signed in.  After looking at multiple solutions I settled with JSON Web Tokens (JWT) for authentication purposes.
+                    </p>
+                    <p>
+                        JWT’s are used to securely transfer a series of claims between parties<sup>1</sup>.  In my application, these claims will determine whether 
+                        the user is signed in.  The parties that these claims are transferred between are the Node.js/Express web server and my Angular 5 client.
+                    </p>
+                    <p>
+                        A JWT is a Base64 encoded JSON object and algorithm used for signing.  It contains a header, payload, and signature<sup>2</sup>.  These three 
+                        components are separated by a period in the Base64 encoding like so:
+                    </p>
+                    <span class="code-span">
+eyJhbGciOiJSUzI1NiJ9.
+eyJpYXQiOjE1MjAzOTI5NDIsImV4cCI6MTUyMDM5NjU0Miwic3ViIjoiNWE5NjE2IyZThiZDBiZDVlIn0.
+dGQU3FsuuOy9-IEEMHGTPB1bCOOk_28d_vofg56h9
+                    </span>
+                    <p>
+                        In the above JWT the first line is the header, the second line is the payload, and third line the signature.  The header carries claims about 
+                        the JWT itself.  In my use case, there was only one claim used - the algorithms used to sign the JWT.  In my use case the algorithm is RS256, which 
+                        is RSA along with SHA256.  More on this later.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-json" title="JSON" contenteditable="true" spellcheck="false">{
+    "alg": "RS256"
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        The payload contains user data about the JWT.  This is the data that we wanted to transfer in the first place.  In my implementation the JWT payload 
+                        had three claims.  The first is the <code>sub</code> claim, which identifies the subject that the claim is about.  In my application, the subject 
+                        would be the user that is logged in.  The second claim is the <code>iat</code> claim, which specifies the time the JWT was issued.  The final claim 
+                        is the <code>exp</code> claim, which is the expiration time of the JWT.  Both the issued time and expiration time are specified in UNIX time, or the 
+                        number of seconds since midnight January 1st, 1970.  Here is an example decoded payload from my application:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-json" title="JSON" contenteditable="true" spellcheck="false">{
+    "iat": 1520392942,
+    "exp": 1520396542,
+    "sub": "5a9616e6c5631b2e8bd0bd5e"
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false"></code>
+                        </pre>
+                    </figure>
+                    <div class="container tags">
+                        <p>
+                            Tags: <span class="badge badge-default">JWT</span> <span class="badge badge-default">JavaScript</span> 
+                            <span class="badge badge-default">JSON</span>
+                            <span class="badge badge-default">Angular</span> <span class="badge badge-default">Node.js</span>
+                            <span class="badge badge-default">Express</span> <span class="badge badge-default">RSA</span>
+                        </p>
+                    </div>
+                    <div class="container sources">
+                        <p>[1] "Continuous Integration", https://www.thoughtworks.com/continuous-integration</p>
+                        <p>[2] "Travis CI", https://en.wikipedia.org/wiki/Travis_CI</p>
+                        <p>[3] "Angular 2 with Travis CI", https://medium.com/from-the-couch/angular-2-with-travis-ci-922040e01937</p>
+                        <p>[4] "Installing Packages with the APT Addon", https://docs.travis-ci.com/user/installing-dependencies/#Installing-Packages-with-the-APT-Addon</p>
+                        <p>[5] "Setting up Databases: MongoDB", https://docs.travis-ci.com/user/database-setup/#MongoDB</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../../../../../prism.js"></script>
+    </body>
+</html>

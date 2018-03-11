@@ -1,0 +1,23 @@
+// Author: Andrew Jarombek
+// Date: 3/11/2018
+// Breaking down the contents of a JWT.  This file is in JSON5 for comments, but JWT uses JSON
+
+// The JWT Header
+
+{
+    // The alg claim details the algorithm used for signing this JWT
+    "alg": "RS256"
+}
+
+// The JWT Payload - my application specifies three claims here
+
+{
+    // Issued at time in UNIX time
+    "iat": 1520392942,
+
+    // Expires time
+    "exp": 1520396542,
+
+    // The subject that the JWT is about.  In this case it is the MongoDB id for a user
+    "sub": "5a9616e6c5631b2e8bd0bd5e"
+}
