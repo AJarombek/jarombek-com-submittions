@@ -77,13 +77,261 @@ dGQU3FsuuOy9-IEEMHGTPB1bCOOk_28d_vofg56h9
                         </pre>
                     </figure>
                     <p>
-
+                        If you look at the issued time and expiration time closely, you can see that there is a 3600 difference between the two.  That means that the JWT was 
+                        valid for an hour after it was issued.
+                    </p>
+                    <p>
+                        The signature, also called JSON Web Signature, is the really cool portion of JWT’s that make them so powerful.  The signature is how you determine the 
+                        authenticity of the JWT<sup>3</sup>.  The signature does not prevent users from decoding the header and payload of the JWT.  Instead it is used to perform 
+                        authentication based on which algorithm is used to sign the JWT.  The algorithm used in my implementation is RSA.
+                    </p>
+                    <p>
+                        RSA is an algorithm that generates two keys: a public key and a private key<sup>4</sup>.  The private key can both create a signed JWT 
+                        and authenticate it, while the public key can only authenticate it<sup>5</sup>.  This creates some interesting application possibilities 
+                        since you can give applications a public key and restrict them from signing JWTs.  My Node.js/Express server simply held both the private 
+                        and public key, using the private one to sign JWTs and the public one to authenticate.  Next I will go through the JWT setup I made for my 
+                        MEAN stack.
+                    </p>
+                    <h5>MEAN Stack implementation</h5>
+                    <p>
+                        The first step in setting up the MEAN stack with JWT is to install some dependencies which will simplify the JWT incorporation and to 
+                        generate both the private and public keys with RSA.
                     </p>
                     <figure>
                         <pre>
-                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false"></code>
+                            <code class="language-bash" title="Bash" contenteditable="true" spellcheck="false">#!/usr/bin/env bash
+                                
+# Dependency used to setup JSON Web Token user authentication
+npm install jsonwebtoken --save
+
+# Handle middleware commonly used with JWT
+npm install express-jwt --save
+
+# Generate a new RS256 key for a JSON Web Token
+# ssh-keygen is used for creating auth pairs for SSH
+ssh-keygen -t rsa -b 4096 -f private.key
+
+# Generate public key from the private key
+openssl rsa -in private.key -pubout -outform PEM -out private.key.pub</code>
                         </pre>
                     </figure>
+                    <p>
+                        The next step was to create a login REST endpoint in the Node.js backend.  If the correct username and password is sent to this 
+                        endpoint, a new JWT is created and sent back to the user.  The subject in the JWT payload is the ID of the user in MongoDB.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">const express = require('express');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt-nodejs');
+const jwtUtils = require('../utils/jwt');
+
+const routes = (User) => {
+
+    const authRouter = express.Router();
+
+    authRouter.route('/login')
+        .post((req, res) => {
+
+            const username = req.body.username;
+            const password = req.body.password;
+
+            getToken().catch(error => {console.error(error); res.status(500).send(error)});
+
+            async function getToken() {
+
+                const user = await User.findOne({username: username}).exec();
+
+                // Synchronously compare the password submitted and the hashed value in MongoDB
+                if(bcrypt.compareSync(password, user.password)) {
+
+                    console.info("Valid Username and Password Entered!");
+
+                    // Create the JWT string for authentication
+                    const jwtBearerToken = jwt.sign({}, jwtUtils.RSA_PRIVATE_KEY, {
+                        algorithm: 'RS256',
+                        expiresIn: 3600,
+                        subject: user._id.toString()
+                    });
+
+                    // Send the client the JWT along with its expiration date.  Another
+                    // popular option is to send JWT in a cookie instead of the HTTP body
+                    res.status(200).json({
+                        idToken: jwtBearerToken,
+                        expiresIn: 3600
+                    });
+
+                } else {
+                    res.status(401).send('Not Authorized');
+                }
+            }
+        });
+
+    return authRouter;
+};
+
+module.exports = routes;</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        You can see that we use the private key to sign the JWT.  I separated out variables that reference the private key, 
+                        public key, and JWT authentication function in a utility class.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">const expressJwt = require('express-jwt');
+const path = require('path');
+const fs = require('fs');
+
+// Private key for the RS256 encryption signature
+const RSA_PRIVATE_KEY = fs.readFileSync(path.join(__dirname, '../private.key'));
+
+exports.RSA_PRIVATE_KEY = RSA_PRIVATE_KEY;
+
+// Public key for the RS256 encryption signature
+const RSA_PUBLIC_KEY = fs.readFileSync(path.join(__dirname, '../private.key.pub'));
+
+exports.RSA_PUBLIC_KEY = RSA_PUBLIC_KEY;
+
+// Middleware for dealing with JWT tokens on HTTP requests
+exports.checkIfAuthenticated = expressJwt({
+    secret: RSA_PUBLIC_KEY
+});
+
+module.exports = exports;</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        That authentication function is then used on all routes that require a JWT:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">postRouter.route('/')
+    .post(checkIfAuthenticated, (req, res) => {/* Endpoint Implementation */});</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Now the backend is completely set up.  Let’s switch to the Angular 5 frontend.  I created an authentication service that sends a 
+                        request to the login endpoint for a JWT.  If it gets a JWT as a response, it places that JWT in localStorage.  The service also has 
+                        helper methods for logging out (removing the JWT from localStorage) and checking if the JWT hasn’t expired (the users session is still 
+                        valid).
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-typescript" title="TypeScript" contenteditable="true" spellcheck="false">import {Injectable} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import 'rxjs/add/operator/map';
+import {Observable} from "rxjs/Observable";
+import * as moment from "moment";
+
+@Injectable()
+export class AuthenticationService {
+
+    private SECOND = 'second';
+
+    constructor(private http: HttpClient) { }
+
+    // Login a user and create a new session
+    login(username: string, password: string) {
+    
+    return this.http.post&lt;any&gt;(`/api/auth/login`, { username: username, password: password})
+        .map(jwtAuth => {
+
+            // Add the JWT to localStorage
+            if (jwtAuth) {
+
+                // Get the time JWT expires by adding the current time and the expires in time
+                const expiresAt: moment.Moment = moment().add(this.SECOND, jwtAuth.expiresIn);
+
+                localStorage.setItem('id_token', jwtAuth.idToken);
+                localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
+                localStorage.setItem('username', username);
+
+                return new Observable(data => {
+                    data.next('Signed In!');
+                });
+            } else {
+                return new Observable(data => {
+                    data.error('Invalid Username or Password');
+                });
+            }
+        });
+    }
+
+    // Log out the current user by removing the session from LocalStorage
+    static logout() {
+        localStorage.removeItem('id_token');
+        localStorage.removeItem('expires_at');
+        localStorage.removeItem('username');
+    }
+
+    // Determine if the user is logged in based on the JWT expiration date
+    static isLoggedIn() {
+        const loggedIn: boolean = moment().isBefore(this.getExpiration());
+
+        if (!loggedIn &amp;&amp; localStorage.getItem('id_token')) {
+            AuthenticationService.logout()
+        }
+
+        return loggedIn;
+    }
+
+    // Get the expiration date of the JWT session from localStorage
+    static getExpiration(): moment.Moment {
+        const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+        return moment(expiresAt);
+    }
+}
+</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        When navigating to routes in the application that are only accessible to signed in users, the Angular components check to see if the 
+                        JWT is still valid.  If it is not valid, users are redirected back to the login form.
+                    </p>
+                    <p>
+                        Finally on all outgoing HTTP requests we also have to attach the JWT to the request body.  This is so that the JWT can be verified by the Node.js/Express server.  
+                        I set up this functionality with an <code>HttpInterceptor</code>:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-typescript" title="TypeScript" contenteditable="true" spellcheck="false">import {Injectable} from "@angular/core";
+import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
+import {Observable} from "rxjs/Observable";
+
+// Intercept outbound HTTP requests.  If user is authorized, add a new header to HTTP request.
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+
+    private LOG_TAG: string = '[AuthInterceptor]';
+
+    intercept(req: HttpRequest&lt;any&gt;, next: HttpHandler): Observable&lt;HttpEvent&lt;any&gt;&gt; {
+
+        const idToken = localStorage.getItem('id_token');
+
+        if (idToken) {
+
+            // If the JWT exists, set it as an HTTP header on outbound requests
+            const authReq = req.clone({
+                headers: req.headers.set("Authorization", "Bearer " + idToken)
+            });
+
+            return next.handle(authReq);
+        } else {
+
+            // If there is no JWT, send original HTTP request without an Authorization header
+            return next.handle(req);
+        }
+    }
+
+}</code>
+                        </pre>
+                    </figure>
+                    <h5>Conclusion</h5>
+                    <p>
+                        I’m sure this will not be the last time I explore JWT.  I also am really interested in how exactly the authentication algorithms 
+                        work!  Hugh shoutout to Angular University<sup>5</sup> and Auth0<sup>6</sup> for really helping me get set up with JWT!
+                    </p>
                     <div class="container tags">
                         <p>
                             Tags: <span class="badge badge-default">JWT</span> <span class="badge badge-default">JavaScript</span> 
@@ -93,11 +341,12 @@ dGQU3FsuuOy9-IEEMHGTPB1bCOOk_28d_vofg56h9
                         </p>
                     </div>
                     <div class="container sources">
-                        <p>[1] "Continuous Integration", https://www.thoughtworks.com/continuous-integration</p>
-                        <p>[2] "Travis CI", https://en.wikipedia.org/wiki/Travis_CI</p>
-                        <p>[3] "Angular 2 with Travis CI", https://medium.com/from-the-couch/angular-2-with-travis-ci-922040e01937</p>
-                        <p>[4] "Installing Packages with the APT Addon", https://docs.travis-ci.com/user/installing-dependencies/#Installing-Packages-with-the-APT-Addon</p>
-                        <p>[5] "Setting up Databases: MongoDB", https://docs.travis-ci.com/user/database-setup/#MongoDB</p>
+                        <p>[1] Sebastián Peyrott, JWT Handbook (Auth0, 2017), https://auth0.com/e-books/jwt-handbook, 5</p>
+                        <p>[2] Ibid., 23</p>
+                        <p>[3] Ibid., 30</p>
+                        <p>[4] Ibid., 33</p>
+                        <p>[5] "Angular Security - Authentication With JSON Web Tokens (JWT): The Complete Guide", https://blog.angular-university.io/angular-jwt-authentication/</p>
+                        <p>[6] "JWT", https://jwt.io/</p>
                     </div>
                 </div>
             </div>
