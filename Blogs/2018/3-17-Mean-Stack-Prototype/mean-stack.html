@@ -59,7 +59,84 @@
                         I had a lot of fun (for the most part!) building with Angular, so let’s get started!
                     </p>
                     <h5>The Prototype</h5>
+                    <p>
+                        The MEAN stack prototype was a website that allows its users to upload cat pictures!  Appropriately, the website is named MeowPics.
+                    </p>
+                    <figure id="meowcat-image">
+                        <img src="meowcat.png">
+                    </figure>
+                    <p>
+                        The MongoDB, Express, Angular, and Node.js technology stack works as follows:
+                    </p>
+                    <figure id="meanstack-image">
+                        <img src="MEAN-Stack.png">
+                    </figure>
+                    <p>
+                        The first piece of the technology stack for MeowPics that I will walkthrough is the MongoDB document database.
+                    </p>
                     <h5>MongoDB Structure</h5>
+                    <p>
+                        I have written many discovery posts on MongoDB in the past, but in general terms it is a NoSQL document database that stores data in collections 
+                        of objects.  I used it extensively in my Node.js and MongoDB prototype as well.  The biggest reason I want to use MongoDB in my website is that 
+                        it fits the JavaScript web stack since its queries are in JavaScript and objects are BSON (Binary JSON).
+                    </p>
+                    <p>
+                        The MongoDB database for MeowPics has two main collections for users and cat posts.  There is also an audit collection that is used for logging 
+                        purposes when updates, inserts, or deletions are made to documents in the user or post collections.
+                    </p>
+                    <p>
+                        Here are some insert statements that show the structure of the user and post collections:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">db.user.insertMany([
+    {
+        username: "andy",
+        first: "Andrew",
+        last: "Jarombek",
+        password: "$2a$10$c/DwED6TayK0d3ce5761zOTBBsnCB.JMpcF4l4Zojqti6Adaym9W2",
+        postCount: 4
+    },
+    {
+        username: "tom",
+        first: "Thomas",
+        last: "Caulfield",
+        password: "$2a$10$8Irw8CAvdJr2uBAUYdlinOf8T9dblJiz0mumgNyfiHGBmT9vUweo6",
+        postCount: 2
+    }
+]);
+
+let andy_id = db.user.findOne({username: "andy"})._id;
+let tom_id = db.user.findOne({username: "tom"})._id;
+    
+db.post.insertMany([
+    {
+        picture: "russianblue.jpg",
+        name: "Cat Pic",
+        username: "andy",
+        user_id: andy_id,
+        first: "Andrew",
+        last: "Jarombek",
+        date: new Date("2018-02-26"),
+        description: "I love this picture!",
+        up: 1,
+        down: 0
+    },
+    {
+        picture: "toms-cat.jpg",
+        name: "Kitty!",
+        username: "tom",
+        user_id: tom_id,
+        first: "Thomas",
+        last: "Caulfield",
+        date: new Date("2018-02-24"),
+        description: "awww!",
+        up: 5,
+        down: 1
+    }
+]);</code>
+                        </pre>
+                    </figure>
                     <h5>Node.js REST API</h5>
                     <h5>Webpack Not In the Web?</h5>
                     <h5>Unit Tests and CI</h5>

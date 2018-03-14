@@ -1,0 +1,20 @@
+#meowcat-image img {
+    height: 220px;
+}
+
+#meanstack-image img {
+    height: 340px;
+}
+
+#meowcat-image, #meanstack-image {
+    width: 100%;
+}
+
+img {
+    display: inherit;
+    margin: 0 auto;
+    padding: {
+        top: 20px;
+        bottom: 20px;
+    }
+}
