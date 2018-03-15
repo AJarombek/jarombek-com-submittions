@@ -76,7 +76,11 @@
                     </p>
                     <h5>MongoDB Structure</h5>
                     <p>
-                        I have written many discovery posts on MongoDB in the past, but in general terms it is a NoSQL document database that stores data in collections 
+                        I have 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/tree/master/Discoveries/2017/12-Dec/12-15-MongoDB-Pt1">written</a> 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/tree/master/Discoveries/2017/12-Dec/12-16-MongoDB-Pt2">many</a> 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/tree/master/Discoveries/2017/12-Dec/12-23-MongoDB-Pt3">discovery</a> 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/tree/master/Discoveries/2017/12-Dec/12-27-MongoDB-Pt4">posts</a> on MongoDB in the past, but in general terms it is a NoSQL document database that stores data in collections 
                         of objects.  I used it extensively in my Node.js and MongoDB prototype as well.  The biggest reason I want to use MongoDB in my website is that 
                         it fits the JavaScript web stack since its queries are in JavaScript and objects are BSON (Binary JSON).
                     </p>
@@ -137,7 +141,231 @@ db.post.insertMany([
 ]);</code>
                         </pre>
                     </figure>
+                    <p>
+                        While these statements are performed on the MongoDB database directly, most of my interactions were done through Mongoose.  
+                        Mongoose is a Node.js module that allows you to model objects from MongoDB as well as performing queries, inserts, updates 
+                        and more.  It is a really powerful tool that I used in my Node.js and MongoDB prototype.  For that prototype I was using 
+                        version 4 of Mongoose.  I was really excited to see that in early January Mongoose 5 was released, which took big steps by 
+                        using Promises by default and support for async functions<sup>1</sup>!  Let’s take a look at Mongoose 5 and the rest of 
+                        the Node.js/Express API.
+                    </p>
                     <h5>Node.js REST API</h5>
+                    <p>
+                        The Node.js/Express API defines three main routes and one for developer testing.  The three main routes are for users, 
+                        posts, and authentication.  The users and posts routes define a CRUD API for both corresponding MongoDB collections.  Here is 
+                        the entry point code to the server application:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const helmet = require('helmet');
+
+const Post = require('./model/post');
+const User = require('./model/user');
+const Test = require('./model/test');
+const Audit = require('./model/audit');
+
+const userRouter = require('./route/userRouter')(User, Audit);
+const postRouter = require('./route/postRouter')(Post, User, Audit);
+const authRouter = require('./route/authRouter')(User);
+const testRouter = require('./route/testRouter')(Test);
+
+// Mongoose 5.0 uses native JS Promises by default (less config needed!)
+mongoose.connect('mongodb://127.0.0.1/meowcat');
+
+const app = express();
+
+// Set a larger payload limit for HTTP requests since some image data will be large
+app.use(bodyParser.urlencoded({extended: true, limit: '50mb'}));
+app.use(bodyParser.json({limit: '50mb'}));
+
+// Helps protect our API endpoint from well known web security vulnerabilities
+app.use(helmet({}));
+
+const port = process.env.port || 3000;
+
+app.use('/api/test', testRouter);
+app.use('/api/user', userRouter);
+app.use('/api/post', postRouter);
+app.use('/api/auth', authRouter);
+
+app.get('/', (req, res) => {
+    res.send(JSON.parse('{"title":"Welcome to the Apps API!"}'));
+});
+
+module.exports = app.listen(port, () => {
+    console.info(`Started MeowCat API on port ${port}`);
+});</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        If you have seen an Express application before this should look familiar.  Some important points are that we are using Mongoose 
+                        5, which requires less startup configuration.  I also had to set the <code>limit</code> property for <code>bodyParser</code> 
+                        because the client may be sending large cat images to the server.  Now any request with a body under 50MB should succeed.
+                    </p>
+                    <p>
+                        I am also using the helmet module which secures my API by setting certain HTTP headers on requests<sup>2</sup>.  All I have to 
+                        do to activate helmet is write one line: <code>app.use(helmet({}))</code>.
+                    </p>
+                    <p>
+                        Let’s take a look at one of these routes - the user route.  The first thing to look at is the user model which is defined using 
+                        Mongoose.  The model can be used to define all the properties of an object and certain validation rules such as regex matches and 
+                        length requirements.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">const mongoose = require('mongoose');
+                                
+const UserSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        trim: true,
+        required: true,
+        match: /^[a-zA-Z0-9]+$/,
+        validate: [
+            function (username) {
+                return username.length <= 15;
+            },
+            'Username must be less than 15 characters'
+        ]
+    },
+    first: {...},
+    last: {...},
+    password: {
+        type: String,
+        trim: true,
+        required: true,
+        match: /^[^\s]+$/
+    },
+    postCount: {
+        type: Number,
+        default: 0
+    }
+});
+
+UserSchema.index({username: 1});
+
+module.exports = mongoose.model('User', UserSchema, 'user');</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        The <code>UserSchema</code> defines five properties - <code>username</code>, <code>first</code>, <code>last</code>, <code>password</code> &amp; 
+                        <code>postCount</code> - along with certain validation for each.  Mongoose even allows you to define indexes!  You can really do practically 
+                        all necessary MongoDB interactions and setup from Mongoose!  Now I am ready to use this model in my <code>userRouter</code>.
+                    </p>
+                    <p>
+                        The <code>userRouter</code> defines a CRUD API for the User model.  Here is how I have the GET request set up for all the users in the database.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">const userRouter = express.Router();
+                                
+userRouter.route('/')
+    .get((req, res) => {
+
+        find().catch(error => res.status(500).send(error));
+
+        async function find() {
+            const users = await User.find().exec();
+
+            res.json(users);
+        }
+    });</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        You can see I am utilizing Mongoose 5’s support for async functions here.  It is much more concise and easy to read this way!  For more on how async 
+                        functions work you can check out my 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/tree/master/Discoveries/2017/11-Nov/11-26-JS-Async-Function/View">discovery post</a> on the topic.
+                        This code calls the Mongoose <code>find()</code> function on the <code>User</code> schema.  This function will asynchronously return all of the 
+                        documents in the user collection.
+                    </p>
+                    <p>
+                        I’ll show one more of the REST endpoints defined on the user route - this time for an HTTP DELETE request.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">userRouter.route('/:username')
+    .delete(jwtUtils.checkIfAuthenticated, (req, res) => {
+        
+        remove().catch(error => res.status(500).send(error));
+
+        async function remove() {
+            await req.user.remove();
+
+            // Should return null if it was successfully deleted
+            const deleted = await User.findOne({username: req.user.username}).exec();
+
+            // Call the catch() function if the user was not deleted
+            if (deleted !== null) {
+                throw Error('User Still Exists');
+            }
+
+            // Audit the deletion of a user
+            const audit = new Audit({
+                object: req.user._id,
+                type: 'user',
+                message: `Deleted User ${req.user.username}`,
+                source: 'NodeJS MeowCat API'
+            });
+
+            await Audit.create(audit);
+
+            res.status(204).send();
+        }
+    });
+                            </code>
+                        </pre>
+                    </figure>
+                    <p>
+                        In this code I used three Mongoose functions, <code>remove()</code>, <code>findOne()</code>, and <code>create()</code>.  <code>remove()</code> deletes an instance of 
+                        the Mongoose user schema, <code>findOne()</code> then tries to find that user to make sure it was properly deleted.  Finally I use <code>create()</code> to insert a 
+                        new document in the audit collection.  This audit collection holds all the important interaction history with the database.  Let’s take a quick look at the 
+                        <code>AuditSchema</code> because it is quite unique:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const AuditSchema = new Schema({
+    time: {
+        type: Date,
+        default: Date.now(),
+        expires: 604800 // Expires after a week
+    },
+    object: Schema.Types.ObjectId,
+    type: {
+        type: String,
+        required: true,
+        enum: ['user', 'post']
+    },
+    message: {
+        type: String,
+        required: true
+    },
+    source: String
+}, { capped: { size: 8192, max: 100, autoIndexId: true }});
+
+AuditSchema.index({time: 1});
+AuditSchema.index({object: 1});
+
+module.exports = mongoose.model('Audit', AuditSchema, 'audit');</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        There are two important aspects of this schema.  The first is the <code>expires</code> property on the <code>time</code> and the corresponding index defined on the 
+                        <code>time</code> property.  This is how you create a time-to-live (TTL) collection in Mongoose.  In MongoDB a TTL collection is one that expires its documents after a 
+                        set amount of time<sup>3</sup>.  In this case the <code>audit</code> collection expires its documents after a week.  This is a similar behavior to many 
+                        logging frameworks in applications.
+                    </p>
+                    <p>
+                        The second important spect is the <code>capped</code> property at the end of the schema definition.  This defines a fixed number of 
+                        documents (the <code>max</code> property) and max number of bytes (the <code>size</code> property) that are allowed in the 
+                        collection<sup>4</sup>.  In my case the <code>audit</code> collection allows a maximum of 100 documents of no greater than 8192 bytes.
+                    </p>
                     <h5>Webpack Not In the Web?</h5>
                     <h5>Unit Tests and CI</h5>
                     <h5>The Angular Front-End</h5>
@@ -153,6 +381,11 @@ db.post.insertMany([
                     <h5>Dealing with Multiple Environments</h5>
                     <h5>Future Steps</h5>
                     <h5>Conclusions</h5>
+                    <figure>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false"></code>
+                        </pre>
+                    </figure>
                     <figure>
                         <pre class="command-line" data-prompt="$">
                             <code class="language-bash" title="Bash" contenteditable="true" spellcheck="false"></code>
@@ -172,7 +405,10 @@ db.post.insertMany([
                         </p>
                     </div>
                     <div class="container sources">
-                        <p>[1] </p>
+                        <p>[1] "Introducing Mongoose 5.0.0-rc0", http://thecodebarbarian.com/introducing-mongoose-5.html</p>
+                        <p>[2] "Helmet", https://helmetjs.github.io/</p>
+                        <p>[3] Kyle Banker, Peter Bakkum, Shaun Verch, Douglas Garrett &amp; Tom Hawkins, MongoDB In Action, 2nd ed (Shelter Island, NY: Manning, 2016), 89</p>
+                        <p>[4] Banker., 90</p>
                     </div>
                 </div>
             </div>
