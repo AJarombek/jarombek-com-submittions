@@ -366,7 +366,171 @@ module.exports = mongoose.model('Audit', AuditSchema, 'audit');</code>
                         documents (the <code>max</code> property) and max number of bytes (the <code>size</code> property) that are allowed in the 
                         collection<sup>4</sup>.  In my case the <code>audit</code> collection allows a maximum of 100 documents of no greater than 8192 bytes.
                     </p>
+                    <p>
+                        The ability to create complex MongoDB structures in Mongoose shows off the versatility of the module.  I use Mongoose with all of my user and post routes.  One important 
+                        aspect of the post route is the ability to upload a picture with a cat post.  I need to store this picture as a file on the server 
+                        Node.js is running on.  Let’s first look at the HTTP POST endpoint for posts, which is where I instruct Node to save the picture data as a file.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">const express = require('express');
+const files = require('../utils/files');
+const jwtUtils = require('../utils/jwt');
+
+const postRouter = express.Router();
+
+postRouter.route('/')
+    .post(jwtUtils.checkIfAuthenticated, (req, res) => {
+
+        // pictureData isn't part of the Post Schema, so remove it once we assign it a variable
+        const data = req.body.pictureData;
+        delete req.body.pictureData;
+
+        const post = new Post(req.body);
+
+        if (post.picture &amp;&amp; post.name &amp;&amp; post.picture &amp;&amp; data) {
+
+            // The naming convention for saved files is [username]_[filename].[filetype]
+            post.picture = `${post.username}_${post.picture}`;
+
+            // First save the file to the servers filesystem
+            files.saveFile(post.picture, data);
+
+            // Then insert the post into MongoDB
+            insert().catch(error => res.status(500).send(error));
+
+            async function insert() {...}
+        }
+    });</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        This endpoint extracts the picture data from the HTTP request body and sends it to the function <code>saveFile()</code>.  
+                        The arguments for this function are the base 64 encoded picture data and the file name.  Let’s take a look at that function now: 
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">const fs = require('fs');
+const path = require('path');
+
+exports.saveFile = function saveFile(name, data) {
+                                
+    // Replace the start of the base 64 encoding - this is not the actual picture file data
+    const base64 = data.replace(/^data:image\/([a-z]+);base64,/, "");
+
+    fs.writeFile(path.join(__dirname, `../pics/${name}`), base64, 'base64', (err) => {
+        console.error(err);
+    });
+};</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        The imported <code>fs</code> module allows for interaction with the filesystem.  I use the <code>writeFile()</code> function to 
+                        create a new file in the filesystem with the base 64 encoded picture data.
+                    </p>
+                    <p>
+                        Besides for adding a new file when uploading a post, I also delete the file when no more posts reference it.  You can check out 
+                        all of the file manipulation functions I created in 
+                        <a href="https://github.com/AJarombek/mean-server-prototype/blob/master/src/utils/files.js">files.js</a> 
+                        and all the endpoints that use the file manipulation functions in 
+                        <a href="https://github.com/AJarombek/mean-server-prototype/blob/master/src/route/postRouter.js">postRouter.js</a>.
+                    </p>
+                    <p>
+                        You may have also noticed that I passed the <code>post()</code> function in the <code>postRouter</code> the argument 
+                        <code>jwtUtils.checkIfAuthenticated</code>.  This is a function that I use for authentication.  Certain endpoints in my REST API 
+                        require the user to be authenticated, such as deleting a user or creating a new post.  When a user logs in, they go through the 
+                        <code>authRouter</code> and get an authentication token.  This token will then be included on all further HTTP requests.  I used 
+                        JSON Web Tokens (JWT) for authentication in my application.  JWT’s are a huge topic in itself, and I made a 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2018/03-Mar/3-11-JWT/View/jwt.html">discovery</a> about some of 
+                        the basic concepts.  I also include the code in this prototype, so check it out if you want more details!
+                    </p>
                     <h5>Webpack Not In the Web?</h5>
+                    <p>
+                        The MEAN Stack prototype was also my first experience with Webpack!  While Angular CLI is built on top of Webpack, you don't actually 
+                        have to interact with the underlying Webpack config files to use it.  The Node.js server was my first actual time configuring Webpack 
+                        to bundle an application!
+                    </p>
+                    <p>
+                        Webpack is a module bundler commonly used with JavaScript projects, especially those used in the browser<sup>5</sup>.  It builds a 
+                        dependency graph of your projects modules and then bundles them into a few larger files.  The reason for bundling JavaScript files is 
+                        that HTTP requests from the web browser to the server are expensive.  If you bundled your JavaScript files into a smaller number of 
+                        files, it would reduce the number of HTTP requests, speeding up the web application.  There is much more complexity to Webpack that 
+                        deserves many discovery posts of its own, but that is the basic idea!
+                    </p>
+                    <p>
+                        While Webpack is mostly used in the front-end, there is nothing from stopping you from using it with Node.js.  You can change the 
+                        environment that Webpack runs in with the <code>target</code> field used in the Webpack configuration<sup>6</sup>.  Let’s take a look 
+                        at the Webpack configuration file 
+                        <a href="https://github.com/AJarombek/mean-server-prototype/blob/master/src/webpack.config.js">webpack.config.js</a> 
+                        used in my Node.js/Express server:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">module.exports = {
+    entry: [
+        'babel-polyfill',
+        './src/app'
+    ],
+    target: "node",
+    node: {
+        __dirname: false,
+        __filename: false
+    },
+    module: {
+        rules: [{
+            test: /\.js?$/,
+            use: "babel-loader",
+            exclude: /node_modules/
+        }]
+    },
+    output: {
+        path: path.join(__dirname, '../build'),
+        filename: "app.js"
+    }
+};</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        I will quickly run through what this configuration does.  First it declares two entry points for web pack to start building its dependency graph.  
+                        The entry <code>babel-polyfill</code> is necessary to use those wonderful async functions seen in my routes.  I then set the target 
+                        environment to node.  The <code>node</code> field is necessary because of a bug where the variable <code>__dirname</code> contains 
+                        the incorrect value after being bundled with Webpack<sup>7</sup>.
+                    </p>
+                    <p>
+                        The <code>module</code> field defines Webpack loaders.  Loaders perform transformations on the files during the bundling process.  
+                        The loader used here is for Babel, a compiler that will transpile ES6+ JavaScript code into ES5.  While less important on the server 
+                        side since newest versions of Node.js support the newest JavaScript features, transpiling into ES5 gives much greater browser 
+                        compatibility for a web application.  I did a full discovery on 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2017/11-Nov/11-10-ES6-Modules-Babel/View/modules-babel.html">Babel</a> 
+                        as well!
+                    </p>
+                    <p>
+                        Back to the Webpack config for the <code>babel-loader</code>.  The regex defined in the <code>test</code> property tells Webpack to 
+                        only use the <code>babel-loader</code> on files with the JavaScript extension.  The other regex defined in the <code>exclude</code> 
+                        property tells Webpack to not run this loader on the projects module dependencies in the <code>node_modules</code> folder. 
+                    </p>
+                    <p>
+                        Finally, the <code>output</code> property defines where the completed bundle will be located.  I tell Webpack to put it in the build 
+                        directory with the name app.js.  And just like that, the Webpack config for the server application is completed!
+                    </p>
+                    <p>
+                        I defined an npm script to start Webpack with this configuration in the projects 
+                        <a href="https://github.com/AJarombek/mean-server-prototype/blob/master/package.json">package.json</a> file.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-json" title="JSON" contenteditable="true" spellcheck="false">...
+"scripts": {
+    "start:dev": "webpack-node-dev --config src/webpack.config.js"
+},
+...</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        While the server side app doesn't really require bundling, it was a really good experience to start using Webpack.  Also the 
+                        configuration on the server side is much simpler than it would be on the front-end, so it was great for a beginner.  I am excited to 
+                        use Webpack with my upcoming React prototype!
+                    </p>
                     <h5>Unit Tests and CI</h5>
                     <h5>The Angular Front-End</h5>
                     <h5>App Component</h5>
@@ -409,6 +573,9 @@ module.exports = mongoose.model('Audit', AuditSchema, 'audit');</code>
                         <p>[2] "Helmet", https://helmetjs.github.io/</p>
                         <p>[3] Kyle Banker, Peter Bakkum, Shaun Verch, Douglas Garrett &amp; Tom Hawkins, MongoDB In Action, 2nd ed (Shelter Island, NY: Manning, 2016), 89</p>
                         <p>[4] Banker., 90</p>
+                        <p>[5] Juho Vepsäläinen, SurviveJS: Webpack, (2017), xi</p>
+                        <p>[6] Vepsäläinen., 259</p>
+                        <p>[7] "__dirname returns '/' when js file is built with webpack", https://github.com/webpack/webpack/issues/1599</p>
                     </div>
                 </div>
             </div>
