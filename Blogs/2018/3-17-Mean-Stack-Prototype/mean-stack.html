@@ -532,6 +532,80 @@ exports.saveFile = function saveFile(name, data) {
                         use Webpack with my upcoming React prototype!
                     </p>
                     <h5>Unit Tests and CI</h5>
+                    <p>
+                        The MEAN Stack prototype was the first project I made with Continuous Integration (CI).  With CI you integrate your code into 
+                        the main repository on every commit.  With this approach unit tests get run every time new code is submitted.  This allows for 
+                        constant regression testing and makes it easier to catch bugs early on.  I wrote a whole discovery about using TravisCI for 
+                        my CI in this project!  It really was a game changer, and I will use it in my projects from now on!
+                    </p>
+                    <p>
+                        With CI it is important to have good tests.  I have always had a bad habit of slacking on writing test code.  While I didn't 
+                        completely break this bad habit with the MEAN prototype, I did write some test code for my REST endpoints!
+                    </p>
+                    <p>
+                        I looked at one of my tests in my TravisCI discovery, but lets look quickly at two other test suites here.  I used the supertest 
+                        npm module for testing HTTP requests along with the mocha test framework.  Supertest was a really nice API that made testing my 
+                        endpoints easy!  Here is the testing suite for my main app endpoint:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false">const request = require('supertest');
+const app = require('../src/app');
+
+// Tests for the default endpoint '/'
+describe("GET '/'", () => {
+    it('responded with a 200', () => {
+        return request(app).get('/').expect(200);
+    });
+
+    it("returned correct JSON", () => {
+        return request(app)
+            .get('/')
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .expect('Content-Length', '36');
+    });
+
+    it("Uses Helmet", () => {
+        return request(app)
+            .get('/files')
+            .expect('X-Content-Type-Options', 'nosniff')
+            .expect('X-DNS-Prefetch-Control', 'off')
+            .expect('X-Download-Options', 'noopen')
+            .expect('X-Frame-Options', 'SAMEORIGIN')
+            .expect('X-XSS-Protection', '1; mode=block')
+    });
+});</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        In the mocha testing framework <code>describe()</code> defines a testing group and <code>it()</code> defines a test 
+                        case<sup>8</sup>.  You can see in the code above I defined a testing group with three test cases.  The first test 
+                        case simply checks to see if the endpoint returns an HTTP 200 OK status.  I use the supertest <code>get()</code> 
+                        function to make a GET request to the endpoint given as an argument and <code>expect()</code> to define the 
+                        anticipated HTTP response.
+                    </p>
+                    <p>
+                        The second and third test cases also use these basic building blocks.  I chain <code>expect()</code> functions to 
+                        define multiple anticipated responses.  The second test checks to see that the returned content type is JSON and 
+                        is of a certain length.  The last test case makes sure that the helmet module discussed earlier is properly adding 
+                        certain HTTP headers.  You can see with these tests how easy it is to create some HTTP endpoint tests with 
+                        supertest and mocha!
+                    </p>
+                    <p>
+                        I defined one more test suite for the posts endpoints in 
+                        <a href="https://github.com/AJarombek/mean-server-prototype/blob/master/test/postRouter.test.js">postRouter.test.js</a>.  
+                        In that test case I make sure an 
+                        endpoint that requires a JWT for use returns a 401 error when no token is present on the request header.
+                    </p>
+                    <p>
+                        That finishes up my discussion of the Node.js/Express backend for my MEAN stack prototype.  If you want to check 
+                        out all the code for the Node.js backend it is available on 
+                        <a href="https://github.com/AJarombek/mean-server-prototype">GitHub</a>.  
+                        Whenever the Angular 
+                        front-end needs data from the server it simply hits one of the REST endpoints I defined in Node.js.  Now let’s 
+                        move on to the Angular frontend!  
+                    </p>
                     <h5>The Angular Front-End</h5>
                     <h5>App Component</h5>
                     <h5>Home Page</h5>
@@ -576,6 +650,7 @@ exports.saveFile = function saveFile(name, data) {
                         <p>[5] Juho Vepsäläinen, SurviveJS: Webpack, (2017), xi</p>
                         <p>[6] Vepsäläinen., 259</p>
                         <p>[7] "__dirname returns '/' when js file is built with webpack", https://github.com/webpack/webpack/issues/1599</p>
+                        <p>[8] "A guide to mocha's describe(), it() and setup hooks", https://samwize.com/2014/02/08/a-guide-to-mochas-describe-it-and-setup-hooks/</p>
                     </div>
                 </div>
             </div>
