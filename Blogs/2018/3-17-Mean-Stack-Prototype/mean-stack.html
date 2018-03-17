@@ -607,7 +607,99 @@ describe("GET '/'", () => {
                         move on to the Angular frontend!  
                     </p>
                     <h5>The Angular Front-End</h5>
+                    <p>
+                        The frontend of the MEAN stack uses Angular.  Angular is a full fledged frontend framework, meaning that you must follow the 
+                        code structure defined by the framework.  While this may give less flexibility to the developer it can also make sure the code 
+                        stays structured even in the most complex of applications.  The version of the Angular framework is 5 at the time of this writing, 
+                        and that is what I used in my prototype.  While you can write Angular applications in JavaScript or any language that transpiles 
+                        to JavaScript, the team at Angular suggests that you use TypeScript.  TypeScript is a language developed by Microsoft that gives 
+                        the option to apply strict typing on top of JavaScript.  I wrote a discovery post on 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2018/03-Mar/3-8-TypeScript/View/typescript.html">TypeScript</a> 
+                        that goes into more details about 
+                        the features of the language and what I learned/liked about it from this Angular project.
+                    </p>
+                    <p>
+                        I also wrote a discovery post about my 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2018/01-Jan/1-6-Angular-5-First-Impression/View/angular-first-imp.html">first impressions</a> 
+                        of the Angular framework.  In that post I was a bit critical of the 
+                        framework.  While I think Angular is far from perfect, it was definitely a joy to learn and work with.  It does have its issues 
+                        which I will cover in this blog.  Another note is that this blog isn't going to teach beginners how to use Angular.  I expect that 
+                        you have some knowledge about the framework and how it works.  I will go through all the major components of my application as well 
+                        as other cool services, directives, etc.  Let’s get started by looking at the app component.  This component is the entry point for 
+                        the application and holds all the routes through the single page application (SPA).
+                    </p>
                     <h5>App Component</h5>
+                    <p>
+                        Before we look at the app component code directly, it is important to look at some of the code in 
+                        <a href="https://github.com/AJarombek/mean-client-prototype/blob/master/web-app/src/app/app.module.ts">app.module.ts</a>.  
+                        This module contains all the components except those for user profiles and cat posts.  It also defines 
+                        the routes for my application.  Here are these route definitions:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-typescript" title="TypeScript" contenteditable="true" spellcheck="false">export const routes: Routes = [
+    {path: '', component: HomeComponent},
+    {path: 'user', loadChildren: './profile/profile.module#ProfileModule'},
+    {path: 'about', component: AboutComponent},
+    {path: 'login', component: LoginComponent},
+    {path: 'signup', component: SignupComponent},
+    {path: '**', redirectTo: ''}
+];</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        The user route is unique because it implements lazy loading.  This means that the module containing code for that route will not be loaded 
+                        from the server until we traverse the route.  I discussed 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2018/01-Jan/1-27-Angular-5-Routing/View/angular-routing.html">Angular lazy loading</a> 
+                        in more depth in a discovery post.
+                    </p>
+                    <p>
+                        You may be wondering why the <code>AppComponent</code> is missing in these routes?  The AppComponent is actually the root component 
+                        and it is bootstrapped into the module<sup>9</sup>.  It is defined in the <code>bootstrap</code> property on the <code>@NgModule</code> 
+                        definition.  On app launch the <code>AppComponent</code> will then be bootstrapped and rendered by default. 
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-typescript" title="TypeScript" contenteditable="true" spellcheck="false">@NgModule({
+    ...
+    bootstrap: [AppComponent]
+})</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        The <code>AppComponent</code> template defines the navigation bar for the website.  Clicking on this navigation bar will change the 
+                        route.  Based on the routes definition code shown before, different routes will display different components on the page.  The 
+                        components will be displayed in the <code>&lt;router-outlet&gt;</code> element, as discussed further in my 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2018/01-Jan/1-27-Angular-5-Routing/View/angular-routing.html">discovery post</a>.
+                          The code for the app components template is found in 
+                          <a href="https://github.com/AJarombek/mean-client-prototype/blob/master/web-app/src/app/app.component.html">app.component.html</a>
+                    </p>
+                    <p>
+                        The navigation bar uses both Bootstrap and Sass for the styling.  In fact, all of the website uses a combination of Bootstrap and 
+                        Sass for the UI.  While I really have loved Sass and how it modularizes my stylesheets and makes them easier to read and work with.  
+                        I made a discovery post about 
+                        <a href="https://github.com/AJarombek/jarombek-com-submittions/blob/master/Discoveries/2018/03-Mar/3-10-Sass/View/sass.html">Sass</a> 
+                        if you want to learn more about how I used it in this prototype.  Bootstrap on the other hand I have mixed feelings about.  While it 
+                        does have really cool components like the navbar I used for this website, it also comes with many frustrations.  For one the current 
+                        state of Bootstrap has been a bit of a mess.  Different versions come with completely different non-backwards compatible naming 
+                        conventions.  While this is confusing, to make matters worse the documentation online is not even up to date with the current release.  
+                        This made developing with Bootstrap really frustrating.
+                    </p>
+                    <p>
+                        If this was the only issue I had with Bootstrap I would suggest to wait for it to get into a more stable state before jumping onboard.  
+                        However, I also found that many of the components weren’t as customizable as I would have liked.  This makes bootstrap seem like more of 
+                        a fun pet project tool than something worth using in production.  I will discuss this lack of customizability in more detail when discussing 
+                        the cat picture module.
+                    </p>
+                    <p>
+                        The <a href="https://github.com/AJarombek/mean-client-prototype/blob/master/web-app/src/app/app.component.ts">app.component.ts</a> 
+                        code also subscribes to certain services that emit and receive messages to and from child components.  This allows 
+                        for message passing between components.  I will go into detail about these services one I look at the child components that subscribe 
+                        to them.
+                    </p>
+                    <p>
+                        Now I want to look at the default route of the application which displays the <code>HomeComponent</code>.
+                    </p>
                     <h5>Home Page</h5>
                     <h5>Cat Posts</h5>
                     <h5>Login Page</h5>
@@ -621,7 +713,7 @@ describe("GET '/'", () => {
                     <h5>Conclusions</h5>
                     <figure>
                         <pre>
-                            <code class="language-javascript" title="JavaScript" contenteditable="true" spellcheck="false"></code>
+                            <code class="language-typescript" title="TypeScript" contenteditable="true" spellcheck="false"></code>
                         </pre>
                     </figure>
                     <figure>
@@ -651,6 +743,7 @@ describe("GET '/'", () => {
                         <p>[6] Vepsäläinen., 259</p>
                         <p>[7] "__dirname returns '/' when js file is built with webpack", https://github.com/webpack/webpack/issues/1599</p>
                         <p>[8] "A guide to mocha's describe(), it() and setup hooks", https://samwize.com/2014/02/08/a-guide-to-mochas-describe-it-and-setup-hooks/</p>
+                        <p>[9] Yakov Fain &amp; Anton Moiseev, Angular 2 Development with TypeScript (Shelter Island, NY: Manning, 2017), 33</p>
                     </div>
                 </div>
             </div>
