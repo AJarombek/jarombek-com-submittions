@@ -4,7 +4,11 @@
 
 #maincomponent-image img { height: 500px; }
 
-#meowcat-image, #meanstack-image, #maincomponent-image { width: 100%; }
+#logincomponent-image img { height: 500px; }
+
+#signupcomponent-image img { height: 600px; }
+
+#meowcat-image, #meanstack-image, #maincomponent-image, #logincomponent-image, #signupcomponent-image { width: 100%; }
 
 img { display: inherit; margin: 0 auto; padding-top: 20px; padding-bottom: 20px; }
 

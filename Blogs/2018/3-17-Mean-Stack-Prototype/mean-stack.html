@@ -806,11 +806,86 @@ export class PostService implements HttpService {
                         </pre>
                     </figure>
                     <h5>Cat Posts</h5>
+                    <p>
+                        The <code>CatPictureComponent</code> displays the cat post details and picture in the UI.  It does this through the Bootstrap card 
+                        component<sup>10</sup>.  The cards component makes displaying the cat posts in a resizable grid extremely easy.  The big problem I 
+                        have with it is you can’t easily customize its default behavior.  By default the cards component displays each post from left to 
+                        right.  This is a problem since now very old cat posts will show up near the top of the page.  Ideally I could easily change the 
+                        behavior to populate the cards to populate from top to bottom instead.  However, Bootstrap does not allow for this customization.  
+                        This is another reason why I feel like Bootstrap components aren’t quite adequate for the needs of a production level website.
+                    </p>
+                    <p>
+                        Here is the HTML for <code>CatPictureComponent</code>.  Take a close look at the first <code>&lt;p&gt;</code> element and the 
+                        <code>(click)</code> event and the <code>[routerLink]</code> Angular property.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-html" title="HTML" contenteditable="true" spellcheck="false">&lt;div class="card"&gt;
+    &lt;img class="img-fluid cat-image" src={{post?.picture}} alt={{post?.picture}}&gt;
+    &lt;div class="card-block mx-2"&gt;
+        &lt;h4 class="card-title mt-2"&gt;{{post?.name}}&lt;/h4&gt;
+        &lt;p class="card-text"&gt;
+            &lt;small class="text-muted" (click)="emitUsername()"
+                    [routerLink]="['../../user/profile', post?.username || '']"&gt;
+                {{post?.first + " " + post?.last}}
+            &lt;/small&gt;
+        &lt;/p&gt;
+        &lt;p class="card-text cat-post-date"&gt;
+            &lt;small class="text-muted"&gt;
+                {{post?.date.toDateString()}}
+            &lt;/small&gt;
+        &lt;/p&gt;
+        &lt;p class="card-text cat-post-description"&gt;{{post?.description}}&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        The click event and router are placed on the name of the user who made the post.  This allows users to click the name and quickly view 
+                        the uploaders profile.  Besides for changing the SPA route, the <code>emitUsername()</code> function is also called.  This function 
+                        creates a message containing the posts username.  The <code>ProfileComponent</code> will subscribe to this emitted message so it knows 
+                        which users information needs to be loaded.  The code for emitting the message is found in 
+                        <a href="https://github.com/AJarombek/mean-client-prototype/blob/master/web-app/src/app/cat-picture/cat-picture.component.ts">cat-picture.component.ts</a> 
+                        and the subscriber of the message is found in 
+                        <a href="https://github.com/AJarombek/mean-client-prototype/blob/master/web-app/src/app/profile/profile.component.ts">profile.component.ts</a>.
+                    </p>
+                    <p>
+                        While I don't mind setting up messaging between components, I wish there was a nicer way to store global data that would be used 
+                        throughout the application.  This seems to be a bit of a weak point of the Angular framework, and I am curious how React.js will 
+                        handle the same situation.
+                    </p>
                     <h5>Login Page</h5>
-                    <h5>Signup Page</h5>
-                    <h5>Profile Page</h5>
+                    <figure id="logincomponent-image">
+                        <img src="login-component.png">
+                    </figure>
+                    <p>
+                        The function of the <code>LoginComponent</code> is pretty self explanatory - it logs in a user!  This is where I ask for authentication 
+                        from the server and get a JWT as a response.  I then store the JWT in <code>localStorage</code> and send it along with all HTTP requests 
+                        to the server.  For more information on that process you can check out my discovery post on JWT.
+                    </p>
+                    <p>
+                        The <code>LoginComponent</code> also uses the Angular forms API to easily create and validate form inputs.  I actually really liked working 
+                        with the forms API.  It really simplified what is often the most convoluted part of a web application.  I remember how difficult it was to 
+                        create a simple login and signup form on my first website (which was a LAMP stack website using JQuery in the frontend).  The Angular approach 
+                        to forms is a welcome change!
+                    </p>
+                    <p>
+                        I am not going to go into how the form API works, but you can check out the code for the login form in 
+                        <a href="https://github.com/AJarombek/mean-client-prototype/blob/master/web-app/src/app/login/login.component.ts">login.component.ts</a> and 
+                        <a href="https://github.com/AJarombek/mean-client-prototype/blob/master/web-app/src/app/login/login.component.html">login.component.html</a>.  
+                        A more complex example of the form API can be found in 
+                        <a href="https://github.com/AJarombek/mean-client-prototype/blob/master/web-app/src/app/signup/signup.component.ts">signup.component.ts</a> and 
+                        <a href="https://github.com/AJarombek/mean-client-prototype/blob/master/web-app/src/app/signup/signup.component.html">signup.component.html</a>.
+                    </p>
+                    <figure id="signupcomponent-image">
+                        <img src="signup-component.png">
+                    </figure>
+                    <p>
+                        Another cool thing about the forms API is it is super easy to implement your own custom validator.  This validator can then be placed 
+                        on any form element.  You can check out a custom validator I made which checks for whitespace in 
+                        <a href="https://github.com/AJarombek/mean-client-prototype/blob/master/web-app/src/app/shared/no-whitespace.validator.ts">no-whitespace.validator.ts</a>.
+                    </p>
                     <h5>Post Page</h5>
-                    <h5>About Page</h5>
                     <h5>Unit Testing Angular</h5>
                     <h5>Dealing with Multiple Environments</h5>
                     <h5>Future Steps</h5>
@@ -848,6 +923,7 @@ export class PostService implements HttpService {
                         <p>[7] "__dirname returns '/' when js file is built with webpack", https://github.com/webpack/webpack/issues/1599</p>
                         <p>[8] "A guide to mocha's describe(), it() and setup hooks", https://samwize.com/2014/02/08/a-guide-to-mochas-describe-it-and-setup-hooks/</p>
                         <p>[9] Yakov Fain &amp; Anton Moiseev, Angular 2 Development with TypeScript (Shelter Island, NY: Manning, 2017), 33</p>
+                        <p>[10] "Cards", http://v4-alpha.getbootstrap.com/components/card/</p>
                     </div>
                 </div>
             </div>
