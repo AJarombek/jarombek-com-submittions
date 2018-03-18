@@ -2,7 +2,9 @@
 
 #meanstack-image img { height: 340px; }
 
-#meowcat-image, #meanstack-image { width: 100%; }
+#maincomponent-image img { height: 500px; }
+
+#meowcat-image, #meanstack-image, #maincomponent-image { width: 100%; }
 
 img { display: inherit; margin: 0 auto; padding-top: 20px; padding-bottom: 20px; }
 

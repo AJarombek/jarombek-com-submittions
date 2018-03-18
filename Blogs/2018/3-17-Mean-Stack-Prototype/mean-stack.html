@@ -701,6 +701,110 @@ describe("GET '/'", () => {
                         Now I want to look at the default route of the application which displays the <code>HomeComponent</code>.
                     </p>
                     <h5>Home Page</h5>
+                    <figure id="maincomponent-image">
+                        <img src="main-component.png">
+                    </figure>
+                    <p>
+                        The code in the <code>HomeComponent</code> is pretty simple.  It subscribes to a service called <code>postService</code>.  By calling 
+                        the <code>getAll()</code> function in <code>postService</code> the component will get all the cat posts stored on the server.  These will 
+                        then be displayed in the UI.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-typescript" title="TypeScript" contenteditable="true" spellcheck="false">import { Component } from '@angular/core';
+import {PostService} from "../post.service";
+import {Post} from "../models/post";
+import {environment} from "../../environments/environment";
+
+@Component({
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss']
+})
+export class HomeComponent {
+    posts: [Post];
+
+    // The private modifier creates a new instance variable
+    constructor(private postService: PostService) {
+
+    // When the Observable getAll() value returns give it to the posts variable
+    postService.getAll().subscribe(data => {
+
+        this.posts = data;
+
+        // Different behavior depending on environment
+        if (environment.evt === 'dev') {
+            this.posts.forEach(post => {
+                post.date = new Date(post.date);
+                post.picture = `${post.picture}`;
+            });
+        }
+    });
+    }
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        The <code>postService</code> is one of the many services I created for this project.  It makes HTTP requests to the posts API.  
+                        Here is a look at the service:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-typescript" title="TypeScript" contenteditable="true" spellcheck="false">import {Injectable} from '@angular/core';
+import {Post} from "./models/post";
+import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs/Observable";
+import {HttpService} from "./http.service";
+
+@Injectable()
+export class PostService implements HttpService {
+
+    constructor(private http: HttpClient) {}
+
+    getAll(): Observable<[any]> {
+        return this.http.get<[Post]>(`/api/post`);
+    }
+
+    get(id: number): Observable<any> {
+        return this.http.get<Post>(`/api/post/${id}`);
+    }
+
+    post(post: Post): Observable<any> {
+        return this.http.post<Post>(`/api/post`, post);
+    }
+
+    put(post: Post): Observable<any> {
+        return this.http.put<Post>(`/api/post/${post.id}`, post);
+    }
+
+    delete(id: number): Observable<any> {
+        return this.http.delete<any>(`/api/post/${id}`);
+    }
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        Each function in the service corresponds with a route defined in the Node.js <code>postRouter</code> API.  You can also see that the 
+                        service implements a TypeScript interface.  The code for this interface is found in 
+                        <a href="https://github.com/AJarombek/mean-client-prototype/blob/master/web-app/src/app/http.service.ts">http.service.ts</a>.  
+                        I defined this interface to be implemented in all my HTTP request services.
+                    </p>
+                    <p>
+                        The HTML template for the <code>HomeComponent</code> loops through the <code>posts</code> array and passes each post to the 
+                        <code>CatPictureComponent</code>.  This component will display the cat post on the UI.
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-html" title="HTML" contenteditable="true" spellcheck="false">&lt;div id="home-container" class="container-fluid mt-3"&gt;
+    &lt;!-- Go through all the cat posts and pass each post to the cat-picture component --&gt;
+    &lt;div class="card-columns"&gt;
+        &lt;div *ngFor="let post of posts"&gt;
+        &lt;cat-picture [post]="post"&gt;&lt;/cat-picture&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code>
+                        </pre>
+                    </figure>
                     <h5>Cat Posts</h5>
                     <h5>Login Page</h5>
                     <h5>Signup Page</h5>
