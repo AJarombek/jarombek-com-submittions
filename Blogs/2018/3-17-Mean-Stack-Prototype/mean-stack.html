@@ -967,7 +967,7 @@ export class SpyDirective implements OnInit, OnDestroy {
                         I didn’t do much unit testing with my Angular application.  It is however set up with TravisCI and a testing suite just like the 
                         server side Node.js code.  I did write unit testing code to test some of the mock services in the project.  These mock services 
                         allowed me to work on the front-end code before the Node.js service was created.  This was really helpful during early 
-                        development!  I will explain how I switched between environments in just a bit.
+                        development!
                     </p>
                     <p>
                         Here is an example of one of my mock services test code.  This one is for the user service:
@@ -1027,22 +1027,32 @@ describe('MockUserService', () => {
                         to maintain, I would realize it was time to create a new module to hold the component.  This is exactly what happened when I 
                         separated out the <code>CatPictureComponent</code> into its own module.
                     </p>
-                    <h5>Dealing with Multiple Environments</h5>
-                    <h5>Future Steps</h5>
-                    <h5>Conclusions</h5>
-                    <figure>
-                        <pre>
-                            <code class="language-typescript" title="TypeScript" contenteditable="true" spellcheck="false"></code>
-                        </pre>
-                    </figure>
-                    <figure>
-                        <pre class="command-line" data-prompt="$">
-                            <code class="language-bash" title="Bash" contenteditable="true" spellcheck="false"></code>
-                        </pre>
-                    </figure>
                     <p>
-                        The code for the prototype is available on my 
-                        <a href="https://github.com/AJarombek/nodejs-mongodb-api-prototype">GitHub</a>. 
+                        However, in general writing unit tests for Angular was a big pain.  There were many occasions where unit testing code for 
+                        components would fail without any obvious reason.  Also the documentation online is practically nonexistent, so you have to hope 
+                        that someone else online ran into the same issue you did.  This was not always the case.  An easy to use unit testing suite could 
+                        be a big point for React.js to win from Angular.
+                    </p>
+                    <h5>Future Steps</h5>
+                    <p>
+                        That concludes my look into the current state of my MEAN Stack prototype.  If you want to check out the frontend code in full you can look on 
+                        <a href="https://github.com/AJarombek/mean-client-prototype">GitHub</a>.  
+                    </p>
+                    <p>
+                        As far as further steps are concerned, I might continue to update this prototype as Angular versions advance.  That would be a really nice 
+                        way to keep up to date on the framework and always have a working prototype to look back on.
+                    </p>
+                    <h5>Conclusions</h5>
+                    <p>
+                        It also would be really cool to deploy it to AWS or another cloud service.  Then I could get experience pushing an Angular app all the 
+                        way to production!
+                    </p>
+                    <p>
+                        I really liked the Angular framework, but it did have some shortcomings.  This gives React some room to beat Angular out when I finally 
+                        pick the front end JavaScript framework/library to use for my website.  These shortcomings include less than ideal cross component 
+                        data transfer and complex unit testing.  Angular also does a lot of things well.  I really enjoyed the forms API and the general 
+                        strict framework Angular presents simplifies frontend development.  TypeScript as a language has also really grown on me!  I am 
+                        excited to work with Angular again in the future and look forward to learning React next!
                     </p>
                     <div class="container tags">
                         <p>
