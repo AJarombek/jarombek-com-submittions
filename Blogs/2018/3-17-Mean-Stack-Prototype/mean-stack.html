@@ -886,7 +886,147 @@ export class PostService implements HttpService {
                         <a href="https://github.com/AJarombek/mean-client-prototype/blob/master/web-app/src/app/shared/no-whitespace.validator.ts">no-whitespace.validator.ts</a>.
                     </p>
                     <h5>Post Page</h5>
+                    <p>
+                        The post page is the most complex page in the website.  The component guides the user through a multi-part process of uploading a new cat 
+                        post.  It involves the Angular forms API, picture file uploading, and calls to the Node.js posts API.
+                    </p>
+                    <p>
+                        The component can be in three different states.  Each of these states presents a different UI for the user.  The first state allows the user 
+                        to upload the cat posts details in an Angular form.  The second state allows them to upload a cat picture.  The third state is when the upload 
+                        has been successfully made.
+                    </p>
+                    <p>
+                        In order to display these three states, I used Angular’s <code>&lt;ng-template&gt;</code> HTML element.  This element is the Angular implementation 
+                        of HTML’s native <code>&lt;template&gt;</code> element.  Anything in this element will not be rendered when the page is first loaded, but can be added 
+                        to the page later on.  In my case the contents of <code>&lt;ng-template&gt;</code> will be rendered when certain variables in the <code>PostComponent</code> 
+                        are set to <code>true</code>.
+                    </p>
+                    <p>
+                        One of the big challenges I had with the <code>PostComponent</code> was getting the value in an HTML <code>&lt;input&gt;</code> 
+                        element before it was destroyed.  This happened when the first state was destroyed and the second state was created.  The solution 
+                        I ended up going with was setting up a spy directive on the <code>&lt;input&gt;</code> elements<sup>11</sup>.  This spy checks the lifecycles of 
+                        the <code>&lt;input&gt;</code> element.  When it is created or destroyed I can then perform certain actions, such as initializing 
+                        its value or retrieving its value.  Here is a look at the spy directive:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-typescript" title="TypeScript" contenteditable="true" spellcheck="false">import {Directive, ElementRef, OnDestroy, OnInit, Renderer2} from '@angular/core';
+import {LifecycleService} from "./lifecycle.service";
+import {Lifecycle} from "../models/lifecycle";
+
+@Directive({
+    selector: '[spy]'
+})
+export class SpyDirective implements OnInit, OnDestroy {
+
+    constructor(private renderer: Renderer2, private el: ElementRef, 
+                private lifecycleService: LifecycleService) {}
+
+    /**
+     * The initialization lifecycle for the spied upon element.  Send an appropriate 
+     * notification to the lifecycle service for subscribers to consume.
+     */
+    ngOnInit(): void {
+        const status: Lifecycle = this.lifecycleObject("init");
+
+        this.lifecycleService.emitData(status);
+    }
+
+    /**
+     * The destroy lifecycle for the spied upon element.  Send an appropriate 
+     * notification to the lifecycle service for subscribers to consume.
+     */
+    ngOnDestroy(): void {
+        const status: Lifecycle = this.lifecycleObject("destroy");
+
+        this.lifecycleService.emitData(status);
+    }
+
+    lifecycleObject(event: string) : Lifecycle {
+        return {
+            id: this.el.nativeElement.id,
+            event: event,
+            value: this.el.nativeElement.value
+        };
+    }
+}</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        The <code>lifecycleService</code> allows for message passing between this directive and the <code>PostComponent</code>.  
+                        You can look at this service in 
+                        <a href="https://github.com/AJarombek/mean-client-prototype/blob/master/web-app/src/app/shared/lifecycle.service.ts">lifecycle.service.ts</a>.
+                    </p>
+                    <p>
+                        Once again I think the message passing services are a bit of a messy approach to sharing data between components.  Maybe there is 
+                        a better approach out there.  However, the fact that you can check the lifecycle of an HTML element through a directive is really 
+                        cool!
+                    </p>
                     <h5>Unit Testing Angular</h5>
+                    <p>
+                        I didn’t do much unit testing with my Angular application.  It is however set up with TravisCI and a testing suite just like the 
+                        server side Node.js code.  I did write unit testing code to test some of the mock services in the project.  These mock services 
+                        allowed me to work on the front-end code before the Node.js service was created.  This was really helpful during early 
+                        development!  I will explain how I switched between environments in just a bit.
+                    </p>
+                    <p>
+                        Here is an example of one of my mock services test code.  This one is for the user service:
+                    </p>
+                    <figure>
+                        <pre>
+                            <code class="language-typescript" title="TypeScript" contenteditable="true" spellcheck="false">import { TestBed, inject } from '@angular/core/testing';
+import {MockUserService} from "./mock-user.service";
+import {User} from "../models/user";
+
+describe('MockUserService', () => {
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [MockUserService]
+        });
+    });
+
+    it('service should be created', inject([MockUserService], (service: MockUserService) => {
+        expect(service).toBeTruthy();
+    }));
+
+    it("getAll() should get two users", inject([MockUserService], 
+                                        (service: MockUserService) => {
+        service.getAll().subscribe(users => {
+            expect(users.length).toBe(2);
+        });
+    }));
+
+    it("get() should get user 'andy'", inject([MockUserService], 
+                                        (service: MockUserService) => {
+        service.get("andy").subscribe(user => {
+            expect(user.username).toBe('andy');
+            expect(user.first).toBe('Andrew');
+            expect(user.last).toBe('Jarombek');
+        });
+    }));
+
+    it("post() should return new user", inject([MockUserService], 
+                                        (service: MockUserService) => {
+        service.post(new User("joe", "Joe", "Smith")).subscribe(user => {
+            expect(user.username).toBe('joe');
+            expect(user.first).toBe('Joe');
+            expect(user.last).toBe('Smith');
+        });
+    }));
+
+    ...
+});</code>
+                        </pre>
+                    </figure>
+                    <p>
+                        When Angular CLI sets up components or services for you, it also generates a spec file that contains unit testing code for the 
+                        component or service.  It only contains one test by default.  This test makes sure that the component or service loads properly.  
+                        Although I wasn’t adding any more tests to the spec files, I found it really helpful to maintain the default test for each 
+                        component.  This way I had to make sure all my components were following the code conventions of the Angular framework.  It 
+                        even helped me to make design decisions.  For example, when the test code for a component became really difficult or impossible 
+                        to maintain, I would realize it was time to create a new module to hold the component.  This is exactly what happened when I 
+                        separated out the <code>CatPictureComponent</code> into its own module.
+                    </p>
                     <h5>Dealing with Multiple Environments</h5>
                     <h5>Future Steps</h5>
                     <h5>Conclusions</h5>
@@ -924,6 +1064,7 @@ export class PostService implements HttpService {
                         <p>[8] "A guide to mocha's describe(), it() and setup hooks", https://samwize.com/2014/02/08/a-guide-to-mochas-describe-it-and-setup-hooks/</p>
                         <p>[9] Yakov Fain &amp; Anton Moiseev, Angular 2 Development with TypeScript (Shelter Island, NY: Manning, 2017), 33</p>
                         <p>[10] "Cards", http://v4-alpha.getbootstrap.com/components/card/</p>
+                        <p>[11] "Spying OnInit and OnDestroy", https://angular.io/guide/lifecycle-hooks#spy</p>
                     </div>
                 </div>
             </div>
