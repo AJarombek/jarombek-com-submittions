@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAAA,sBAAuB,CACnB,MAAM,CAAE,KAAK,CAGjB,wBAAyB,CACrB,MAAM,CAAE,IAAI",
-"sources": ["../java-default-method.scss"],
-"names": [],
-"file": "java-default-method.css"
-}

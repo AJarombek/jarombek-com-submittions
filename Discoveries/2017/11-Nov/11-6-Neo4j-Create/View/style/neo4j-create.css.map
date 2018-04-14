@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAIA,GAAI,CACA,MAAM,CAAE,KAAK,CACb,MAAM,CAAE,0BAA0B",
-"sources": ["../neo4j-create.scss"],
-"names": [],
-"file": "neo4j-create.css"
-}

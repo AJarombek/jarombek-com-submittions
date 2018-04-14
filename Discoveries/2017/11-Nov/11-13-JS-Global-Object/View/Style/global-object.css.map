@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAAA,GAAI,CACA,MAAM,CAAE,0BAA0B,CAClC,KAAK,CAAE,KAAK,CACZ,OAAO,CAAE,KAAK,CACd,MAAM,CAAE,MAAM",
-"sources": ["../global-object.scss"],
-"names": [],
-"file": "global-object.css"
-}

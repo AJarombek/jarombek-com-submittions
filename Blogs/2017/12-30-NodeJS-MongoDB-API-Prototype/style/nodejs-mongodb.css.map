@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAAA,gBAAiB,GACb,MAAM,EAAE,KAAK;;AAGjB,kBAAmB,GACf,MAAM,EAAE,KAAK;;AAGjB,sBAAuB,GACnB,MAAM,EAAE,KAAK,EACb,MAAM,EAAE,iBAAiB;;AAG7B,0BAA2B,GACvB,MAAM,EAAE,KAAK,EACb,MAAM,EAAE,iBAAiB;;AAG7B,UAAW,GACP,UAAU,EAAE,IAAI,EAChB,aAAa,EAAE,IAAI",
-"sources": ["../nodejs-mongodb.scss"],
-"names": [],
-"file": "nodejs-mongodb.css"
-}
