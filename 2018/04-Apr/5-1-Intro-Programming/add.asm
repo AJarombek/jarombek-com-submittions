@@ -1,6 +1,6 @@
 # Author: Andrew Jarombek
 # Date: 4/20/2018
-# Basic addition assembly code
+# Basic addition assembly code for MIPS
 
 addi $t0 $zero 3
 addi $t1 $zero 7
