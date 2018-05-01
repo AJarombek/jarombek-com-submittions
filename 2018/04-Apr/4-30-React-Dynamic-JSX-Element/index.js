@@ -3,7 +3,7 @@ import { render } from "react-dom";
 import Link from "./Link";
 
 /**
- * Demonstrate creating dynamic JSX tags
+ * Demonstrate creating dynamic JSX elements
  * @author Andrew Jarombek
  * @since 4/29/2018
  */
