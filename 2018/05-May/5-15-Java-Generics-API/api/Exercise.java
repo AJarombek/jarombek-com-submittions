@@ -5,7 +5,12 @@ import java.time.LocalDate;
 
 public interface Exercise {
 
-    public String getDistance();
-    public Duration getTime();
-    public LocalDate getDate();
+    double getMiles();
+    Duration getTime();
+    LocalDate getDate();
+
+    default Duration pace() {
+        long secondsPerMile = getTime().toSeconds() / 60;
+        return Duration.ofSeconds(secondsPerMile);
+    }
 }
