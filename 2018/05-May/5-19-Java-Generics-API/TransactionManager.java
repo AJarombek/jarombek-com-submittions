@@ -1,6 +1,6 @@
-import api.Exercise;
-import api.Run;
-import api.Ski;
+import exercise.Exercise;
+import exercise.Run;
+import exercise.Ski;
 import bchain.Block;
 import bchain.BlockChain;
 import bchain.SimpleBlockChain;
