@@ -14,6 +14,9 @@ public abstract class AbstractBlockChain<E> implements BlockChain<E> {
     @Override
     public abstract Optional<Block.Transaction<E>> find(long id);
 
+    @Override
+    public abstract void addAll(Iterable<? extends E> elements);
+
     abstract List<Block<E>> getBlockList();
 
     @Override

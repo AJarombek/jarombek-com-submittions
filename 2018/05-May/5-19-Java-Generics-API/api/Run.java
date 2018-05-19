@@ -17,7 +17,7 @@ public class Run implements Exercise, Comparable<Run> {
                     .thenComparing(run -> run.surface);
 
     public enum Surface {
-        GRASS, SAND, ROAD, TRACK, TRAIL
+        GRASS, SAND, ROAD, TRACK, TRAIL, UNKNOWN
     }
 
     private double miles;
@@ -37,7 +37,7 @@ public class Run implements Exercise, Comparable<Run> {
     }
 
     public static Run create(double miles, Duration time, LocalDate date) {
-        return new Run(miles, time, date, null);
+        return new Run(miles, time, date, Surface.UNKNOWN);
     }
 
     public static Run createNow(double miles, Duration time, Surface surface) {
@@ -45,7 +45,7 @@ public class Run implements Exercise, Comparable<Run> {
     }
 
     public static Run createNow(double miles, Duration time) {
-        return new Run(miles, time, LocalDate.now(), null);
+        return new Run(miles, time, LocalDate.now(), Surface.UNKNOWN);
     }
 
     @Override

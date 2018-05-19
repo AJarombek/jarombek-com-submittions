@@ -50,6 +50,11 @@ public final class SimpleBlockChain<E> extends AbstractBlockChain<E> {
     }
 
     @Override
+    public void addAll(Iterable<? extends E> elements) {
+        elements.forEach(this::add);
+    }
+
+    @Override
     List<Block<E>> getBlockList() {
         return blockList;
     }

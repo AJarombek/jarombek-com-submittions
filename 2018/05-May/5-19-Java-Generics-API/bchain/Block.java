@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-
 import static java.util.stream.Collectors.toMap;
 
 public final class Block<V> {
@@ -26,7 +25,7 @@ public final class Block<V> {
         this.transactions = transactions;
     }
 
-    Block<V> concatTransaction(V value) {
+    Block <V> concatTransaction(V value) {
         var map = transactions.entrySet().stream().collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         Transaction.create(value).ifPresent(transaction -> map.put(String.valueOf(transaction.hashCode()), transaction));
@@ -92,6 +91,20 @@ public final class Block<V> {
         @Override
         public String toString() {
             return "[ " + value.toString() + ", " + creationDate.toString() + ", " + id + " ]";
+        }
+
+        /* Getters */
+
+        public V getValue() {
+            return value;
+        }
+
+        public LocalTime getCreationDate() {
+            return creationDate;
+        }
+
+        public long getId() {
+            return id;
         }
     }
 
