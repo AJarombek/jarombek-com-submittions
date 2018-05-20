@@ -39,10 +39,10 @@ public class Ski implements Exercise, Comparable<Ski> {
 
     /* Instance Variables */
 
-    private double miles;
-    private Duration time;
-    private LocalDate date;
-    private Ski.Type type;
+    private final double miles;
+    private final Duration time;
+    private final LocalDate date;
+    private final Ski.Type type;
 
     /* Private Constructor */
 

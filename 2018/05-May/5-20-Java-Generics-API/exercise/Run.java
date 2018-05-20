@@ -35,10 +35,10 @@ public class Run implements Exercise, Comparable<Run> {
 
     /* Instance Variables */
 
-    private double miles;
-    private Duration time;
-    private LocalDate date;
-    private Surface surface;
+    private final double miles;
+    private final Duration time;
+    private final LocalDate date;
+    private final Surface surface;
 
     /* Private Constructor */
 

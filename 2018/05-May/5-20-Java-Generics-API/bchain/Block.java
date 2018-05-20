@@ -8,7 +8,7 @@ import java.util.Optional;
 import static java.util.stream.Collectors.toMap;
 
 /**
- * Class representing a block in the blockchain.  This class is private final - it
+ * Class representing a block in the blockchain.  This class is final - it
  * can not be extended.  From an outside view it is also immutable - the transactions
  * and previous block fields can't be changed in the lifetime of the {@code Block} instance.
  * @author Andrew Jarombek
@@ -66,7 +66,7 @@ public final class Block<V> {
      * @param prevBlock - the previous block in the blockchain
      * @return a new {@code Block}.
      */
-    Block <V> concatTransaction(V value, Block<V> prevBlock) {
+    Block<V> concatTransaction(V value, Block<V> prevBlock) {
 
         // Create a new instance with the contents of the existing transactions map
         var map = transactions.entrySet().stream()

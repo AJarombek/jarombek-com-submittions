@@ -8,8 +8,7 @@ import bchain.SimpleBlockChain;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Main method to initialize a blockChain instance and add transactions to it
@@ -20,8 +19,23 @@ public class TransactionManager {
 
     public static void main(String... args) {
 
-        // Create a new blockchain and add a transaction to it
+        // Create a new blockchain
         BlockChain<Exercise> blockChain = new SimpleBlockChain<>();
+
+        /* The following four method calls do nothing, but are all valid */
+        HashSet<Ski> skis = new HashSet<>();
+        blockChain.addAll(skis);
+
+        HashSet<Exercise> exercisesSet = new HashSet<>();
+        blockChain.addAll(exercisesSet);
+
+        List<Run> runs = new ArrayList<>();
+        blockChain.addAll(runs);
+
+        List<Exercise> exercisesList = new ArrayList<>();
+        blockChain.addAll(exercisesList);
+
+        // Perform a blockchain transaction
         var transaction1 = blockChain.add(Run.createNow(2.0,
                 Duration.ofMinutes(26).plusSeconds(22), Run.Surface.SAND));
 

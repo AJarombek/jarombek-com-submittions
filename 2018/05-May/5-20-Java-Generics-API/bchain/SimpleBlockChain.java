@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * A simple implementation of the blockchain.  This class is private final - it can not
+ * A simple implementation of the blockchain.  This class is final - it can not
  * be extended.
  * @author Andrew Jarombek
  * @since 5/19/2018
