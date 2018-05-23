@@ -4,13 +4,13 @@
  * @since 5/21/2018
  */
 
-/* Const can't be rebound to a new object */
+/* Const can't be rebound to a new primitive or object */
 const name = 'Andy';
 
 /* Throws TypeError: Assignment to constant variable. */
 // name = 'Joe';
 
-/* Let can be bound to a new object */
+/* Let can be bound to a new object or primitive */
 let othername = 'Andy';
 othername = 'Joe';
 
@@ -43,11 +43,17 @@ const cat = {
 
 Object.seal(cat);
 
+const isSealed = Object.isSealed(cat);
+console.info(`Is Cat Sealed: ${isSealed}`);
+
 /* Sealed objects allow for properties to be modified... */
 cat.name = "Dotty";
 
-/* ...But they do not allow for new properties to be added */
+/* ...But they do not allow for new properties to be added... */
 cat.owner = "Andy";
+
+/* ...or deleted */
+delete cat.name;
 
 console.info(`Sealed Cat After Modification: ${JSON.stringify(cat)}`);
 

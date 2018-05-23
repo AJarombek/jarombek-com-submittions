@@ -9,4 +9,5 @@ tsc immutableObjects.ts
 # Run all files
 node immutable.js
 node immutableArray.js
+node immutableObject.js
 node immutableObjects.js

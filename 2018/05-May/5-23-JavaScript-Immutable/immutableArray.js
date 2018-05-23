@@ -4,8 +4,10 @@
  * @since 5/21/2018
  */
 
+/* Class with static helper methods for immutably manipulating arrays */
 class Arrays {
 
+    /* Add a new element to an array */
     static add(item, array) {
         return [
             ...array,
@@ -13,12 +15,14 @@ class Arrays {
         ];
     };
 
-    static edit(item, newItem, array) {
+    /* Replace an element in an array */
+    static replace(item, newItem, array) {
         return array.map((i) => {
             return (i === item) ? newItem : i;
         });
     };
 
+    /* Remove an element from an array */
     static remove(item, array) {
         return array.filter((i) => i !== item);
     };
@@ -31,7 +35,7 @@ const thirtyTwoArray = Arrays.add(32, array);
 console.info(array);
 console.info(thirtyTwoArray);
 
-const zeroMiddleArray = Arrays.edit(4, 0, array);
+const zeroMiddleArray = Arrays.replace(4, 0, array);
 
 console.info(array);
 console.info(zeroMiddleArray);
