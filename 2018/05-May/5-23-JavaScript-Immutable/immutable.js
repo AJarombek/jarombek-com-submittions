@@ -17,7 +17,7 @@ othername = 'Joe';
 console.info(othername); // Joe
 
 /*
-Although they cant bind to a new value, the value a const variable
+Although they can't bind to a new object/primative, the value a const variable
 is currently bound to can change.  This means const is NOT immutable
 */
 const names = ["Andrew", "Jarombek"];

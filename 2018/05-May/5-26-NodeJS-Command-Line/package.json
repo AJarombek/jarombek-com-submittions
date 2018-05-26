@@ -1,0 +1,14 @@
+{
+  "name": "5-26-NodeJS-Command-Line",
+  "version": "1.0.0",
+  "description": "Node.JS Command Line Prototype Application",
+  "main": "index.js",
+  "author": "Andrew Jarombek",
+  "license": "MIT",
+  "bin": {
+    "random": "./index.js"
+  },
+  "dependencies": {
+    "commander": "^2.15.1"
+  }
+}
