@@ -27,3 +27,13 @@ class Run extends Exercise {
 const run = new Run(1, 5, 31, 'Track');
 
 run.print();
+
+// Go through the prototype chain of Run
+// run -> Run{constructor} -> Exercise{constructor, print} -> Object.prototype -> null
+const runPrototype = Object.getPrototypeOf(run);
+const runProtoPrototype = Object.getPrototypeOf(runPrototype);
+const runProtoProtoPrototype = Object.getPrototypeOf(runProtoPrototype);
+
+console.info(runPrototype);
+console.info(runProtoPrototype);
+console.info(runProtoProtoPrototype);

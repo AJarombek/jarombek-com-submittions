@@ -1,5 +1,5 @@
 /**
- * Traditional pre-ES6 prototype inheritance
+ * Traditional pre-ES5 prototype inheritance
  * @author Andrew JArombek
  * @since 6/7/2018
  */
@@ -19,7 +19,7 @@ const newExercise = new Exercise('Run');
 
 console.info(newExercise);
 
-// Able to access intems on the prototype
+// Able to access items on the prototype
 console.info(`${newExercise.minutes}:${newExercise.seconds}`);
 
 // Traverse the prototype chain:
@@ -48,6 +48,9 @@ function Run(surface) {
 const firstRun = new Run('Grass');
 
 console.info(firstRun);
+
+// Cant find minutes and seconds - the prototype is not yet hooked up
+console.info(`${firstRun.minutes}:${firstRun.seconds} on ${firstRun.surface}`);
 
 // Set the prototype of Run's prototype to Exercise's prototype
 Object.setPrototypeOf(Run.prototype, Exercise.prototype);

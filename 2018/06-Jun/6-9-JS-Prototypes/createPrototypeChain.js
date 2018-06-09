@@ -12,9 +12,10 @@ const Exercise = {
 
 // Create a new object with Exercise as its prototype
 // Note that using this version of Object.create() means that objects are not immutable
+// if you want them to have properties
 let run = Object.create(Exercise);
 
-// Add new fields to the run object.
+// Add new properties to the run object.
 run.type = 'Run';
 run.miles = 3.46;
 run.minutes = 20;
