@@ -1,0 +1,64 @@
+/**
+ * Styling for the web workers demo
+ * Author: Andrew Jarombek
+ * Date: 6/12/2018
+ */
+
+@font-face {
+    font-family: Sylexiad;
+    font-weight: normal;
+    src: url("./assets/SylexiadSansThin.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: Sylexiad-Bold;
+    font-weight: bold;
+    src: url("./assets/SylexiadSansThin-Bold.ttf") format("truetype");
+}
+
+/* Container for the demo */
+.content {
+    display: grid;
+    grid-template-columns: [start] 100% [end];
+    grid-template-rows: [top] 10% [input] 10% [notes-title] 10% [notes] 70% [bottom];
+}
+
+/* All grid items should be centered in their respective grids in the page */
+.input-title, .input, .output-title, .output {
+    justify-self: center;
+    align-self: center;
+}
+
+.input-title {
+    grid-area: top / start / input / end;
+    font-family: 'Sylexiad-Bold', Helvetica, sans-serif;
+}
+
+.input {
+    grid-area: input / start / notes-title / end;
+}
+
+#noteInput {
+    font-family: 'Sylexiad', Helvetica, sans-serif;
+    height: 40px;
+    width: 300px;
+    font-size: 28px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.output-title {
+    grid-area: notes-title / start / notes / end;
+    font-family: 'Sylexiad-Bold', Helvetica, sans-serif;
+}
+
+.output {
+    grid-area: notes / start / bottom / end;
+    font-family: 'Sylexiad', Helvetica, sans-serif;
+}
+
+.output div {
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+}
