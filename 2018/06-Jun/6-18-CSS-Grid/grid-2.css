@@ -1,0 +1,26 @@
+/*
+ * Author: Andrew Jarombek
+ * Date: 6/17/2018
+ * Grid template areas
+ */
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+
+    grid-template-areas:
+            "a b"
+            "c b"
+            "d e"
+            "d ."
+            "f g";
+}
+
+.run-6-17-0 { grid-area: a; }
+.run-6-16-0 { grid-area: b; }
+.run-6-15-2 { grid-area: c; }
+.run-6-15-1 { grid-area: d; }
+.run-6-15-0 { grid-area: e; }
+.run-6-14-0 { grid-area: f; }
+.run-6-13-0 { grid-area: g; }
