@@ -1,0 +1,69 @@
+/*
+ * Author: Andrew Jarombek
+ * Date: 6/17/2018
+ */
+
+@font-face {
+    font-family: Sylexiad;
+    font-weight: normal;
+    src: url("./assets/SylexiadSansThin.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: Sylexiad-Bold;
+    font-weight: bold;
+    src: url("./assets/SylexiadSansThin-Bold.ttf") format("truetype");
+}
+
+/* Background colors depending on how I felt on the run */
+.run-0 { background-color: #ea9999; }
+.run-1 { background-color: #ffad99; }
+.run-2 { background-color: #eac199; }
+.run-3 { background-color: #ffd699; }
+.run-4 { background-color: #ffffad; }
+.run-5 { background-color: #e3e3e3; }
+.run-6 { background-color: #c7f599; }
+.run-7 { background-color: #99d699; }
+.run-8 { background-color: #99c199; }
+.run-9 { background-color: #a3a3ff; }
+
+.run {
+    font-family: 'Sylexiad-Bold', Helvetica, sans-serif;
+    box-shadow: 0 1px 3px rgba(170, 170, 170, 0.1);
+    text-align: center;
+    border-radius: 3px;
+
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.run h1, .run-date-locale, .run-details, .run-description {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.run h1 {
+    font-size: 24px;
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.run-date-locale {
+    font-size: 18px;
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.run-details {
+    font-size: 18px;
+    grid-column: 1;
+    grid-row: 3;
+}
+
+.run-description {
+    font-family: 'Sylexiad', Helvetica, sans-serif;
+    letter-spacing: 0.4px;
+    font-size: 16px;
+    grid-column: 1;
+    grid-row: 4;
+}
