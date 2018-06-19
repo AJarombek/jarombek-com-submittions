@@ -1,0 +1,48 @@
+/*
+ * Author: Andrew Jarombek
+ * Date: 6/17/2018
+ * Grid template with identifiers
+ */
+
+.container {
+    display: grid;
+    grid-template-columns: [left] 1fr [middle-start] 2fr [middle-end] 1fr [right];
+    grid-template-rows: [row-1] 1fr [row-2] 1fr [row-3] 1fr [bottom];
+    grid-gap: 10px;
+}
+
+.run-6-17-0 {
+    /* Specify the items location within the grid */
+    grid-column-start: left;
+    grid-column-end: middle-start;
+    grid-row-start: row-1;
+    grid-row-end: row-3;
+}
+
+.run-6-16-0 {
+    /*
+      Shorthand for specifying each column and rows start and end
+      Goes in this order: row-start, column-start, row-end, column-end
+     */
+    grid-area: row-3 / middle-start / bottom / middle-end;
+}
+
+.run-6-15-2 {
+    grid-area: row-1 / middle-end / row-2 / right;
+}
+
+.run-6-15-1 {
+    grid-area: row-1 / middle-start / row-3 / middle-end;
+}
+
+.run-6-15-0 {
+    grid-area: row-3 / left / bottom / middle-start;
+}
+
+.run-6-14-0 {
+    grid-area: row-2 / middle-end / row-3 / right;
+}
+
+.run-6-13-0 {
+    grid-area: row-3 / middle-end / bottom / right;
+}
