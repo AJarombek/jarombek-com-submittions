@@ -19,8 +19,8 @@ typedef struct {
     unsigned int statusField : 3;
 } User;
 
-void addStatus(User *user, unsigned int change);
-void removeStatus(User *user, unsigned int change);
+void addStatus(User *user, unsigned int mask);
+void removeStatus(User *user, unsigned int mask);
 int containsStatus(unsigned int bitField, unsigned int mask);
 void printUser(User user);
 
@@ -74,31 +74,31 @@ int main()
 }
 
 /**
- * Add a status to the bitfield on a user type
+ * Add a status to the bit field on a user type
  * @param user - a User type
- * @param change - the status to add to the bitfield
+ * @param mask - the status to add to the bit field
  */
-void addStatus(User *user, unsigned int change) {
-    // Equivalent of statusField = statusField | change.  Combines the "on" bits
-    // from the existing statuses on the bitfield and the new status bits
-    user->statusField |= change;
+void addStatus(User *user, unsigned int mask) {
+    // Equivalent of statusField = statusField | mask.  Combines the "on" bits
+    // from the existing statuses on the bit field and the new status bits
+    user->statusField |= mask;
 }
 
 /**
- * Remove a status from the bitfield on a user type
+ * Remove a status from the bit field on a user type
  * @param user - a User type
- * @param change - the status to add to the bitfield
+ * @param mask - the status to add to the bit field
  */
-void removeStatus(User *user, unsigned int change) {
-    // Equivalent of statusField = statusField & ~change.
-    user->statusField &= ~change;
+void removeStatus(User *user, unsigned int mask) {
+    // Equivalent of statusField = statusField & ~mask.
+    user->statusField &= ~mask;
 }
 
 /**
  * Check to see if a status is in the bit field
- * @param bitField - a bitfield to search through
- * @param mask - a bit mask to bitwise 'and' with the bitfield
- * @return 0 if the mask doesnt exist in the bit field, an integer >= 1 otherwise
+ * @param bitField - a bit field to search through
+ * @param mask - a bit mask to bitwise 'and' with the bit field
+ * @return 0 if the mask doesn't exist in the bit field, an integer >= 1 otherwise
  */
 int containsStatus(unsigned int bitField, unsigned int mask) {
     return bitField & mask;
