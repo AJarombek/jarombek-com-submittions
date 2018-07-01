@@ -28,9 +28,17 @@ public class Reflect {
         Class superClass = objectClass.getSuperclass();
         System.out.println(superClass.toString());
 
-        Optional<Method> method = getMethod(objectClass, "length", null);
+        Optional<Method> method = getMethod(objectClass, "isLatin1", null);
 
-        method.ifPresent(m -> System.out.println(m.toString()));
+        method.ifPresent(m -> {
+            System.out.println(m.toString());
+            try {
+                System.out.println("Result of length() invocation: " + m.invoke(object, null));
+            } catch (Exception e) {
+                System.out.println("Error Invoking Method: " + e.getLocalizedMessage());
+            }
+        });
+
     }
 
     /**
@@ -108,6 +116,7 @@ public class Reflect {
             Method method = objectClass.getMethod(name, parameterTypes);
             return Optional.of(method);
         } catch (NoSuchMethodException e) {
+            System.out.println("Error Getting Method with Reflection: " + e.getLocalizedMessage());
             return Optional.empty();
         }
     }
