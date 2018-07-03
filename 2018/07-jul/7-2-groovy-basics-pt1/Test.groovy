@@ -12,11 +12,15 @@ def hello = "Hello"
 // Groovy allows you to omit parenthesis for method calls if it has at least one argument
 println hello
 
-// Dynamic typing at work - hello is now an array
+// Dynamic typing at work - hello is now a list
 hello = ["Hello", "World"]
 
 // String templating in Groovy
 println "${hello[0]} ${hello[1]}"
+
+// Create a new list where each element is the result of a function call on the old list elements
+def helloLengths = hello*.length()
+println helloLengths
 
 def list = [1, 2, 3, 4, 5]
 
@@ -31,12 +35,31 @@ Closure squared = { println it * it }
 // Pass the closure object to each().  These parenthesis could be omitted
 list.each(squared)
 
+// Create a new list that is each item squared
+def squaredList = list.collect { item -> item * item }
+println squaredList
+
+// Long version and Groovy shorthand for appending to a data structure
+squaredList.add(36)
+squaredList << 49
+squaredList << 64
+println squaredList
+
 // Groovy closures can also take arguments.  Instead of using the default 'it' argument
 // for the iterator, use 'name' instead.
 ["Joe", "Tom", "Ben"].each { name ->
     // Brackets are not mandatory with string templating
     println "A Great Friend: $name"
 }
+
+// Groovy supports multi-line strings
+def paragraph = '''
+Hello everyone, this is my first in depth look at the
+Groovy programming language.  I have written a little
+bit of Groovy in the past but never a significant amount.
+'''
+
+println paragraph.trim()
 
 // Closure with no parameter.  No return statement is needed
 def author = { -> "Andrew Jarombek"}
@@ -59,6 +82,11 @@ LinkedHashMap otherMap = [
         first: "Joe",
         last: "Smith"
 ]
+
+// Easily append to a map as well
+otherMap << [age:22, country: "United States"]
+
+println otherMap
 
 // Print out each entry in the map
 map.each { entry ->
@@ -85,6 +113,11 @@ for (item in newList) {
 // You can also make an array easily
 def array = (1..10).toArray()
 println array
+
+// Another easy loop is the times loop
+5.times { i ->
+    println "Iteration of the loop: $i"
+}
 
 // <=> is called the spaceship operator.  It is the equivalent of a Java comparator function.
 // This usage of the spaceship operator will return 1 since the first value is larger
