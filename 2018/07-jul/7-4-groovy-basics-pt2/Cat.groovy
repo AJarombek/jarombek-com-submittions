@@ -12,7 +12,8 @@ class Cat {
     String name
     String breed
 
+    // Methods in Groovy are public by default - no modifier is needed
     def sayHello() {
-        println "$name says Meow!"
+        return "$name says Meow!"
     }
 }
