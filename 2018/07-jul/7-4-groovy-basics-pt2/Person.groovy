@@ -11,7 +11,7 @@ class Person {
     String first
     String last
 
-    Person(first, last) {
+    Person(String first, String last) {
         this.first = first
         this.last = last
     }

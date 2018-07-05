@@ -60,8 +60,6 @@ assert factorial(2) == 2
 assert factorial(3) == 6
 assert factorial(4) == 24
 
-// factorial('Hey')
-
 // Type Errors are caught at compile time instead of run time with this annotation
 @TypeChecked
 static int factorial(int number) {
@@ -77,6 +75,11 @@ static int factorial(int number) {
     }
 }
 
+/**
+ * Compute a factorial number
+ * @param number - the number to build the factorial on (ex. number=3 : 3! = 3 * 2 * 1)
+ * @return the factorial number
+ */
 static int computeFactorial(int number) {
     int answer = 1
     2.upto(number) { n ->
