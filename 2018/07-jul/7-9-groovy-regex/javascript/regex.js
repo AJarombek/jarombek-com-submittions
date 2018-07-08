@@ -8,6 +8,8 @@ const assert = (assertion) => {
     console.assert(assertion, `Assertion failed!`);
 };
 
+// Two regular expression literals in JavaScript.
+// The JS engine pre-compiles and caches regex literals before runtime
 const datePattern = /\d{1,2}\/\d{1,2}\/\d{4}/;
 const exactDatePattern = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
 
