@@ -41,6 +41,33 @@ func match(_ string: String, withRegex regex: NSRegularExpression?) -> Bool {
 }
 
 /**
+ Search a String for multiple matches to a Regular Expression
+ - parameters:
+ - string: A string object to search
+ - regex: A string formatted as a regular expression
+ - Returns: an optional array of regular expression matching results
+ */
+func getMatches(_ string: String, withRegex regex: String) -> [NSTextCheckingResult]? {
+    do {
+        let regExp: NSRegularExpression = try NSRegularExpression(pattern: regex)
+        return getMatches(string, withRegex: regExp)
+    } catch {
+        return nil
+    }
+}
+
+/**
+ Search a String for multiple matches to a Regular Expression
+ - parameters:
+ - string: A string object to search
+ - regex: An optional regular expression.  If the regular expression is nil, return nil
+ - Returns: an optional array of regular expression matching results
+ */
+func getMatches(_ string: String, withRegex regex: NSRegularExpression?) -> [NSTextCheckingResult]? {
+    return regex?.matches(in: string, range: NSRange(string.startIndex..., in: string))
+}
+
+/**
  Check if an entire string matches a regular expression.  The range of the string is compared to the range of its
  substring that matches the regular expression pattern.  If both ranges are the same, the entire string matched
  the regular expression pattern.
@@ -88,9 +115,73 @@ assert(tomorrowMatches)
 assert(endOfYearMatches)
 assert(!myBirthdayMatches)
 
-let results: [NSTextCheckingResult]? =
-    dateRegex?.matches(in: today, range: NSRange(today.startIndex..., in: today))
+// Looping through RegEx matches
 
-results.map {
-    print($0)
+let catStatements = """
+    I really like cats.  Cats, cats, CATS!
+    I wish I had a cat, I would name it Cat.
+"""
+
+let catPattern = "[Cc][Aa][Tt][Ss]?"
+let catRegex: NSRegularExpression? = try NSRegularExpression(pattern: catPattern)
+
+if let results: [NSTextCheckingResult] = getMatches(catStatements, withRegex: catRegex) {
+
+    var cats: Array<String> = []
+
+    results.map {
+        let range: NSRange = $0.range(at: 0)
+        let start: String.Index = String.Index(encodedOffset: range.lowerBound)
+        let end: String.Index = String.Index(encodedOffset: range.upperBound)
+        let cat: Substring = catStatements[start..<end]
+        cats.append(String(cat))
+    }
+
+    assert(cats.count == 6)
+    assert(cats[0] == "cats")
+    assert(cats[3] == "CATS")
+    assert(cats[5] == "Cat")
+
+} else {
+    assert(false)
+}
+
+// Looping through Regex Grouping Captures
+
+let topLanguages = """
+Top 5 Favorite Programming Languages (as of 7/8/2018)
+    1. Java
+    2. JavaScript
+    3. Python
+    4. Swift
+    5. PHP
+"""
+
+let languagePattern = "(\\d)\\. (\\w*)"
+
+if let results: [NSTextCheckingResult] = getMatches(topLanguages, withRegex: languagePattern) {
+
+    var languages: [String:String] = [:]
+
+    results.map {
+        let rangeFirstGroup: NSRange = $0.range(at: 1)
+        let startFirstGroup: String.Index = String.Index(encodedOffset: rangeFirstGroup.lowerBound)
+        let endFirstGroup: String.Index = String.Index(encodedOffset: rangeFirstGroup.upperBound)
+        let firstGroup: Substring = topLanguages[startFirstGroup..<endFirstGroup]
+
+        let rangeSecondGroup: NSRange = $0.range(at: 2)
+        let startSecondGroup: String.Index = String.Index(encodedOffset: rangeSecondGroup.lowerBound)
+        let endSecondGroup: String.Index = String.Index(encodedOffset: rangeSecondGroup.upperBound)
+        let secondGroup: Substring = topLanguages[startSecondGroup..<endSecondGroup]
+        languages[String(firstGroup)] = String(secondGroup)
+    }
+
+    assert(languages["1"] == "Java")
+    assert(languages["2"] == "JavaScript")
+    assert(languages["3"] == "Python")
+    assert(languages["4"] == "Swift")
+    assert(languages["5"] == "PHP")
+
+} else {
+    assert(false)
 }
