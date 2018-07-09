@@ -6,6 +6,7 @@ import re
 Working with Regular Expressions
 Author: Andrew Jarombek
 Date: 7/8/2018
+Source: https://docs.python.org/3/howto/regex.html
 """
 
 datePattern = re.compile('\d{1,2}/\d{1,2}/\d{4}')
