@@ -32,10 +32,10 @@ set fakeName=%name:Jarombek=Jarbek%
 echo %fakeName%
 
 :: Use '/A' for numeric values
-set /A age=23
-set /A ten=10
+set /a age=23
+set /a ten=10
 
-set /A ageInTenYears=%age% + %ten%
+set /a ageInTenYears=%age% + %ten%
 echo Age in 10 Years: %ageInTenYears%
 
 :: Define a local scope.  Any variables defined in the local scope will no
@@ -97,3 +97,23 @@ if %towns[0]% == Greenwich (
 ) else (
     echo Something must have gone wrong^^!
 )
+
+:: Batch has DATE and TIME variables
+echo %DATE%
+
+:: LSS is the less than operator - Others include:
+:: EQU (equal to), NEQ (not equal to), LEQ (less than or equal to), GTR (greater than), GEQ (greater than or equal to)
+if "%DATE%" lss "Fri 07/28/2018" (
+    echo %DATE% is before Saturday July 28th, 2018
+) else (
+    echo %DATE% is equal to or later than Saturday July 28th, 2018
+)
+
+:: Create a function to print out the current time.  The exit commands last item (0) is the error code
+:: An error code of 0 means success
+:displayTime
+    echo The current time is %TIME%
+    exit /b 0
+
+:: Invoke the created function
+call :displayTime
