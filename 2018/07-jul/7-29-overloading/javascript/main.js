@@ -18,7 +18,7 @@ const assert = (assertion) => {
 
 const msGroundhog = new Animal("Ms. Groundhog", Animal.Species.GROUNDHOG,
     "Enjoys lounging and eating grass all day");
-const mrGroundhog = new Animal("Mr. Groundhog");
+const mrGroundhog = new Animal("Mr. Groundhog", Animal.Species.GROUNDHOG);
 
 const doe = new Animal("doe", Animal.Species.DEER,
     "from the tip of his wand burst the silver doe");
