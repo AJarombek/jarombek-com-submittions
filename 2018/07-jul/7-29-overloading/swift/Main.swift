@@ -19,6 +19,10 @@ let iris = Plant(species: PlantSpecies.Iris, in_bloom: false)
 let garden = Garden(withAnimals: [msGroundhog, mrGroundhog, doe, bunny], plants: [hosta, lily, iris], andObjects: nil)
 
 assert(garden.inGarden(doe))
+
+let otherDoe: Any = doe
+assert(!garden.inGarden(otherDoe))
+
 assert(garden.inGarden(lily))
 assert(!garden.inGarden(Animal(name: "momma rabbit", species: AnimalSpecies.Rabbit)))
 assert(!garden.inGarden("Squirrel"))
