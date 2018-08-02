@@ -1,6 +1,10 @@
 const {buildSchema} = require('graphql');
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
+const fs = require('fs');
+const path = require('path');
+
+const data = require('./dataSource');
 
 /**
  * A Basic GraphQL Server
@@ -8,11 +12,8 @@ const graphqlHTTP = require('express-graphql');
  * @since 8/1/2018
  */
 
-const schema = buildSchema(`
-    type Query {
-        hello: String
-    }
-`);
+const helloQuery = fs.readFileSync(path.join(__dirname, "test.graphql"), "utf-8");
+const schema = buildSchema(helloQuery);
 
 const root = {
     hello: () => {
