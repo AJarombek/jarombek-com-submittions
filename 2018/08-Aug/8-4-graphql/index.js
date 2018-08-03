@@ -1,29 +1,31 @@
-const {buildSchema} = require('graphql');
-const express = require('express');
-const graphqlHTTP = require('express-graphql');
-const fs = require('fs');
-const path = require('path');
-
-const data = require('./dataSource');
-
 /**
  * A Basic GraphQL Server
  * @author Andrew Jarombek
  * @since 8/1/2018
  */
 
-const helloQuery = fs.readFileSync(path.join(__dirname, "test.graphql"), "utf-8");
-const schema = buildSchema(helloQuery);
+const express = require('express');
+const graphqlHTTP = require('express-graphql');
+
+const data = require('./dataSource');
+const GraphQLSchemas = require('./graphQLSchemas');
+
+class Exercise {
+
+}
 
 const root = {
-    hello: () => {
-        return 'Hello World';
+    test: () => {
+        return 'Hello From GraphQL!';
+    },
+    findExercise: ({name}) => {
+        return new Exercise();
     }
 };
 
 const app = express();
 app.use('/', graphqlHTTP({
-    schema,
+    schema: GraphQLSchemas.testSchema,
     rootValue: root,
     graphiql: true
 }));

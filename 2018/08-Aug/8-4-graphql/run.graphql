@@ -1,0 +1,39 @@
+# Author: Andrew Jarombek
+# Date: 8/3/2018
+# GraphQL Definition for Exercise types
+
+interface Exercise {
+    name: String!
+    user: String!
+    description: String
+}
+
+enum CardioType {
+    RUN
+    BIKE
+    SWIM
+    SKI
+    HIKE
+}
+
+enum StrengthType {
+    CORE
+    LIFT
+}
+
+type Cardio implements Exercise {
+    name: String!
+    user: String!
+    distance: Float
+    minutes: Int
+    seconds: Int
+    description: String
+    type: CardioType
+}
+
+type Strength implements Exercise {
+    name: String!
+    user: String!
+    description: String
+    type: StrengthType
+}

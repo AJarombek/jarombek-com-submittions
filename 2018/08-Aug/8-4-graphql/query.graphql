@@ -1,0 +1,13 @@
+# Author: Andrew Jarombek
+# Date: 8/3/2018
+# Top Level GraphQL queries and mutations
+
+type Query {
+    test: String
+    findExercise(name: String!): [Exercise]
+}
+
+type Mutation {
+    createCardioExercise(name: String!): [Cardio]
+    createStrengthExercise(name: String!): [Strength]
+}
