@@ -33,7 +33,7 @@ type Cardio implements Exercise {
     distance: Float
     minutes: Int
     seconds: Int
-    type: CardioType
+    type: CardioType!
 }
 
 type Strength implements Exercise {
@@ -43,7 +43,7 @@ type Strength implements Exercise {
     description: String
     date: Date!
     workouts: [String]!
-    type: StrengthType
+    type: StrengthType!
 }
 
 input ExerciseInput {

@@ -9,6 +9,14 @@ const ExerciseData = {
             minutes: 23,
             seconds: 46,
             type: "RUN"
+        },
+        {
+            name: "Push-Ups at Home",
+            user: "Andy",
+            description: "It was exhausting",
+            date: Date.parse("Aug 4, 2018"),
+            workouts: ["Push-Ups", "Sit-Ups"],
+            type: "CORE"
         }
     ]
 };

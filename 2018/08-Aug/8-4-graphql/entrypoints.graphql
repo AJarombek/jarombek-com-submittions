@@ -15,6 +15,9 @@ type Query {
     getCardioExercise(id: ID!): Cardio
     getCardioExercises(name: String!): [Cardio]
     getCardioExercisesByUser(user: String!): [Cardio]
+    getStrengthExercise(id: ID!): Strength
+    getStrengthExercises(name: String!): [Strength]
+    getStrengthExercisesByUser(user: String!): [Strength]
 }
 
 type Mutation {

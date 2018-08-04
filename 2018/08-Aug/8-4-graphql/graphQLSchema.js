@@ -11,8 +11,8 @@ const fs = require('fs');
 const path = require('path');
 
 // Source Files for GraphQL Queries, Mutations, and Types
-const exerciseTypes = fs.readFileSync(path.join(__dirname, "exercise.graphqls"), "utf-8");
-const entryPoint = fs.readFileSync(path.join(__dirname, "entrypoints.graphqls"), "utf-8");
+const exerciseTypes = fs.readFileSync(path.join(__dirname, "exercise.graphql"), "utf-8");
+const entryPoint = fs.readFileSync(path.join(__dirname, "entrypoints.graphql"), "utf-8");
 
 // Build a full GraphQL schema out of all the source .graphql files
 const graphQLSchema = `${exerciseTypes} ${entryPoint}`;

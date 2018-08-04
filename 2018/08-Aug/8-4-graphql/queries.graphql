@@ -2,10 +2,33 @@
 # Date: 8/4/2018
 # GraphQL Queries
 
+query Test {
+    test
+}
+
 query AndysExercises {
     test
     getExercisesByUser(user: "Andy") {
         name
+        description
+    }
+}
+
+query AndyCardioExercises {
+    getCardioExercisesByUser(user: "Andy") {
+        name
+        distance
+        minutes
+        seconds
+        description
+        type
+    }
+}
+
+query AndyStrengthExercises {
+    getStrengthExercisesByUser(user: "Andy") {
+        name
+        workouts
         description
     }
 }

@@ -22,10 +22,45 @@ const root = {
         return exercise.length > 0 ? exercise[0] : null;
     },
     getExercisesByUser: (arg) => {
-        console.info(arg);
-        const retVal =  data.exercises.filter((exercise) => exercise.user === arg.user);
-        console.info(retVal);
-        return retVal;
+        return data.exercises.filter((exercise) => exercise.user === arg.user);
+    },
+    isCardioExercise: (exercise) => {
+        return exercise.distance || exercise.minutes || exercise.seconds;
+    },
+    getCardioExercises: function (arg) {
+        return data.exercises.filter((exercise) =>
+            exercise.name === arg.name && this.isCardioExercise(exercise)
+        );
+    },
+    getCardioExercise: function (arg) {
+        const cardio = data.exercises.filter((exercise) =>
+            exercise.id === arg.id && this.isCardioExercise(exercise)
+        );
+        return cardio.length > 0 ? cardio[0] : null;
+    },
+    getCardioExercisesByUser: function (arg) {
+        return data.exercises.filter((exercise) =>
+            exercise.user === arg.user && this.isCardioExercise(exercise)
+        );
+    },
+    isStrengthExercise: (exercise) => {
+        return exercise.workouts;
+    },
+    getStrengthExercises: function (arg) {
+        return data.exercises.filter((exercise) =>
+            exercise.name === arg.name && this.isStrengthExercise(exercise)
+        );
+    },
+    getStrengthExercise: function (arg) {
+        const strength = data.exercises.filter((exercise) =>
+            exercise.id === arg.id && this.isStrengthExercise(exercise)
+        );
+        return strength.length > 0 ? strength[0] : null;
+    },
+    getStrengthExercisesByUser: function (arg) {
+        return data.exercises.filter((exercise) =>
+            exercise.user === arg.user && this.isStrengthExercise(exercise)
+        );
     },
     createExercise: (exercise) => {
         const newExercise = {id: "ID", ...newExercise};
