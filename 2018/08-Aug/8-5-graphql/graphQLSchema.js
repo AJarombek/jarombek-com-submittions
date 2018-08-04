@@ -1,5 +1,6 @@
 /**
- * Modularize all the GraphQL Schemas in one file.  The Schemas exist in separate .graphql files
+ * Modularize the construction of the GraphQL Schema in one file.
+ * The GraphQL code exists in separate .graphql files
  * @author Andrew Jarombek
  * @since 8/2/2018
  */
@@ -18,7 +19,8 @@ const entryPoint = fs.readFileSync(path.join(__dirname, "entrypoints.graphql"), 
 const graphQLSchema = `${exerciseTypes} ${entryPoint}`;
 
 // Define a scalar type (a leaf type of a query - think primitive type) for the GraphQL schema
-// This type represents a Date - since GraphQL does not have a Date scalar type
+// This type represents a Date - since GraphQL does not have a Date scalar type.
+// https://stackoverflow.com/a/41513681
 const DateScalar = new GraphQLScalarType({
     name: 'Date',
     description: 'Scalar type representing a date in time',
@@ -44,6 +46,9 @@ const DateScalar = new GraphQLScalarType({
     }
 });
 
+// Used by GraphQL to resolve the Exercise interface.  GraphQL needs to know which implementing
+// type to use, and the __resolveType() function helps it pick.
+// https://www.apollographql.com/docs/graphql-tools/resolvers#Unions-and-interfaces
 const ExerciseTypes = {
     Exercise: {
         __resolveType(obj, context, info) {
@@ -56,17 +61,17 @@ const ExerciseTypes = {
     }
 };
 
+// All GraphQL fields have resolve functions defined in the client to help GraphQL know
+// how to return/handle a value.
 const resolvers = {
     Date: DateScalar,
     Exercise: ExerciseTypes.Exercise
 };
 
+// Build the final GraphQL Schema with the GraphQL code and JavaScript resolvers
 const Schema = makeExecutableSchema({
     typeDefs: graphQLSchema,
-    resolvers,
-    resolverValidationOptions: {
-        requireResolversForResolveType: false
-    }
+    resolvers
 });
 
 module.exports = Schema;

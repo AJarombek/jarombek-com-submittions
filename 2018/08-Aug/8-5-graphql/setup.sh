@@ -15,3 +15,6 @@ yarn add express express-graphql
 
 # Dependency to help generate GraphQL schemas
 yarn add graphql-tools
+
+# Handle unique identifiers for exercises
+yarn add uuid

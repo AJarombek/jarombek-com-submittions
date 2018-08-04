@@ -27,6 +27,7 @@ query AndyCardioExercises {
 
 query AndyStrengthExercises {
     getStrengthExercisesByUser(user: "Andy") {
+        id
         name
         workouts
         description
