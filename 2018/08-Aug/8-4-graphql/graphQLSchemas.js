@@ -8,8 +8,12 @@ const {buildSchema} = require('graphql');
 const fs = require('fs');
 const path = require('path');
 
-/* The test GraphQL Schema for a Basic Hello World Example */
-const testQuery = fs.readFileSync(path.join(__dirname, "query.graphql"), "utf-8");
-exports.testSchema = buildSchema(testQuery);
+/* Source Files for GraphQL Queries, Mutations, and Types */
+const exerciseQL = fs.readFileSync(path.join(__dirname, "exercise.graphql"), "utf-8");
+const qlEntryPoint = fs.readFileSync(path.join(__dirname, "query.graphql"), "utf-8");
+
+const ql = `${exerciseQL} ${qlEntryPoint}`;
+
+exports.Schema = buildSchema(ql);
 
 module.exports = exports;

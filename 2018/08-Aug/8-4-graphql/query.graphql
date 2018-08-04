@@ -4,10 +4,13 @@
 
 type Query {
     test: String
-    findExercise(name: String!): [Exercise]
+    getExercise(id: ID!): Exercise
+    getExercises(name: String!): [Exercise]
+    getExercisesByUser(user: String!): [Exercise]
 }
 
 type Mutation {
-    createCardioExercise(name: String!): [Cardio]
-    createStrengthExercise(name: String!): [Strength]
+    createExercise(exercise: Exercise!): Exercise
+    createCardioExercise(cardio: CardioInput!): Cardio
+    createStrengthExercise(strength: StrengthInput!): Strength
 }

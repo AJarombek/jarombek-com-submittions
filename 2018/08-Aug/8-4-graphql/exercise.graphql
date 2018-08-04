@@ -2,10 +2,13 @@
 # Date: 8/3/2018
 # GraphQL Definition for Exercise types
 
+scalar Date
+
 interface Exercise {
     name: String!
     user: String!
     description: String
+    date: Date!
 }
 
 enum CardioType {
@@ -22,18 +25,41 @@ enum StrengthType {
 }
 
 type Cardio implements Exercise {
+    id: ID!
     name: String!
     user: String!
+    description: String
+    date: Date!
     distance: Float
     minutes: Int
     seconds: Int
-    description: String
     type: CardioType
 }
 
 type Strength implements Exercise {
+    id: ID!
     name: String!
     user: String!
     description: String
+    date: Date!
+    type: StrengthType
+}
+
+input CardioInput {
+    name: String!
+    user: String!
+    description: String
+    date: Date!
+    distance: Float
+    minutes: Int
+    seconds: Int
+    type: CardioType
+}
+
+input StrengthInput {
+    name: String!
+    user: String!
+    description: String
+    date: Date!
     type: StrengthType
 }
