@@ -12,3 +12,6 @@ node index.js
 
 # Set up a web server for GraphQL
 yarn add express express-graphql
+
+# Dependency to help generate GraphQL schemas
+yarn add graphql-tools
