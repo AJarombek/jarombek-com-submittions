@@ -1,0 +1,11 @@
+# Author: Andrew Jarombek
+# Date: 8/4/2018
+# GraphQL Queries
+
+query AndysExercises {
+    test
+    getExercisesByUser(user: "Andy") {
+        name
+        description
+    }
+}

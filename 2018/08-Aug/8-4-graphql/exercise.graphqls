@@ -42,7 +42,15 @@ type Strength implements Exercise {
     user: String!
     description: String
     date: Date!
+    workouts: [String]!
     type: StrengthType
+}
+
+input ExerciseInput {
+    name: String!
+    user: String!
+    description: String
+    date: Date!
 }
 
 input CardioInput {

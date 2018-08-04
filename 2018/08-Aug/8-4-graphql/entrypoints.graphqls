@@ -2,15 +2,23 @@
 # Date: 8/3/2018
 # Top Level GraphQL queries and mutations
 
+schema {
+    query: Query
+    mutation: Mutation
+}
+
 type Query {
     test: String
     getExercise(id: ID!): Exercise
     getExercises(name: String!): [Exercise]
     getExercisesByUser(user: String!): [Exercise]
+    getCardioExercise(id: ID!): Cardio
+    getCardioExercises(name: String!): [Cardio]
+    getCardioExercisesByUser(user: String!): [Cardio]
 }
 
 type Mutation {
-    createExercise(exercise: Exercise!): Exercise
+    createExercise(exercise: ExerciseInput!): Exercise
     createCardioExercise(cardio: CardioInput!): Cardio
     createStrengthExercise(strength: StrengthInput!): Strength
 }

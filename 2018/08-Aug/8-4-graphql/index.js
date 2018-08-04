@@ -8,21 +8,24 @@ const express = require('express');
 const graphqlHTTP = require('express-graphql');
 
 const data = require('./exerciseData');
-const GraphQLSchemas = require('./graphQLSchemas');
+const GraphQLSchema = require('./graphQLSchema');
 
 const root = {
     test: () => {
         return 'Hello From GraphQL!';
     },
-    getExercises: (name) => {
-        return data.exercises.filter((exercise) => exercise.name === name);
+    getExercises: (arg) => {
+        return data.exercises.filter((exercise) => exercise.name === arg.name);
     },
-    getExercise: (id) => {
-        const exercise = data.exercises.filter((exercise) => exercise.id === id);
+    getExercise: (arg) => {
+        const exercise = data.exercises.filter((exercise) => exercise.id === arg.id);
         return exercise.length > 0 ? exercise[0] : null;
     },
-    getExercisesByUser: (user) => {
-        return data.exercises.filter((exercise) => exercise.user === user);
+    getExercisesByUser: (arg) => {
+        console.info(arg);
+        const retVal =  data.exercises.filter((exercise) => exercise.user === arg.user);
+        console.info(retVal);
+        return retVal;
     },
     createExercise: (exercise) => {
         const newExercise = {id: "ID", ...newExercise};
@@ -42,7 +45,7 @@ const root = {
 
 const app = express();
 app.use('/', graphqlHTTP({
-    schema: GraphQLSchemas.Schema,
+    schema: GraphQLSchema,
     rootValue: root,
     graphiql: true
 }));

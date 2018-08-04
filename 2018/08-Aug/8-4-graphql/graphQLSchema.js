@@ -1,5 +1,3 @@
-import {ValueNode} from "@types/graphql/language/ast";
-
 /**
  * Modularize all the GraphQL Schemas in one file.  The Schemas exist in separate .graphql files
  * @author Andrew Jarombek
@@ -13,8 +11,8 @@ const fs = require('fs');
 const path = require('path');
 
 // Source Files for GraphQL Queries, Mutations, and Types
-const exerciseTypes = fs.readFileSync(path.join(__dirname, "exercise.graphql"), "utf-8");
-const entryPoint = fs.readFileSync(path.join(__dirname, "query.graphql"), "utf-8");
+const exerciseTypes = fs.readFileSync(path.join(__dirname, "exercise.graphqls"), "utf-8");
+const entryPoint = fs.readFileSync(path.join(__dirname, "entrypoints.graphqls"), "utf-8");
 
 // Build a full GraphQL schema out of all the source .graphql files
 const graphQLSchema = `${exerciseTypes} ${entryPoint}`;
@@ -46,8 +44,29 @@ const DateScalar = new GraphQLScalarType({
     }
 });
 
-const resolvers = {Date: DateScalar};
+const ExerciseTypes = {
+    Exercise: {
+        __resolveType(obj, context, info) {
+            if (obj.distance || obj.minutes) {
+                return 'Cardio'
+            } else {
+                return 'Strength'
+            }
+        }
+    }
+};
 
-exports.Schema = makeExecutableSchema({typeDefs: graphQLSchema, resolvers});
+const resolvers = {
+    Date: DateScalar,
+    Exercise: ExerciseTypes.Exercise
+};
 
-module.exports = exports;
+const Schema = makeExecutableSchema({
+    typeDefs: graphQLSchema,
+    resolvers,
+    resolverValidationOptions: {
+        requireResolversForResolveType: false
+    }
+});
+
+module.exports = Schema;
