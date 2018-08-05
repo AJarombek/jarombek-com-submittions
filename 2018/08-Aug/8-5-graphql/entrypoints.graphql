@@ -2,24 +2,38 @@
 # Date: 8/3/2018
 # Top Level GraphQL queries and mutations
 
+# Schemas have queries which get data and mutations which manipulate/create data
 schema {
     query: Query
     mutation: Mutation
 }
 
+# Define all the root level queries for the GraphQL server
 type Query {
+    # Test query just to make sure that GraphQL is working
     test: String
+
+    # Queries for the Exercise interface.  Note that certain fields existing on concrete
+    # implementation types implementing Exercise will not be accessable
+    getAllExercises: [Exercise]
     getExercise(id: ID!): Exercise
     getExercises(name: String!): [Exercise]
     getExercisesByUser(user: String!): [Exercise]
+
+    # Queries for cardio specific exercises (ex. runs, bike rides, swims, etc.)
+    getAllCardioExercises: [Cardio]
     getCardioExercise(id: ID!): Cardio
     getCardioExercises(name: String!): [Cardio]
     getCardioExercisesByUser(user: String!): [Cardio]
+
+    # Queries for strength specific exercies (ex. core, weight lifting)
+    getAllStrengthExercises: [Strength]
     getStrengthExercise(id: ID!): Strength
     getStrengthExercises(name: String!): [Strength]
     getStrengthExercisesByUser(user: String!): [Strength]
 }
 
+# Define all the root level mutations for the GraphQL server
 type Mutation {
     createExercise(exercise: ExerciseInput!): Exercise
     createCardioExercise(cardio: CardioInput!): Cardio

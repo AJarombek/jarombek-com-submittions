@@ -6,6 +6,42 @@ query Test {
     test
 }
 
+query AllExercises {
+    getAllExercises {
+        id
+        name
+        date
+        description
+    }
+    getAllCardioExercises {
+        id
+        name
+        date
+        distance
+    }
+    getAllStrengthExercises {
+        id
+        name
+        date
+        workouts
+    }
+}
+
+query ExercisesByName {
+    getExercises(name: "Push-Ups at Home") {
+        description
+        date
+    }
+    getCardioExercises(name: "Track Workout at High School") {
+        description
+        date
+    }
+    getStrengthExercises(name: "Push-Ups at Home") {
+        description
+        date
+    }
+}
+
 query AndysExercises {
     test
     getExercisesByUser(user: "Andy") {
@@ -16,6 +52,7 @@ query AndysExercises {
 
 query AndyCardioExercises {
     getCardioExercisesByUser(user: "Andy") {
+        id
         name
         distance
         minutes
@@ -31,5 +68,25 @@ query AndyStrengthExercises {
         name
         workouts
         description
+    }
+}
+
+query SpecificWorkouts {
+    # The Exercise interface only has access to the name, user, description, and date fields
+    getExercise(id: "dadd5383-3ffd-4d40-a105-5ced93bf4dd3") {
+        name
+        date
+    }
+    # However a concrete type that implements Exercise has more fields, such as distance
+    getCardioExercise(id: "dadd5383-3ffd-4d40-a105-5ced93bf4dd3") {
+        name
+        date
+        distance
+    }
+    getStrengthExercise(id: "afcf6dc7-c5fb-4eca-9e4a-dd1b5232a146") {
+        name
+        date
+        workouts
+        type
     }
 }

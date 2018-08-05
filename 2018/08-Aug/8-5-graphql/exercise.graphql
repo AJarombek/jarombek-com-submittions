@@ -5,6 +5,7 @@
 scalar Date
 
 interface Exercise {
+    id: ID!
     name: String!
     user: String!
     description: String

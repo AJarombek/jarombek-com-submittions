@@ -28,12 +28,12 @@ const DateScalar = new GraphQLScalarType({
     // ParseValue() is called when an input value is sent to GraphQL from
     // the client through variables.
     parseValue(value) {
-        return Date.parse(value)
+        return Date.parse(value);
     },
     // Serialize an internally stored value in GraphQL to return as a response
-    // In this case, GraphQL will return the date in milliseconds
+    // In this case, GraphQL will return a date object
     serialize(value) {
-        return value.getTime()
+        return new Date(parseInt(value));
     },
     // Parse an external value sent to GraphQL as a Date type.  This function handles incoming
     // values of type ValueNode (which corresponds to all JSON types).

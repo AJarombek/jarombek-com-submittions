@@ -22,6 +22,16 @@ const ExerciseData = {
         },
         {
             id: uuid(),
+            name: "Track Workout at High School",
+            user: "Andy",
+            description: `Was drizzling during the warmup and raining for the workout.  
+                6x1000m at a much slower pace than in college (3:12-3:20)`,
+            date: Date.parse("Aug 4, 2018"),
+            distance: 8.75,
+            type: "RUN"
+        },
+        {
+            id: uuid(),
             name: "Push-Ups at Home",
             user: "Andy",
             description: "It was exhausting",

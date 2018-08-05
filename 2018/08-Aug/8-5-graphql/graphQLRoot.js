@@ -19,6 +19,12 @@ const root = {
     },
 
     /**
+     * Get all the exercises in the data store
+     * @return {*} an array of exercises
+     */
+    getAllExercises: () => data.exercises,
+
+    /**
      * Get all the exercises with a given name.  Name is not a unique field.
      * @param arg - arguments passed through the getExercises() field.
      * @return all the exercises that match a name.
@@ -55,6 +61,16 @@ const root = {
      */
     isCardioExercise: (exercise) => {
         return exercise.distance || exercise.minutes || exercise.seconds;
+    },
+
+    /**
+     * Get all the cardio exercises in the data store. NOTE: an arrow function isn't used here
+     * to maintain dynamic 'this' and avoid lexical 'this'.  All methods in this object that
+     * don't use an arrow function are implemented that way because of this.
+     * @return an array of cardio exercises
+     */
+    getAllCardioExercises: function () {
+        return data.exercises.filter((exercise) => this.isCardioExercise(exercise));
     },
 
     /**
@@ -101,6 +117,14 @@ const root = {
      */
     isStrengthExercise: (exercise) => {
         return exercise.workouts;
+    },
+
+    /**
+     * Get all the strength exercises in the data store
+     * @return an array of strength exercises
+     */
+    getAllStrengthExercises: function () {
+        return data.exercises.filter((exercise) => this.isStrengthExercise(exercise));
     },
 
     /**
