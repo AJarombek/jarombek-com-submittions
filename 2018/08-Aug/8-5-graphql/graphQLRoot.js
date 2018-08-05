@@ -4,6 +4,7 @@
  * @since 8/4/2018
  */
 
+const uuid = require('uuid/v4');
 const data = require('./exerciseData');
 
 // Each endpoint defined in GraphQL uses a resolver
@@ -164,12 +165,13 @@ const root = {
     },
 
     /**
-     * Create a new exercise to be stored as a JavaScript object.
+     * Create a new exercise to be stored as a JavaScript object.  NOTE: This is a helper method,
+     * not an entry point specified in GraphQL.
      * @param exercise - an object representing an exercise.
      * @return {{id: string}} the newly created exercise
      */
     createExercise: (exercise) => {
-        const newExercise = {id: "ID", ...newExercise};
+        const newExercise = {id: uuid(), ...exercise};
         data.exercises = [
             ...data.exercises,
             newExercise
@@ -179,20 +181,20 @@ const root = {
 
     /**
      * Create a new cardio exercise to be stored as a JavaScript object.
-     * @param cardioExercise - an object representing a cardio exercise.
+     * @param cardio - an object representing a cardio exercise.
      * @return {*|{id: string}} the newly created cardio exercise
      */
-    createCardioExercise: (cardioExercise) => {
-        return this.createExercise(cardioExercise);
+    createCardioExercise: function ({cardio}) {
+        return this.createExercise(cardio);
     },
 
     /**
      * Create a new strength exercise to be stored as a JavaScript object.
-     * @param strengthExercise - an object representing a strength exercise.
+     * @param strength - an object representing a strength exercise.
      * @return {*|{id: string}} the newly created strength exercise
      */
-    createStrengthExercise: (strengthExercise) => {
-        return this.createExercise(strengthExercise);
+    createStrengthExercise: function ({strength}) {
+        return this.createExercise(strength);
     }
 };
 

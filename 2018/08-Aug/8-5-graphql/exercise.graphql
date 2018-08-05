@@ -2,8 +2,11 @@
 # Date: 8/3/2018
 # GraphQL Definition for Exercise types
 
+# Scalar types resolve to concrete data.  GraphQL has built in scalar types, however
+# you are free to build your own
 scalar Date
 
+# GraphQL allows for abstract types that other concrete types can implement
 interface Exercise {
     id: ID!
     name: String!
@@ -12,6 +15,7 @@ interface Exercise {
     date: Date!
 }
 
+# Enums in GraphQL are restricted sets of values
 enum CardioType {
     RUN
     BIKE
@@ -23,8 +27,10 @@ enum CardioType {
 enum StrengthType {
     CORE
     LIFT
+    OTHER
 }
 
+# A concrete type that implements the exercise interface.  This exercise type is cardio specific
 type Cardio implements Exercise {
     id: ID!
     name: String!
@@ -37,6 +43,7 @@ type Cardio implements Exercise {
     type: CardioType!
 }
 
+# A concrete type that implements the exercise interface.  This exercise type is strength specific
 type Strength implements Exercise {
     id: ID!
     name: String!
@@ -47,6 +54,7 @@ type Strength implements Exercise {
     type: StrengthType!
 }
 
+# Input types are used with mutations to pass an entire object into the mutation
 input ExerciseInput {
     name: String!
     user: String!
@@ -70,5 +78,6 @@ input StrengthInput {
     user: String!
     description: String
     date: Date!
+    workouts: [String]!
     type: StrengthType
 }

@@ -35,7 +35,6 @@ type Query {
 
 # Define all the root level mutations for the GraphQL server
 type Mutation {
-    createExercise(exercise: ExerciseInput!): Exercise
     createCardioExercise(cardio: CardioInput!): Cardio
     createStrengthExercise(strength: StrengthInput!): Strength
 }

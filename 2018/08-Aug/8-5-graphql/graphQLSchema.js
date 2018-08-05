@@ -40,7 +40,8 @@ const DateScalar = new GraphQLScalarType({
     // ParseLiteral() is called when input values are sent to GraphQL through an inline query
     parseLiteral(valueNode) {
         if (valueNode.kind === Kind.INT || valueNode.kind === Kind.STRING) {
-            return new Date(valueNode.value);
+            const date = new Date(valueNode.value);
+            return date.getTime();
         }
         return null;
     }

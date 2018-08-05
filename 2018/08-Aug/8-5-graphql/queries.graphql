@@ -2,10 +2,12 @@
 # Date: 8/4/2018
 # GraphQL Queries
 
+# A test query just to check that GraphQL is up and running properly
 query Test {
     test
 }
 
+# Make sure that all the queries which return an array of all the exercises work
 query AllExercises {
     getAllExercises {
         id
@@ -27,6 +29,7 @@ query AllExercises {
     }
 }
 
+# Exercises of different implementation types can be queried by their name field
 query ExercisesByName {
     getExercises(name: "Push-Ups at Home") {
         description
@@ -42,6 +45,7 @@ query ExercisesByName {
     }
 }
 
+# They can also be queried by the user who they belong to
 query AndysExercises {
     test
     getExercisesByUser(user: "Andy") {
@@ -54,6 +58,7 @@ query AndyCardioExercises {
     getCardioExercisesByUser(user: "Andy") {
         id
         name
+        date
         distance
         minutes
         seconds
@@ -87,6 +92,43 @@ query SpecificWorkouts {
         name
         date
         workouts
+        type
+    }
+}
+
+# Test out the mutation operations to add new workouts.  When the above queries are run again,
+# these additions should be reflected.
+mutation AddNewStrengthWorkout {
+    createStrengthExercise(strength: {
+        name: "Kayaking"
+        user: "Andy"
+        date: "Aug 4, 2018"
+        workouts: ["Kayaking"]
+        type: OTHER
+    }) {
+        id
+        name
+        user
+        description
+        date
+        workouts
+        type
+    }
+}
+
+mutation AddNewRun {
+    createCardioExercise(cardio: {
+        name: "Beautiful Sunday Long Run"
+        user: "Andy"
+        date: "Aug 5, 2018"
+        distance: 12.31
+        type: RUN
+    }) {
+        id
+        name
+        user
+        date
+        distance
         type
     }
 }
