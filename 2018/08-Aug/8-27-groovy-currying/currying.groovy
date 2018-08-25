@@ -6,6 +6,19 @@
  * @since 8/17/2018
  */
 
+// Very basic curring techniques
+def times = { x, y -> x * y }
+
+assert times(2, 2) == 4
+
+def timesTwo = times.curry(2)
+
+assert timesTwo(5) == 10
+
+def timesTen = times.curry(10)
+
+assert timesTen(10) == 100
+
 // Closure that prints out a workout
 def workout = { type, miles, minutes, seconds ->
 
@@ -27,7 +40,7 @@ def run5K = workout.curry("Ran", 3.106)
 
 assert run5K(15, 27) == "Ran 3.106 miles in 15:27"
 
-// Bind the second argument in the workout closure to the 5K conversion to miles
+// Bind the second argument in the workout closure to the 5K mile conversion
 def fiveK = workout.ncurry(1, 3.106)
 
 assert fiveK("Biked", 15, 0) == "Biked 3.106 miles in 15:00"
