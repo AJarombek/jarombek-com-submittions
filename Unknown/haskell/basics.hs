@@ -27,4 +27,7 @@ subTuple (x,y) = x-y
 -- Display the program result in stdout
 -- 'show :: Int -> String' converts a value to a character list (which is aliased as String)
 main :: IO ()
-main = putStrLn (show (sub 5 3))
+main = do
+  putStrLn (show (sub 5 3))
+  putStrLn (show (subList [5, 3]))
+  putStrLn (show (subTuple (5, 3)))
