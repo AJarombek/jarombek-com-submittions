@@ -3,7 +3,7 @@
 /**
  * Experiment with the meta object protocol.
  * @author Andrew Jarombek
- * @since 8/15/2018
+ * @since 9/8/2018
  */
 
 class LanguageUse {
@@ -11,9 +11,9 @@ class LanguageUse {
     static def lastMonth = [
         "javascript": 1656,
         "html": 658,
+        "groovy": 484,
         "sass": 387,
         "hcl": 366,
-        "groovy": 363,
         "haskell": 138,
         "bash": 90,
         "java": 30,
@@ -50,10 +50,10 @@ def languageUse = new LanguageUse()
 
 // Call methods that go through the MOP and methodMissing()
 assert languageUse.getJavaScript() == 1656
-assert languageUse.getGroovy() == 363
+assert languageUse.getGroovy() == 484
 assert languageUse.getJava() == 30
 
 // Access properties that go through the MOP and propertyMissing()
 assert languageUse.javascript == 1656
-assert languageUse.groovy == 363
+assert languageUse.groovy == 484
 assert languageUse.java == 30
