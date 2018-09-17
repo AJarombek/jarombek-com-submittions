@@ -15,7 +15,7 @@ assert mc.methods.size() == 9
 // The number of methods that Groovy dynamically adds to the List object (pg. 210)
 assert mc.metaMethods.size() == 288
 
-// The number of properties in the List object
+// The number of fields in the List object
 assert mc.properties.size() == 1
 
 // Invoke methods dynamically with the meta class
