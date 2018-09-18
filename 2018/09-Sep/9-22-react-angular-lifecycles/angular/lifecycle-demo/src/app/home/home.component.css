@@ -1,0 +1,27 @@
+/**
+ * Styles for the Home Component
+ * Author: Andrew Jarombek
+ * Date: 9/17/2018
+ */
+
+.home-component-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 10px;
+    justify-items: center;
+}
+
+.logo-container {
+    grid-column: 1;
+    grid-row: 1;
+    margin-top: 30px;
+}
+
+.logo-container img {
+    height: 150px;
+}
+
+.lifecycle-log-container {
+    grid-column: 1;
+    grid-row: 2;
+}

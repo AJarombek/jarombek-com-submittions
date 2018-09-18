@@ -11,3 +11,6 @@ ng set --global packageManager=yarn
 
 cd lifecycle-demo/
 ng serve
+
+ng generate component home
+ng generate component pictures
