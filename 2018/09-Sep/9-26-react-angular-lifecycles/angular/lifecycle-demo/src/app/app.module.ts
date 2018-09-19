@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import {RouterModule, Routes} from "@angular/router";
 import { HomeComponent } from './home/home.component';
 import { PicturesComponent } from './pictures/pictures.component';
+import { NotificationComponent } from './notification/notification.component';
 
 /**
  * Module for the Lifecycle Demo Application
@@ -21,7 +22,8 @@ export const routes: Routes = [
     declarations: [
         AppComponent,
         HomeComponent,
-        PicturesComponent
+        PicturesComponent,
+        NotificationComponent
     ],
     imports: [
         BrowserModule,

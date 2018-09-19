@@ -3,6 +3,8 @@
         <img src="../../assets/logo.png"/>
     </div>
     <div class="lifecycle-log-container">
-
+        <div *ngFor="const lifeCycle of lifeCycles">
+            <app-notification [content]="lifeCycle"> </app-notification>
+        </div>
     </div>
 </div>
