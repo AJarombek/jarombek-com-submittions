@@ -61,30 +61,32 @@ export class AppComponent implements OnChanges, OnInit, DoCheck, AfterContentIni
     }
 
     /**
-     *
+     * Called on a parent component after the child components state is initialized when using the ng-content directive.
+     * This is a component initialization hook method.
      */
     ngAfterContentInit(): void {
         console.info(`${this.LOG_TAG} Inside ngAfterContentInit`);
     }
 
     /**
-     *
+     * Called on a child component after it receives the content to place in the ng-content directive from a parent.
+     * This is a component initialization hook method.
      */
     ngAfterContentChecked(): void {
         console.info(`${this.LOG_TAG} Inside ngAfterContentChecked`);
     }
 
     /**
-     * Called after the components child views are initialized.  This is a component initialization hook method.
-     * This method will only get called once.
+     * Called after all bindings on the template are complete and the components child views are initialized.
+     * This is a component initialization hook method.  This method will only get called once.
      */
     ngAfterViewInit(): void {
         console.info(`${this.LOG_TAG} Inside ngAfterViewInit`);
     }
 
     /**
-     * Called after the components child views are checked.  This is a change detection lifecycle hook method.
-     * May be called multiple times over the lifecycle of the component.
+     * Called when change-detection checks if there are any changes to the components template bindings.  This is a
+     * change detection lifecycle hook method.  May be called multiple times over the lifecycle of the component.
      */
     ngAfterViewChecked(): void {
         console.info(`${this.LOG_TAG} Inside ngAfterViewChecked`);
