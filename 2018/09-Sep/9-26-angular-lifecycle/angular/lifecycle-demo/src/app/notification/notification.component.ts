@@ -1,5 +1,10 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
 
+/**
+ * @author Andrew Jarombek
+ * @since 9/19/2018
+ */
+
 @Component({
   selector: 'app-notification',
   templateUrl: './notification.component.html',
@@ -7,7 +12,7 @@ import {Component, Input, OnChanges, OnInit} from '@angular/core';
 })
 export class NotificationComponent implements OnChanges, OnInit {
 
-    @Input() content: string;
+    @Input() content: object;
 
     private LOG_TAG: string = '[Notification.Component]';
 
