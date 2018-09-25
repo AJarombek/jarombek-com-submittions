@@ -22,6 +22,8 @@
 Unknown/terraform/*
 
 2018/08-Aug/8-5-graphql/node_modules/*
-2018/10-Oct/10-3-react-lifecycle/react/lifecycle-demo/node_modules/*
-2018/09-Sep/9-26-angular-lifecycle/angular/lifecycle-demo/node_modules/*
-2018/09-Sep/9-26-angular-lifecycle/angular/.idea/
+Unknown/react-lifecycle/react/lifecycle-demo/node_modules/*
+Unknown/angular-lifecycle/angular/lifecycle-demo/node_modules/*
+Unknown/d3-react/react/d3-demo/node_modules/*
+Unknown/9-26-angular-lifecycle/angular/.idea/
+2018/09-Sep/.idea/
