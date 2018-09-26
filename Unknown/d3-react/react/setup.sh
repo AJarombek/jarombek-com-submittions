@@ -10,3 +10,4 @@ yarn start
 
 yarn add prop-types
 yarn add d3
+yarn add react-faux-dom

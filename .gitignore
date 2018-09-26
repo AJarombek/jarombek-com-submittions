@@ -25,5 +25,8 @@ Unknown/terraform/*
 Unknown/react-lifecycle/react/lifecycle-demo/node_modules/*
 Unknown/angular-lifecycle/angular/lifecycle-demo/node_modules/*
 Unknown/d3-react/react/d3-demo/node_modules/*
-Unknown/9-26-angular-lifecycle/angular/.idea/
-2018/09-Sep/.idea/
+Unknown/9-26-angular-lifecycle/angular/.idea/*
+2018/09-Sep/.idea/*
+Unknown/d3-react/.idea/*
+Unknown/d3-react/react/.idea/*
+Unknown/d3-react/react/d3-demo/.idea/*
