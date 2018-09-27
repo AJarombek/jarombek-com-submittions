@@ -1,0 +1,12 @@
+/*
+ * Styles for the Graph component
+ * Author: Andrew Jarombek
+ * Date: 9/26/2018
+ */
+
+.graph-label {
+    text-anchor: middle;
+    font-family: 'Longway', Helvetica, sans-serif;
+    font-size: 24px;
+    fill: #666;
+}
