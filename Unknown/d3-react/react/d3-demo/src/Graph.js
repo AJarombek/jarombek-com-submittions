@@ -42,20 +42,47 @@ class Graph extends React.Component {
     componentDidMount() {
         const faux = this.props.connectFauxDOM('div', 'chart');
 
+        // Measurements for the graph
         const graphWidth = 800;
         const graphHeight = 300;
         const graphPaddingRight = 4;
+        const graphPaddingBottom = 30;
+
+        // The data displayed in the graph
         const graphData = this.props.data;
 
+        // A D3 Scale for the height of the graph
         const heightScale = d3.scaleLinear()
             .domain([0, d3.max(graphData, (d) => d.miles)])
             .range([0, graphHeight]);
 
+        // A D3 Scale for the width of the x-axis of the graph
+        const xAxisScale = d3.scaleTime()
+            .domain([
+                d3.min(graphData, (d) => d.date),
+                d3.max(graphData, (d) => d.date)
+            ])
+            .range([
+                (graphWidth / graphData.length) / 2,
+                graphWidth - (graphWidth / graphData.length) / 2
+            ]);
+
+        // A format for the date displayed on each x-axis tick mark
+        const dayOfWeek = d3.timeFormat("%a, %b. %d");
+
+        // The x-axis displayed under the graph
+        const xAxis = d3.axisBottom()
+            .scale(xAxisScale)
+            .ticks(7)
+            .tickFormat(dayOfWeek);
+
+        // The svg container for the graph
         const svg = d3.select(faux)
             .append("svg")
             .attr("width", graphWidth)
-            .attr("height", graphHeight);
+            .attr("height", graphHeight + graphPaddingBottom);
 
+        // For each data point, create a rectangle bar in the graph
         svg.selectAll("rect")
             .data(graphData)
             .enter()
@@ -67,6 +94,8 @@ class Graph extends React.Component {
             .attr("fill", (d) => this.colors[d.feel])
             .text((d) => `${d.miles}`);
 
+        // For each data point, create a label for each bar.
+        // The label displays the 'miles' property.
         svg.selectAll("text")
             .data(graphData)
             .enter()
@@ -78,6 +107,12 @@ class Graph extends React.Component {
             )
             .attr("y", (d) => graphHeight - heightScale(d.miles) + 18)
             .attr("class", "graph-label");
+
+        // Add the x-axis to the bottom of the graph
+        svg.append("g")
+            .attr("class", "x-axis")
+            .attr("transform", `translate(0,${graphHeight + 5})`)
+            .call(xAxis);
 
         this.props.animateFauxDOM(800);
     }

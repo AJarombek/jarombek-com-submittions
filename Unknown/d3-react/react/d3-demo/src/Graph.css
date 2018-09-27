@@ -10,3 +10,15 @@
     font-size: 24px;
     fill: #666;
 }
+
+.x-axis line, .x-axis path {
+    shape-rendering: crispEdges;
+    stroke: #666;
+    stroke-width: 2px;
+}
+
+.x-axis text {
+    font-family: 'Longway', Helvetica, sans-serif;
+    fill: #888;
+    font-size: 18px;
+}
