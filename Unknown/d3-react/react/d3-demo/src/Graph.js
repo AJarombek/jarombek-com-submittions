@@ -17,6 +17,7 @@ class Graph extends React.Component {
 
         // Colors for the bars which are indexed based on the feel property
         this.colors = [
+            'rgb(153, 0, 0)',
             'rgba(204, 0, 0, .4)',
             'rgba(255, 51, 0, .4)',
             'rgba(204, 102, 0, .4)',
@@ -40,21 +41,36 @@ class Graph extends React.Component {
     };
 
     componentDidMount() {
-        const faux = this.props.connectFauxDOM('div', 'chart');
+        console.info('Inside Graph componentDidMount');
+        this.generateGraph(this.props);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        console.info('Inside Graph componentWillReceiveProps');
+        // this.generateGraph(nextProps);
+    }
+
+    generateGraph(props) {
+        const faux = props.connectFauxDOM('div', 'chart');
 
         // Measurements for the graph
         const graphWidth = 800;
         const graphHeight = 300;
-        const graphPaddingRight = 4;
         const graphPaddingBottom = 30;
 
         // The data displayed in the graph
-        const graphData = this.props.data;
+        const graphData = props.data;
 
-        // A D3 Scale for the height of the graph
+        // A D3 Scale for the height of each bar in the graph
         const heightScale = d3.scaleLinear()
             .domain([0, d3.max(graphData, (d) => d.miles)])
-            .range([0, graphHeight]);
+            .range([10, graphHeight]);
+
+        // A D3 Scale for the width of each bar in the graph
+        const widthScale = d3.scaleBand()
+            .domain(d3.range(graphData.length))
+            .rangeRound([0, graphWidth])
+            .paddingInner(0.05);
 
         // A D3 Scale for the width of the x-axis of the graph
         const xAxisScale = d3.scaleTime()
@@ -87,9 +103,9 @@ class Graph extends React.Component {
             .data(graphData)
             .enter()
             .append("rect")
-            .attr("x", (d, i) => i * (graphWidth / graphData.length))
+            .attr("x", (d, i) => widthScale(i))
             .attr("y", (d) => graphHeight - heightScale(d.miles))
-            .attr("width", graphWidth / graphData.length - graphPaddingRight)
+            .attr("width", widthScale.bandwidth())
             .attr("height", (d) => heightScale(d.miles))
             .attr("fill", (d) => this.colors[d.feel])
             .text((d) => `${d.miles}`);
@@ -101,10 +117,7 @@ class Graph extends React.Component {
             .enter()
             .append("text")
             .text((d) => d.miles)
-            .attr("x", (d, i) =>
-                i * (graphWidth / graphData.length) +
-                    (graphWidth / graphData.length - graphPaddingRight) / 2
-            )
+            .attr("x", (d, i) => widthScale(i) + widthScale.bandwidth() / 2)
             .attr("y", (d) => graphHeight - heightScale(d.miles) + 18)
             .attr("class", "graph-label");
 
@@ -114,7 +127,7 @@ class Graph extends React.Component {
             .attr("transform", `translate(0,${graphHeight + 5})`)
             .call(xAxis);
 
-        this.props.animateFauxDOM(800);
+        props.animateFauxDOM(800);
     }
 
     render() {

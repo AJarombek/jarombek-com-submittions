@@ -56,6 +56,47 @@ mult = \x -> (\y -> x * y)
 age' :: a -> Int
 age' = \_ -> 23
 
+{-
+ - Get half the length of a list
+ -}
+halveLength :: [a] -> Int
+halveLength list = length list `div` 2
+
+{-
+ - Split a list into two lists.  Use a tuple as a container for these two lists
+ -}
+halve :: [a] -> ([a], [a])
+halve list = splitAt (halveLength list) list
+
+{-
+ - Get the third element in a list.  !! is the at-index operator
+ -}
+third :: [a] -> a
+third list = list !! 2
+
+{-
+ - Get a sub list from a list
+ -}
+subList :: Int -> Int -> [a] -> [a]
+subList _ _ [] = []
+subList _ 0 _ = []
+subList s e (x:xs) | s <= 0 && e > 0 = x : subList s (e - 1) xs
+                   | s <= 0 && e <= 0 = []
+                   | otherwise = subList (s - 1) (e - 1) xs
+
+{-
+ - Sum all the items in a list.  The list can have any items that follow the Num class constraint.
+ - This function utilizes generators, which follow the mathematical set comprehension notation.
+ -}
+sumList :: Num a => [a] -> a
+sumList xs = sum [x | x <- xs]
+
+{-
+ - Extract the vowels from a String.  
+ -}
+vowels :: String -> String
+vowels str = [s | s <- str, elem s "aeiouAEIOU"]
+
 main :: IO()
 main = do
   putStrLn (show (wrap "Hello")) -- ["Hello"]
@@ -79,3 +120,21 @@ main = do
   putStrLn (show (mult 2 3)) -- 6
 
   putStrLn (show (age' 40)) -- 23
+
+  putStrLn (show (halve [1,2,3,4,5,6])) -- ([1,2,3],[4,5,6])
+
+  putStrLn (show (third [1,2,3,4])) -- 3
+
+  putStrLn (show (subList 2 4 [0,1,2,3,4,5,6,7])) -- [2,3]
+  putStrLn (show (subList 0 1 [0,1,2,3,4,5,6,7])) -- [0]
+  putStrLn (show (subList 5 11 [0,1,2,3,4,5,6,7])) -- [5,6,7]
+  putStrLn (show (subList 0 (-1) [0, 2, 3, 5])) -- []
+  putStrLn (show (subList 0 4 "Andy Jarombek")) -- "Andy"
+  putStrLn (show (subList 0 6 "Andy Jarombek")) -- "Andy J"
+  putStrLn (show (subList 5 14 "Andy Jarombek")) -- "Jarombek"
+
+  putStrLn (show (sumList [1,2,3,4])) -- 10
+  putStrLn (show (sumList [1.2, 2.5, 3, 4.9])) -- 11.60...
+
+  putStrLn (show (vowels "Andy Jarombek")) -- "Aaoe"
+  putStrLn (show (vowels "Greenwich,CT")) -- "eei"
