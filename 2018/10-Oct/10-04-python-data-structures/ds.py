@@ -7,7 +7,6 @@ Date: 9/27/2018
 from datetime import date
 from collections import namedtuple
 from bisect import insort
-from array import array
 
 """
 Lists
@@ -53,6 +52,9 @@ items = ("My", "name", "is", "Andy")
 
 print(items)   # ('My', 'name', 'is', 'Andy')
 print(*items)  # My name is Andy
+
+_my, _name, _is, _andy = items
+assert _my == "My" and _name == "name" and _is == "is" and _andy == "Andy"
 
 run_info = (4.32, 31, 25, 'Riverside, CT', date(2018, 9, 27))
 
@@ -106,11 +108,24 @@ print(chr(memv[0]), chr(memv[1]), chr(memv[2]), chr(memv[3]))
 assert memv[0] == 65 and memv[1] == 110 and memv[2] == 100 and memv[3] == 121
 assert chr(memv[0]) == 'A' and chr(memv[1]) == 'n' and chr(memv[2]) == 'd' and chr(memv[3]) == 'y'
 
-# Convert the first byte in the memory view from capital 'A' to lower case 'a'
+assert name_byte_array == bytearray(b'Andy')
+
+# Convert the first byte in the memory view from capital 'A' to lowercase 'a'
 memv[0] = 97
 
 # Confirm the change to the memory view impacts the original array
 assert name_byte_array == bytearray(b'andy')
+
+# Split the memory view, creating a new memory view that holds only the last two bytes
+last_two_letters_memv = memv[2:]
+
+assert bytes(last_two_letters_memv) == b'dy'
+
+# From the split memory view, change the last letter to 'i'
+last_two_letters_memv[1] = ord('i')
+
+# Since the split memory view didn't copy any bytes, the original byte array is still impacted
+assert name_byte_array == bytearray(b'andi')
 
 """
 Sets
