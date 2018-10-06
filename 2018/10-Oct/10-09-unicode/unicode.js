@@ -17,7 +17,7 @@ const b = 'beyonce\u0301'; // beyoncé
 const b2 = 'beyonc\u00E9'; // beyoncé
 
 // Both appear to have 7 characters, yet variable 'b' which uses combining characters
-// (it combines 'e' and '\u0301', the second of which is a diacritic) and is listed
+// (it combines 'e' and '\u0301', the second of which is a diacritic) is listed
 // as having length 8.
 assert(b.length === 8);
 assert(b2.length === 7);
