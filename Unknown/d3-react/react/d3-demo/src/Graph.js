@@ -16,7 +16,7 @@ class Graph extends React.Component {
         super();
 
         // Colors for the bars which are indexed based on the feel property
-        this.colors = [
+        const colors = [
             'rgb(153, 0, 0)',
             'rgba(204, 0, 0, .4)',
             'rgba(255, 51, 0, .4)',
@@ -29,6 +29,13 @@ class Graph extends React.Component {
             'rgba(0, 102, 0, .4)',
             'rgba(26, 26, 255, .4)'
         ];
+
+        this.state = {
+            colors,
+            graphWidth: 800,
+            graphHeight: 300,
+            graphPaddingBottom: 30
+        }
     }
 
     static propTypes = {
@@ -40,31 +47,45 @@ class Graph extends React.Component {
         chart: 'loading'
     };
 
+    /**
+     * Called when the component first mounts.  At this point the initial graph is created.
+     */
     componentDidMount() {
         console.info('Inside Graph componentDidMount');
         this.generateGraph(this.props);
     }
 
+    /**
+     * Called when new props are passed to the component.  Check to see if the new props contains
+     * new graph data.  If so, generate a new graph.  Otherwise ignore the new props.
+     * @param nextProps - the new props passed to the component.
+     */
     componentWillReceiveProps(nextProps) {
         console.info('Inside Graph componentWillReceiveProps');
-        // this.generateGraph(nextProps);
+        if (this.props.data !== nextProps.data) {
+            console.info('Received New Props');
+            this.updateGraph(nextProps);
+        }
     }
 
+    /**
+     * Use D3 to Generate a Graph
+     * @param props - the React component props containing data to populate the graph with
+     */
     generateGraph(props) {
         const faux = props.connectFauxDOM('div', 'chart');
 
         // Measurements for the graph
-        const graphWidth = 800;
-        const graphHeight = 300;
-        const graphPaddingBottom = 30;
+        const graphWidth = this.state.graphWidth;
+        const graphHeight = this.state.graphHeight;
+        const graphPaddingBottom = this.state.graphPaddingBottom;
 
         // The data displayed in the graph
         const graphData = props.data;
+        const colors = this.state.colors;
 
         // A D3 Scale for the height of each bar in the graph
-        const heightScale = d3.scaleLinear()
-            .domain([0, d3.max(graphData, (d) => d.miles)])
-            .range([10, graphHeight]);
+        const heightScale = Graph.createHeightScale(graphData, graphHeight);
 
         // A D3 Scale for the width of each bar in the graph
         const widthScale = d3.scaleBand()
@@ -107,7 +128,7 @@ class Graph extends React.Component {
             .attr("y", (d) => graphHeight - heightScale(d.miles))
             .attr("width", widthScale.bandwidth())
             .attr("height", (d) => heightScale(d.miles))
-            .attr("fill", (d) => this.colors[d.feel])
+            .attr("fill", (d) => colors[d.feel])
             .text((d) => `${d.miles}`);
 
         // For each data point, create a label for each bar.
@@ -128,8 +149,48 @@ class Graph extends React.Component {
             .call(xAxis);
 
         props.animateFauxDOM(800);
+
+        this.setState({
+            svg
+        })
     }
 
+    /**
+     * Use D3 to update the graph
+     * @param props - the React component props containing data to populate the graph with
+     */
+    updateGraph(props) {
+        const graphData = props.data;
+        const graphHeight = this.state.graphHeight;
+
+        const heightScale = Graph.createHeightScale(graphData, graphHeight);
+
+        this.state.svg
+            .selectAll("rect")
+            .data(graphData)
+            .transition()
+            .attr("y", (d) => graphHeight - heightScale(d.miles))
+            .attr("height", (d) => heightScale(d.miles));
+
+        props.animateFauxDOM(800);
+    }
+
+    /**
+     * Create a D3 height scale
+     * @param data - all the data in the graph.  The largest piece of data is used in the
+     * ranges domain.
+     * @param height - the height of the Graph
+     * @return {*}
+     */
+    static createHeightScale(data, height) {
+        return d3.scaleLinear()
+            .domain([0, d3.max(data, (d) => d.miles)])
+            .range([10, height]);
+    }
+
+    /**
+     * Render the JSX
+     */
     render() {
         return (
             <div className="graph">

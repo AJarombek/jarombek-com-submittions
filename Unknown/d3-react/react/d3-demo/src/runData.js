@@ -14,8 +14,17 @@ const runData = [
         { date: new Date('Sep 26, 2018'), miles: 4.95, feel: 9 },
         { date: new Date('Sep 27, 2018'), miles: 4.32, feel: 8 },
         { date: new Date('Sep 28, 2018'), miles: 4.32, feel: 8 },
-        { date: new Date('Sep 29, 2018'), miles: 0, feel: 0 },
-        { date: new Date('Sep 30, 2018'), miles: 0, feel: 0 }
+        { date: new Date('Sep 29, 2018'), miles: 8.13, feel: 8 },
+        { date: new Date('Sep 30, 2018'), miles: 10.16, feel: 4 }
+    ],
+    [
+        { date: new Date('Oct 1, 2018'), miles: 4.32, feel: 6 },
+        { date: new Date('Oct 2, 2018'), miles: 4.34, feel: 7 },
+        { date: new Date('Oct 3, 2018'), miles: 4.29, feel: 6 },
+        { date: new Date('Oct 4, 2018'), miles: 4.35, feel: 6 },
+        { date: new Date('Oct 5, 2018'), miles: 8.96, feel: 7 },
+        { date: new Date('Oct 6, 2018'), miles: 4.31, feel: 6 },
+        { date: new Date('Oct 7, 2018'), miles: 11.08, feel: 5 }
     ]
 ];
 

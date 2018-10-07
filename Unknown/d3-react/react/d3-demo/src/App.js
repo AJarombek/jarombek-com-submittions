@@ -14,18 +14,25 @@ class App extends React.Component {
     constructor() {
         super();
 
+        // The running logs initially shown in the graph are from the latest week
         this.state = {
             dataIndex: runData.length - 1
         };
     }
 
+    /**
+     * View the previous week of running logs
+     */
     onClickPrev() {
-        console.info('Click Previous');
+        console.info(`Click Previous to index: ${this.state.dataIndex - 1}`);
         this.setState({dataIndex: this.state.dataIndex - 1});
     }
 
+    /**
+     * View the next week of running logs
+     */
     onClickNext() {
-        console.info('Click Next');
+        console.info(`Click Next to index: ${this.state.dataIndex + 1}`);
         this.setState({dataIndex: this.state.dataIndex + 1});
     }
 
