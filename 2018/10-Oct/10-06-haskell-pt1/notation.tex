@@ -1,0 +1,35 @@
+% Author: Andrew Jarombek
+% Date: 10/6/2018
+
+% Document Class is always needed at the beginning of a document
+\documentclass[a4paper, 12pt]{article}
+\usepackage{amsmath}
+
+\begin{document}
+	
+	\title{Haskell Math Equations}
+	\author{Andrew Jarombek}
+	\date{October 6, 2018}
+	\maketitle
+	
+	\section{Guarded Equation}
+	
+	$$
+	older(x) = \begin{cases}
+		1 & x > 23 \\
+		0 & x = 23 \\
+		-1 & otherwise
+		\end{cases}
+	$$
+	
+	\section{List Comprehensions}
+	
+	$$
+	\{x^2 \: | \: x \in xs\}
+	$$
+	
+	$$
+	\{(x', y') \: | \: x' \in \{0..x\}, \: y' \in \{0..y\}\}
+	$$
+	
+\end{document}
