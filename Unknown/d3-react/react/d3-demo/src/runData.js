@@ -1,3 +1,9 @@
+/**
+ * Running data to display in a Graph
+ * @author Andrew Jarombek
+ * @since 9/26/2018
+ */
+
 const runData = [
     [
         { date: new Date('Sep 17, 2018'), miles: 3.2, feel: 6 },

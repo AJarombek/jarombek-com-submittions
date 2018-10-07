@@ -88,30 +88,10 @@ class Graph extends React.Component {
         const heightScale = Graph.createHeightScale(graphData, graphHeight);
 
         // A D3 Scale for the width of each bar in the graph
-        const widthScale = d3.scaleBand()
-            .domain(d3.range(graphData.length))
-            .rangeRound([0, graphWidth])
-            .paddingInner(0.05);
-
-        // A D3 Scale for the width of the x-axis of the graph
-        const xAxisScale = d3.scaleTime()
-            .domain([
-                d3.min(graphData, (d) => d.date),
-                d3.max(graphData, (d) => d.date)
-            ])
-            .range([
-                (graphWidth / graphData.length) / 2,
-                graphWidth - (graphWidth / graphData.length) / 2
-            ]);
-
-        // A format for the date displayed on each x-axis tick mark
-        const dayOfWeek = d3.timeFormat("%a, %b. %d");
+        const widthScale = Graph.createWidthScale(graphData, graphWidth);
 
         // The x-axis displayed under the graph
-        const xAxis = d3.axisBottom()
-            .scale(xAxisScale)
-            .ticks(7)
-            .tickFormat(dayOfWeek);
+        const xAxis = Graph.createXAxis(graphData, graphWidth);
 
         // The svg container for the graph
         const svg = d3.select(faux)
@@ -162,15 +142,32 @@ class Graph extends React.Component {
     updateGraph(props) {
         const graphData = props.data;
         const graphHeight = this.state.graphHeight;
+        const graphWidth = this.state.graphWidth;
+        const colors = this.state.colors;
 
         const heightScale = Graph.createHeightScale(graphData, graphHeight);
+        const widthScale = Graph.createWidthScale(graphData, graphWidth);
+        const xAxis = Graph.createXAxis(graphData, graphWidth);
 
         this.state.svg
             .selectAll("rect")
             .data(graphData)
             .transition()
             .attr("y", (d) => graphHeight - heightScale(d.miles))
-            .attr("height", (d) => heightScale(d.miles));
+            .attr("height", (d) => heightScale(d.miles))
+            .attr("fill", (d) => colors[d.feel]);
+
+        this.state.svg
+            .selectAll("text")
+            .data(graphData)
+            .transition()
+            .text((d) => d.miles)
+            .attr("x", (d, i) => widthScale(i) + widthScale.bandwidth() / 2)
+            .attr("y", (d) => graphHeight - heightScale(d.miles) + 18);
+
+        this.state.svg
+            .select(".x-axis")
+            .call(xAxis);
 
         props.animateFauxDOM(800);
     }
@@ -186,6 +183,47 @@ class Graph extends React.Component {
         return d3.scaleLinear()
             .domain([0, d3.max(data, (d) => d.miles)])
             .range([10, height]);
+    }
+
+    /**
+     * Create a D3 width scale
+     * @param data - all the data in the graph.  The length of the data is used in the width scale.
+     * @param width - the width of the Graph
+     * @return {*}
+     */
+    static createWidthScale(data, width) {
+        return d3.scaleBand()
+            .domain(d3.range(data.length))
+            .rangeRound([0, width])
+            .paddingInner(0.05);
+    }
+
+    /**
+     * Create a D3 X-Axis
+     * @param data - all the data in the graph.  The length of the data is used in the x-axis
+     * scale, and the dates in the data are displayed on the axis.
+     * @param width - the width of the Graph
+     * @return {*}
+     */
+    static createXAxis(data, width) {
+        // A D3 Scale for the width of the x-axis of the graph
+        const xAxisScale = d3.scaleTime()
+            .domain([
+                d3.min(data, (d) => d.date),
+                d3.max(data, (d) => d.date)
+            ])
+            .range([
+                (width / data.length) / 2,
+                width - (width / data.length) / 2
+            ]);
+
+        // A format for the date displayed on each x-axis tick mark
+        const dayOfWeek = d3.timeFormat("%a, %b. %d");
+
+        return d3.axisBottom()
+            .scale(xAxisScale)
+            .ticks(7)
+            .tickFormat(dayOfWeek);
     }
 
     /**

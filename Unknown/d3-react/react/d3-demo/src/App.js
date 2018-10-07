@@ -24,18 +24,29 @@ class App extends React.Component {
      * View the previous week of running logs
      */
     onClickPrev() {
-        console.info(`Click Previous to index: ${this.state.dataIndex - 1}`);
-        this.setState({dataIndex: this.state.dataIndex - 1});
+        const newIndex = this.state.dataIndex - 1;
+
+        if (newIndex >= 0) {
+            console.info(`Click Previous to index: ${newIndex}`);
+            this.setState({dataIndex: newIndex});
+        }
     }
 
     /**
      * View the next week of running logs
      */
     onClickNext() {
-        console.info(`Click Next to index: ${this.state.dataIndex + 1}`);
-        this.setState({dataIndex: this.state.dataIndex + 1});
+        const newIndex = this.state.dataIndex + 1;
+
+        if (newIndex < runData.length) {
+            console.info(`Click Next to index: ${newIndex}`);
+            this.setState({dataIndex: newIndex});
+        }
     }
 
+    /**
+     * Render the JSX
+     */
     render() {
         return (
             <div className="app">
