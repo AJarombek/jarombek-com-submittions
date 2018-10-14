@@ -37,4 +37,3 @@ if __name__ == '__main__':
 
     # Notify Subscribers of Article "Python Decorators"
     # Article "Python Decorators" written on 2018-10-16
-    
