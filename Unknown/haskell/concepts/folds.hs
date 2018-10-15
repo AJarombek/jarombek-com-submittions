@@ -1,5 +1,5 @@
 {-
-  Working with higher-order functions in Haskell
+  Working with higher-order fold functions in Haskell
   Author: Andrew Jarombek
   Date: 10/13/2018
 -}
@@ -17,6 +17,10 @@ foldr' f v (x:xs) = f x (foldr' f v xs)
 
 {-|
   Redefining the fold-left recursive function for reference
+  (a -> b -> a) - a function that takes an accumulator 'a' and a list item 'b' and performs an operation
+                  on 'b' that combines it with 'a'
+              a - a starting value for the accumulator
+            [b] - a list to operate on
 -}
 foldl' :: (a -> b -> a) -> a -> [b] -> a
 foldl' f v [] = v
