@@ -5,7 +5,7 @@
 
 npx create-react-app d3-react
 
-cd lifecycle-demo/
+cd d3-demo/
 yarn start
 
 yarn add prop-types
