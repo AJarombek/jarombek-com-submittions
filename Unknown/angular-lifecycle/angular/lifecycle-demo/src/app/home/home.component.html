@@ -4,14 +4,8 @@
         <a [routerLink]="['/pics']">Navigate</a>
     </div>
     <div class="lifecycle-log-container">
-        <div *ngFor="let lifecycle of lifecycleList">
-            <app-notification [content]="lifecycle">
-              <div class="{{content?.type}}-{{content?.lifecycle}}">
-                <p>{{content?.component}}</p>
-                <p>{{content?.lifecycle}}</p>
-                <p>{{content?.type}}</p>
-              </div>
-            </app-notification>
+        <div *ngFor="let lifecycle of this.lifecycleList">
+          <app-notification [content]="lifecycle"></app-notification>
         </div>
     </div>
 </div>

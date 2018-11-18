@@ -1,3 +1,7 @@
 <div class="notification-container">
-    <ng-content> </ng-content>
+    <div class="{{content?.type}}-{{content?.lifecycle}}">
+        <p>{{content?.component}}</p>
+        <p>{{content?.lifecycle}}</p>
+        <p>{{content?.type}}</p>
+    </div>
 </div>

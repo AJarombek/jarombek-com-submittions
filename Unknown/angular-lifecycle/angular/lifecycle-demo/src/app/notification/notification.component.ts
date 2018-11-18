@@ -21,6 +21,7 @@ export class NotificationComponent implements OnChanges, OnInit {
 
     ngOnChanges(): void {
         console.info(`${this.LOG_TAG} Inside ngOnChanges`);
+        console.info(this.content);
     }
 
     ngOnInit() {
