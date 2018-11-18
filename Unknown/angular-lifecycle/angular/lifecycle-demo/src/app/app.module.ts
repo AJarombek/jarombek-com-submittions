@@ -5,6 +5,7 @@ import {RouterModule, Routes} from "@angular/router";
 import { HomeComponent } from './home/home.component';
 import { PicturesComponent } from './pictures/pictures.component';
 import { NotificationComponent } from './notification/notification.component';
+import {LifecycleService} from "./lifecycle.service";
 
 /**
  * Module for the Lifecycle Demo Application
@@ -29,7 +30,9 @@ export const routes: Routes = [
         BrowserModule,
         RouterModule.forRoot(routes)
     ],
-    providers: [],
+    providers: [
+        LifecycleService
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

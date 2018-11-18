@@ -1,14 +1,17 @@
 import {
     AfterContentChecked,
-    AfterContentInit, AfterViewChecked,
+    AfterContentInit,
+    AfterViewChecked,
     AfterViewInit,
     Component,
-    DoCheck, EventEmitter,
+    DoCheck,
     OnChanges,
     OnDestroy,
-    OnInit, Output, ViewChild
+    OnInit,
+    ViewChild
 } from '@angular/core';
 import {HomeComponent} from "./home/home.component";
+import {LifecycleService} from "./lifecycle.service";
 
 /**
  * @author Andrew Jarombek
@@ -23,8 +26,9 @@ import {HomeComponent} from "./home/home.component";
 export class AppComponent implements OnChanges, OnInit, DoCheck, AfterContentInit,
         AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy {
 
-    @ViewChild(HomeComponent) viewChild: HomeComponent;
-    lifecycleList = [];
+    // Angular fills in viewChild with an instance of HomeComponent
+    @ViewChild(HomeComponent)
+    viewChild: HomeComponent;
 
     private LOG_TAG: string = '[App.Component]';
 
@@ -33,7 +37,7 @@ export class AppComponent implements OnChanges, OnInit, DoCheck, AfterContentIni
      * being created.  NOTE: The components properties are not initialized in the constructor,
      * they will be initialized by the time {@code ngOnInit()} is invoked.
      */
-    constructor() {}
+    constructor(private lifecycleService: LifecycleService) {}
 
     /**
      * The first lifecycle hook method called after the constructor finishes execution.
@@ -43,14 +47,13 @@ export class AppComponent implements OnChanges, OnInit, DoCheck, AfterContentIni
      */
     ngOnChanges(): void {
         console.info(`${this.LOG_TAG} Inside ngOnChanges`);
-        this.lifecycleList = [
-            {
-                component: this.LOG_TAG,
-                lifecycle: 'ngOnChanges',
-                type: 'Change'
-            },
-            ...this.lifecycleList
-        ];
+        const lifecycle = {
+            component: this.LOG_TAG,
+            lifecycle: 'ngOnChanges',
+            type: 'Change'
+        };
+
+        this.lifecycleService.emitData(lifecycle);
     }
 
     /**
@@ -59,14 +62,13 @@ export class AppComponent implements OnChanges, OnInit, DoCheck, AfterContentIni
      */
     ngOnInit(): void {
         console.info(`${this.LOG_TAG} Inside ngOnInit`);
-        this.lifecycleList = [
-            {
-                component: this.LOG_TAG,
-                lifecycle: 'ngOnInit',
-                type: 'Initialize'
-            },
-            ...this.lifecycleList
-        ];
+        const lifecycle = {
+            component: this.LOG_TAG,
+            lifecycle: 'ngOnInit',
+            type: 'Initialize'
+        };
+
+        this.lifecycleService.emitData(lifecycle);
     }
 
     /**
@@ -76,14 +78,13 @@ export class AppComponent implements OnChanges, OnInit, DoCheck, AfterContentIni
      */
     ngDoCheck(): void {
         console.info(`${this.LOG_TAG} Inside ngDoCheck`);
-        this.lifecycleList = [
-            {
-                component: this.LOG_TAG,
-                lifecycle: 'ngDoCheck',
-                type: 'Change'
-            },
-            ...this.lifecycleList
-        ];
+        const lifecycle = {
+            component: this.LOG_TAG,
+            lifecycle: 'ngDoCheck',
+            type: 'Change'
+        };
+
+        this.lifecycleService.emitData(lifecycle);
     }
 
     /**
@@ -92,14 +93,13 @@ export class AppComponent implements OnChanges, OnInit, DoCheck, AfterContentIni
      */
     ngAfterContentInit(): void {
         console.info(`${this.LOG_TAG} Inside ngAfterContentInit`);
-        this.lifecycleList = [
-            {
-                component: this.LOG_TAG,
-                lifecycle: 'ngAfterContentInit',
-                type: 'Initialize'
-            },
-            ...this.lifecycleList
-        ];
+        const lifecycle = {
+            component: this.LOG_TAG,
+            lifecycle: 'ngAfterContentInit',
+            type: 'Initialize'
+        };
+
+        this.lifecycleService.emitData(lifecycle);
     }
 
     /**
@@ -108,14 +108,13 @@ export class AppComponent implements OnChanges, OnInit, DoCheck, AfterContentIni
      */
     ngAfterContentChecked(): void {
         console.info(`${this.LOG_TAG} Inside ngAfterContentChecked`);
-        this.lifecycleList = [
-            {
-                component: this.LOG_TAG,
-                lifecycle: 'ngAfterContentChecked',
-                type: 'Initialize'
-            },
-            ...this.lifecycleList
-        ];
+        const lifecycle = {
+            component: this.LOG_TAG,
+            lifecycle: 'ngAfterContentChecked',
+            type: 'Initialize'
+        };
+
+        this.lifecycleService.emitData(lifecycle);
     }
 
     /**
@@ -125,14 +124,18 @@ export class AppComponent implements OnChanges, OnInit, DoCheck, AfterContentIni
      */
     ngAfterViewInit(): void {
         console.info(`${this.LOG_TAG} Inside ngAfterViewInit`);
-        this.lifecycleList = [
-            {
-                component: this.LOG_TAG,
-                lifecycle: 'ngAfterViewInit',
-                type: 'Initialize'
-            },
-            ...this.lifecycleList
-        ];
+
+        // Instance variables with the @ViewChild annotation first contain injected values here
+        const lifecycleLength = '0' || this.viewChild.lifecycleList.length;
+
+        const lifecycle = {
+            component: this.LOG_TAG,
+            lifecycle: 'ngAfterViewInit',
+            type: 'Initialize',
+            message: `Length of 'lifecycles' in HomeComponent: ${lifecycleLength}`
+        };
+
+        this.lifecycleService.emitData(lifecycle);
     }
 
     /**
@@ -142,14 +145,13 @@ export class AppComponent implements OnChanges, OnInit, DoCheck, AfterContentIni
      */
     ngAfterViewChecked(): void {
         console.info(`${this.LOG_TAG} Inside ngAfterViewChecked`);
-        this.lifecycleList = [
-            {
-                component: this.LOG_TAG,
-                lifecycle: 'ngAfterViewChecked',
-                type: 'Change'
-            },
-            ...this.lifecycleList
-        ];
+        const lifecycle = {
+            component: this.LOG_TAG,
+            lifecycle: 'ngAfterViewChecked',
+            type: 'Change'
+        };
+
+        this.lifecycleService.emitData(lifecycle);
     }
 
     /**
@@ -157,13 +159,12 @@ export class AppComponent implements OnChanges, OnInit, DoCheck, AfterContentIni
      */
     ngOnDestroy(): void {
         console.info(`${this.LOG_TAG} Inside ngOnDestroy`);
-        this.lifecycleList = [
-            {
-                component: this.LOG_TAG,
-                lifecycle: 'ngOnDestroy',
-                type: 'Destroy'
-            },
-            ...this.lifecycleList
-        ];
+        const lifecycle = {
+            component: this.LOG_TAG,
+            lifecycle: 'ngOnDestroy',
+            type: 'Destroy'
+        };
+
+        this.lifecycleService.emitData(lifecycle);
     }
 }

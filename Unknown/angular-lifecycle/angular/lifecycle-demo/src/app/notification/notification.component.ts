@@ -1,4 +1,5 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Lifecycle} from "../lifecycle";
 
 /**
  * @author Andrew Jarombek
@@ -12,7 +13,7 @@ import {Component, Input, OnChanges, OnInit} from '@angular/core';
 })
 export class NotificationComponent implements OnChanges, OnInit {
 
-    @Input() content: object;
+    @Input() content: Lifecycle;
 
     private LOG_TAG: string = '[Notification.Component]';
 
