@@ -19,6 +19,12 @@ export class NotificationComponent implements OnChanges, OnInit {
 
     private LOG_TAG: string = '[Notification.Component]';
 
+    static max = 5;
+    static lifecycleCount = {
+        ngOnChanges: NotificationComponent.max,
+        ngOnInit: NotificationComponent.max
+    };
+
     /**
      * {@link AppComponent#constructor}
      */
@@ -28,14 +34,51 @@ export class NotificationComponent implements OnChanges, OnInit {
      * {@link AppComponent#ngOnChanges}
      */
     ngOnChanges(): void {
-        console.info(`${this.LOG_TAG} Inside ngOnChanges`);
-        console.info(this.content);
+        if (NotificationComponent.lifecycleCount.ngOnChanges > 0) {
+            console.info(`${this.LOG_TAG} Inside ngOnChanges`);
+
+            const lifecycle = {
+                component: this.LOG_TAG,
+                lifecycle: 'ngOnChanges',
+                type: 'Change',
+                message: `Notification Content: ${JSON.stringify(this.content)}`
+            };
+
+            this.lifecycleService.emitData(lifecycle);
+
+            NotificationComponent.decrementLifecycleCount('ngOnChanges');
+        }
     }
 
     /**
      * {@link AppComponent#ngOnInit}
      */
     ngOnInit() {
-        console.info(`${this.LOG_TAG} Inside ngOnInit`);
+        if (NotificationComponent.lifecycleCount.ngOnInit > 0) {
+            console.info(`${this.LOG_TAG} Inside ngOnInit`);
+
+            const lifecycle = {
+                component: this.LOG_TAG,
+                lifecycle: 'ngOnInit',
+                type: 'Initialize'
+            };
+
+            this.lifecycleService.emitData(lifecycle);
+
+            NotificationComponent.decrementLifecycleCount('ngOnInit');
+        }
+    }
+
+    /**
+     * Update lifecycle count by decrementing the corresponding lifecycle property
+     * @param {string} lifecycle - the name of the lifecycle method to decrement
+     */
+    static decrementLifecycleCount(lifecycle: string) {
+        NotificationComponent.lifecycleCount = {
+            ...NotificationComponent.lifecycleCount,
+            [`${lifecycle}`]: NotificationComponent.lifecycleCount[`${lifecycle}`] - 1
+        };
+
+        console.info(JSON.stringify(NotificationComponent.lifecycleCount));
     }
 }

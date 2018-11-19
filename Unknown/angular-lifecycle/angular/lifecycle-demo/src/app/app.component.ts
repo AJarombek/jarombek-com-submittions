@@ -32,15 +32,19 @@ export class AppComponent implements OnChanges, OnInit, DoCheck, AfterContentIni
 
     private LOG_TAG: string = '[App.Component]';
 
+    private max = 5;
+
+    // If lifecycle notifications are freely sent, there will be an infinite loop.
+    // Therefore limit the number of lifecycle notifications.
     private lifecycleCount = {
-        ngOnChanges: 3,
-        ngOnInit: 3,
-        ngDoCheck: 3,
-        ngAfterContentInit: 3,
-        ngAfterContentChecked: 3,
-        ngAfterViewInit: 3,
-        ngAfterViewChecked: 3,
-        ngOnDestroy: 3
+        ngOnChanges: this.max,
+        ngOnInit: this.max,
+        ngDoCheck: this.max,
+        ngAfterContentInit: this.max,
+        ngAfterContentChecked: this.max,
+        ngAfterViewInit: this.max,
+        ngAfterViewChecked: this.max,
+        ngOnDestroy: this.max
     };
 
     /**

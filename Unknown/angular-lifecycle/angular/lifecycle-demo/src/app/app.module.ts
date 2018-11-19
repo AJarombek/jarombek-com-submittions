@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import {RouterModule, Routes} from "@angular/router";
 import { HomeComponent } from './home/home.component';
-import { PicturesComponent } from './pictures/pictures.component';
 import { NotificationComponent } from './notification/notification.component';
 import {LifecycleService} from "./lifecycle.service";
 
@@ -15,7 +14,6 @@ import {LifecycleService} from "./lifecycle.service";
 
 export const routes: Routes = [
     {path: '', component: HomeComponent},
-    {path: 'pictures', component: PicturesComponent},
     {path: '**', redirectTo: ''}
 ];
 
@@ -23,7 +21,6 @@ export const routes: Routes = [
     declarations: [
         AppComponent,
         HomeComponent,
-        PicturesComponent,
         NotificationComponent
     ],
     imports: [

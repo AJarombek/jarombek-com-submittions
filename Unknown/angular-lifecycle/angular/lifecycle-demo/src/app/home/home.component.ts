@@ -5,6 +5,7 @@ import {Subject} from "rxjs/Subject";
 import {Lifecycle} from "../lifecycle";
 
 /**
+ * Home Component which displays all the lifecycle notifications
  * @author Andrew Jarombek
  * @since 9/19/2018
  */

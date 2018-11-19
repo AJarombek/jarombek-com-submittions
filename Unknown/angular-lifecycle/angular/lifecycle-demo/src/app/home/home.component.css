@@ -11,14 +11,16 @@
     justify-items: center;
 }
 
-.logo-container {
+.title-container {
     grid-column: 1;
     grid-row: 1;
-    margin-top: 30px;
+    margin-top: 10px;
 }
 
-.logo-container img {
-    height: 150px;
+.title-container p {
+    font-family: 'Longway', Helvetica, sans-serif;
+    font-size: 48px;
+    color: #555;
 }
 
 .lifecycle-log-container {

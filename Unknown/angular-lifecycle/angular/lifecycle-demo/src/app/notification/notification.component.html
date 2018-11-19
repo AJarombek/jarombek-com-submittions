@@ -1,7 +1,8 @@
-<div class="notification-container">
-    <div class="{{content?.component.substring(1, content.component.length-1)}}">
+<div class="notification-container {{content?.component.substring(1, content.component.length-1)}}">
+    <div>
         <p>{{content?.component}}</p>
         <p class="code">{{content?.lifecycle}}()</p>
         <p>{{content?.type}}</p>
+        <p>{{content?.message}}</p>
     </div>
 </div>
