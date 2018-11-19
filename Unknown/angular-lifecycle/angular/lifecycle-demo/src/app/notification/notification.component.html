@@ -1,7 +1,7 @@
 <div class="notification-container">
-    <div class="{{content?.type}}-{{content?.lifecycle}}">
+    <div class="{{content?.component.substring(1, content.component.length-1)}}">
         <p>{{content?.component}}</p>
-        <p>{{content?.lifecycle}}</p>
+        <p class="code">{{content?.lifecycle}}()</p>
         <p>{{content?.type}}</p>
     </div>
 </div>

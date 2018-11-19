@@ -1,0 +1,17 @@
+/*
+ * Global styles for the angular-lifecycle app
+ * Author: Andrew Jarombek
+ * Date: 11/18/2018
+ */
+
+@font-face {
+    font-family: Longway;
+    font-weight: bold;
+    src: url("https://asset.jarombek.com/fonts/Longway-Regular.otf") format("opentype");
+}
+
+@font-face {
+    font-family: Fantasque-Bold;
+    font-weight: bold;
+    src: url("https://asset.jarombek.com/fonts/FantasqueSansMono-Bold.ttf") format("truetype");
+}

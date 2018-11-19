@@ -1,0 +1,29 @@
+/*
+ * Styles for the Notification component
+ * Author: Andrew Jarombek
+ * Date: 11/18/2018
+ */
+
+.notification-container {
+    font-family: 'Longway', Helvetica, sans-serif;
+    font-size: 18px;
+    color: #333;
+
+    background-color: #ddd;
+    border-radius: 2px;
+
+    min-width: 600px;
+    padding: 25px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+
+    transition: all .4s ease;
+}
+
+.code {
+    font-family: 'Fantasque-Bold', Helvetica, sans-serif;
+}
+
+.notification-container:hover {
+    box-shadow: 0 1px 3px rgba(170, 170, 170, 0.5);
+}

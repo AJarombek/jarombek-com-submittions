@@ -20,10 +20,24 @@ export class HomeComponent implements OnInit, OnDestroy {
     private LOG_TAG: string = '[Home.Component]';
     lifecycleList: Lifecycle[];
 
+    /**
+     * {@link AppComponent#constructor}
+     */
     constructor(private lifecycleService: LifecycleService) { }
 
+    /**
+     * {@link AppComponent#ngOnInit}
+     */
     ngOnInit() {
         console.info(`${this.LOG_TAG} Inside ngOnInit`);
+
+        this.lifecycleList = [
+            {
+                component: this.LOG_TAG,
+                lifecycle: 'ngOnInit',
+                type: 'Initialize'
+            }
+        ];
 
         // Why is delay(0) needed?  https://bit.ly/2A3UPXR
         this.lifecycleService.onData
@@ -40,6 +54,9 @@ export class HomeComponent implements OnInit, OnDestroy {
                 });
     }
 
+    /**
+     * {@link AppComponent#ngOnDestroy}
+     */
     ngOnDestroy(): void {
         console.info(`${this.LOG_TAG} Inside ngOnDestroy`);
         this.ngUnsubscribe.next();
