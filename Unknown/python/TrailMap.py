@@ -62,3 +62,11 @@ if __name__ == '__main__':
 
     assert last_two_trails.trails == [('Swamp Trail', 2.2), ('Laurel Trail', 1.8)]
     assert first_and_last_trails.trails == [('Main Road', 1.3), ('Laurel Trail', 1.8)]
+
+    # The following access throws a TypeError: TrailMap indices must be integers
+    # mrp_trail_map['1']
+
+    # If no __iter__() special method exists, Python falls back to __getitem__()
+    for trail in mrp_trail_map:
+        assert type(trail) is tuple
+        print(trail)
