@@ -39,3 +39,4 @@ Unknown/d3-react/react/d3-demo/.idea/*
 
 **/.idea/*
 **/node_modules/*
+**/__pycache__/*

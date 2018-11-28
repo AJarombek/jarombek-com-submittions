@@ -22,6 +22,21 @@ class Animal(object):
         self.species = species
         self.description = description
 
+    def __str__(self):
+        """
+        Create and return a human readable string that represents the Animal object
+        :return: string
+        """
+        return '({}, {}, {})'.format(self.name, self.species, self.description or None)
+
+    def __repr__(self):
+        """
+        Create an internal representation of the Animal object.
+        Simply delegate to the __str__() special method
+        :return: string
+        """
+        return str(self)
+
 
 class AnimalSpecies(Enum):
     DEER = 1

@@ -19,6 +19,21 @@ class Plant(object):
         self.species = species
         self.in_bloom = in_bloom
 
+    def __str__(self):
+        """
+        Create and return a human readable string that represents the Plant object
+        :return: string
+        """
+        return '({}, {})'.format(self.species, self.in_bloom or None)
+
+    def __repr__(self):
+        """
+        Create an internal representation of the Plant object.
+        Simply delegate to the __str__() special method
+        :return: string
+        """
+        return str(self)
+
 
 class PlantSpecies(Enum):
     HOSTA = 1

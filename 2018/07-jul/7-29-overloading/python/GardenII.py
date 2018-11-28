@@ -1,25 +1,36 @@
 """
-Representation of a Garden I do work in at Tod's Point
+Representation of a Garden I do work in at Tod's Point - Version II
 Author: Andrew Jarombek
-Date: 7/28/2018
+Date: 11/27/2018
 """
 
 from Animal import Animal
 from Plant import Plant
 
 
-class Garden(object):
+class GardenII(object):
 
-    def __init__(self, animals=list(), plants=list(), random_objects=list()):
+    def __init__(self, animals=None, plants=None, random_objects=None):
         """
         Constructor for a garden which contains animals, plants, and some other random objects
         :param animals: a list of animals in the garden (defaults to an empty list)
         :param plants: a list of plants in the garden (defaults to an empty list)
         :param random_objects: a list of random objects in the garden (defaults to an empty list)
         """
-        self.animals = animals
-        self.plants = plants
-        self.random_objects = random_objects
+        if animals is None:
+            self.animals = []
+        else:
+            self.animals = animals
+
+        if plants is None:
+            self.plants = []
+        else:
+            self.plants = plants
+
+        if random_objects is None:
+            self.random_objects = []
+        else:
+            self.random_objects = random_objects
 
     def in_garden(self, item):
         """
