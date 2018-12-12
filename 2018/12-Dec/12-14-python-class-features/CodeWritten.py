@@ -45,3 +45,9 @@ if __name__ == '__main__':
     assert python_today.amount == 146
     assert python_today.language == 'Python'
     assert python_today.day == date.today()
+
+    # Using __slots__ removes the ability to add new instance attributes
+    try:
+        python_today.minutes_spent_working = 60
+    except AttributeError:
+        print('Unable to add an attribute not declared in __slots__')

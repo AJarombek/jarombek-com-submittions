@@ -7,7 +7,7 @@ Date: 11/27/2018
 
 class Meta:
 
-    def __init__(self, first_name: str, last_name: str):
+    def __init__(self, first_name: str, last_name: str) -> None:
         """
         Construct a new Meta object which contains the first and last name of its creator
         :param first_name: the first name of the objects creator
@@ -96,4 +96,16 @@ if __name__ == "__main__":
     assert custom_meta.first_name == "Andy"
     assert custom_meta.last_name == "J"
 
+    # You can't access an attribute beginning with double underscores directly
+    try:
+        assert custom_meta.__first_name == "Andy"
+    except AttributeError:
+        print('Unable to find property __first_name in class Meta')
+
+    # However you can access it's name mangled protected attribute
+    assert custom_meta._Meta__first_name == "Andy"
+
     assert format(custom_meta, '') == '(Andy, J)'
+
+    # Adding new instance attributes is permitted when using __dict__
+    custom_meta.username = 'andy'
