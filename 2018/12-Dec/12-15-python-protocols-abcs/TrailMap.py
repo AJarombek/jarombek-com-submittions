@@ -10,8 +10,6 @@ import numbers
 
 class TrailMap:
 
-    trail_item_keys = ['name', 'dist']
-
     def __init__(self, trails):
         """
         Construct a new TrailMap object which contains a list of all the trails in a park

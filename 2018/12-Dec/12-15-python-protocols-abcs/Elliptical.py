@@ -19,4 +19,7 @@ class Elliptical:
 
 
 if __name__ == '__main__':
-    Elliptical((60, 0))
+    elliptical = Elliptical((60, 0))
+
+    assert isinstance(elliptical, Exercise)
+    assert issubclass(Elliptical, Exercise)

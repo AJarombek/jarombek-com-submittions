@@ -60,6 +60,6 @@ class Exercise(abc.ABC):
 
 if __name__ == '__main__':
     # Print out the method resolution order for 'Exercise'
-    print(Exercise.__mro__)
+    assert Exercise.__mro__ == (Exercise, abc.ABC, object)
 
     assert issubclass(Exercise, abc.ABC)

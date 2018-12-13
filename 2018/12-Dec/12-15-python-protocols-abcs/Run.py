@@ -4,6 +4,7 @@ Author: Andrew Jarombek
 Date: 11/28/2018
 """
 
+import abc
 import numbers
 from datetime import date
 from Exercise import Exercise
@@ -54,7 +55,7 @@ class Run(Exercise):
 
 if __name__ == '__main__':
     # Print out the method resolution order for 'Run'
-    print(Run.__mro__)
+    assert Run.__mro__ == (Run, Exercise, abc.ABC, object)
 
     run = Run(1.14, (10, 12), date(2018, 11, 27), 'Sand')
     assert str(run) == '(Ran 1.14 miles in 10:12 on 2018-11-27 on Sand)'
