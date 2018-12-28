@@ -5,12 +5,44 @@
  */
 
 using System;
-using System.Diagnostics;
+using static System.Diagnostics.Debug;
 
 namespace Basics
 {
     internal class Program
     {
+        
+        /// <summary>
+        /// Increment an integer (pass by copy of reference).
+        /// </summary>
+        /// <param name="num">An integer to incremented by 1</param>
+        /// <returns>A new integer</returns>
+        static int Inc(int num)
+        {
+            return num++;
+        }
+
+        /// <summary>
+        /// Increment an integer (pass by reference)
+        /// </summary>
+        /// <param name="num">An integer to be incremented by 1</param>
+        /// <returns>The passed in integer incremented by 1</returns>
+        static int IncRef(ref int num)
+        {
+            return num++;
+        }
+
+        /// <summary>
+        /// Information about the class using output parameters
+        /// </summary>
+        /// <param name="author">Who wrote the class</param>
+        /// <param name="date">The date they wrote the class</param>
+        static void Info(out string author, out DateTime date)
+        {
+            author = "Andrew Jarombek";
+            date = DateTime.Parse("12/23/2018");
+        }
+        
         public static void Main(string[] args)
         {
             // C# has support for tuples
@@ -19,20 +51,20 @@ namespace Basics
             Console.WriteLine(name.Item2);
 
             // While strings are reference types in C#, testing them for equality uses the value type '==' syntax
-            Debug.Assert(name.Item1 == "Andrew" && name.Item2 == "Jarombek");
+            Assert(name.Item1 == "Andrew" && name.Item2 == "Jarombek");
             
             // ...and tuples with named items
             var info = (name: "Andy", age: 23);
-            Debug.Assert(info.name == "Andy" && info.age == 23);
+            Assert(info.name == "Andy" && info.age == 23);
 
             // You can create an identifier with a keyword if its prefixed with '@'
             var @int = 5;
 
-            Debug.Assert(@int == 5);
+            Assert(@int == 5);
             
             // My C# execution config throws an OverflowException by default for number overflows.  Use an 'unchecked'
             // block to change this behavior.
-            Debug.Assert(unchecked(int.MaxValue + 1) == int.MinValue);
+            Assert(unchecked(int.MaxValue + 1) == int.MinValue);
 
             // Wrap the value around if a number overflows its max or min value.
             unchecked
@@ -40,11 +72,11 @@ namespace Basics
                 var minValue = int.MaxValue + 1;
                 var maxValue = int.MinValue - 1;
 
-                Debug.Assert(maxValue == int.MaxValue && minValue == int.MinValue);
+                Assert(maxValue == int.MaxValue && minValue == int.MinValue);
                 
                 // If you want an OverflowException to be thrown when a number overflows (or a compile time error),
                 // use a 'checked' block
-                Debug.Assert(checked(5 + 5 == 10));
+                Assert(checked(5 + 5 == 10));
 
                 // This code won't compile
                 // checked(int.MaxValue + 1);
@@ -56,18 +88,18 @@ namespace Basics
             if (false && i++ == 1)
             {
                 // This code is never reached
-                Debug.Assert(false);
+                Assert(false);
             }
 
             // This 'if' block does not short circuit and i++ is invoked
             if (false & (i++ == 1))
             {
                 // This code is never reached
-                Debug.Assert(false);
+                Assert(false);
             }
 
             // Prove that the second if block's boolean comparison did not short circuit
-            Debug.Assert(i == 1);
+            Assert(i == 1);
 
             // Strings prefixed with '@' do not have escape sequences
             var url1 = "https:\\\\jarombek.com";
@@ -79,13 +111,51 @@ namespace Basics
 
             foreach (var url in new string[] {url1, url2, url3, url4})
             {
-                Debug.Assert(url == @"https:\\jarombek.com");
+                Assert(url == @"https:\\jarombek.com");
             }
 
             var multiLine = @"
                 Hi there.
                 My name is Andy.
             ";
+            
+            // C# supports both rectangular multidimensional arrays ...
+            // (rectangular arrays sizes are strictly enforced)
+            int[,] rectangularArray = 
+            {
+                {1, 2},
+                {3, 4}
+            };
+            
+            // and jagged multidimensional arrays
+            int[][] jaggedArray = 
+            {
+                new int[] {1, 2},
+                new int[] {3, 4, 5}, 
+            };
+            
+            Assert(!rectangularArray.Equals(jaggedArray));
+            Assert(rectangularArray[1,1] == jaggedArray[1][1]);
+            Assert(jaggedArray[1][2] == 5);
+
+            var num = 26;
+            
+            // Inc() doesn't mutate num, and returns the new value
+            var num2 = Inc(num);
+            
+            Assert(num == 26);
+            Assert(num2 == 27);
+            
+            // IncRef() mutates num
+            var num3 = IncRef(ref num);
+            
+            Assert(num == 27);
+            Assert(num3 == 27);
+            
+            // Call a method with output arguments.  Use a discard '_' to ignore certain output arguments.
+            Info(out string author, out _);
+            
+            Assert(author == "Andrew Jarombek");
         }
     }
 }
