@@ -43,7 +43,8 @@ namespace Basics
             date = DateTime.Parse("12/23/2018");
         }
         
-        public static void Main(string[] args)
+        // 'params' keyword allows for a variable number of arguments
+        public static void Main(params string[] args)
         {
             // C# has support for tuples
             var name = ("Andrew", "Jarombek");
@@ -156,6 +157,23 @@ namespace Basics
             Info(out string author, out _);
             
             Assert(author == "Andrew Jarombek");
+
+            int? age = null;
+
+            // Null coalescing operator
+            double ageDouble = age ?? 0.0;
+            Assert(ageDouble == 0.0);
+
+            // Null conditional operator and null coalescing operator
+            string ageStr = age?.ToString() ?? "Unknown";
+            Assert(ageStr == "Unknown");
+
+            string username = null;
+            
+            // Avoid NullReferenceException with null conditional operator
+            var upperUsername = username?.ToUpper();
+            
+            Assert(upperUsername == null);
         }
     }
 }
