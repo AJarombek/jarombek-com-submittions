@@ -9,4 +9,8 @@ const {execWat} = require('./wat-wasm');
 // Basic addition operation in Web Assembly
 execWat("wa/test.wat", (instance) => console.info(instance.exports.add(2, 2)));
 
-execWat("wa/basics.wat", (instance) => console.info(instance.exports.calc_pace(2, 12, 31)));
+execWat("wa/basics.wat", (instance) => {
+    console.info(instance.exports.calc_pace_1(2, 12, 31));
+    console.info(instance.exports.calc_pace_2(2.6, 12, 31));
+    console.info(instance.exports.getInt())
+});
