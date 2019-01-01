@@ -5,3 +5,6 @@
 # Date: 12/30/2018
 
 npm init
+
+# Setting up wabt
+npm install wabt
