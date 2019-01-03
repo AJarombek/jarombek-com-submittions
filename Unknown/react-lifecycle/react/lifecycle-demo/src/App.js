@@ -1,19 +1,66 @@
+/**
+ * The applications main component for displaying lifecycles
+ * @author Andrew Jarombek
+ * @since 1/3/2019
+ */
+
 import React, { Component } from 'react';
 import './App.css';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+
+    static ComponentName = "App";
+
+    constructor(props) {
+        super(props);
+
+        // Set the initial state
+        this.state = {
+            life_cycles: [
+                {
+                    component: App.ComponentName,
+                    event: "constructor()",
+                    parameters: [
+                        props
+                    ]
+                }
+            ]
+        }
+    }
+
+    componentWillMount() {
+
+    }
+
+    componentWillReceiveProps() {
+
+    }
+
+    shouldComponentUpdate() {
+
+    }
+
+    componentWillUpdate() {
+
+    }
+
+    render() {
+        return (
+            <div className="App"> </div>
+        );
+    }
+
+    componentDidMount() {
+
+    }
+
+    componentDidUpdate() {
+
+    }
+
+    componentWillUnmount() {
+
+    }
 }
 
 export default App;
