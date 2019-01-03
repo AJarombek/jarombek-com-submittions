@@ -4,12 +4,29 @@
 
 (module
   ;; Function section
-  (type $0 (func (param i32 i32 i32) (result i32)))
-  (type $1 (func (param i32 i32 i32) (result i32)))
-  (type $2 (func (param f32 i32 i32) (result f32)))
-  (type $3 (func (param i32 i32)))
-  (type $4 (func (param i32) (result i32)))
-  (type $5 (func (result i32)))
+  (type $calc_pace_1a (func (param i32 i32 i32) (result i32)))
+  (type $calc_pace_1b (func (param i32 i32 i32) (result i32)))
+  (type $calc_pace_2 (func (param f32 i32 i32) (result f32)))
+  (type $setInt (func (param i32 i32)))
+  (type $getInt (func (param i32) (result i32)))
+  (type $inc (func (result i32)))
+  (type $div (func (param i32 i32 i32) (result i32)))
+
+  ;; Global section
+  (global $stored_location i32 (i32.const 26))
+
+  ;; Memory section
+  ;; This module requires one page of memory (64 KiB)
+  (memory 1)
+
+  ;; Export section
+  (export "calc_pace_1a" (func $calc_pace_1a))
+  (export "calc_pace_1b" (func $calc_pace_1b))
+  (export "calc_pace_2" (func $calc_pace_2))
+  (export "setInt" (func $setInt))
+  (export "getInt" (func $getInt))
+  (export "inc" (func $inc))
+  (export "div" (func $div))
 
   ;; Calculate the mile pace of an exercise.  The number of miles exercised must
   ;; be an integer.
@@ -74,14 +91,44 @@
     )
   )
 
+  ;; Increment a number each time the function is invoked.
   (func $inc (result i32)
-    (call $setInt
-      ;; Arbitrary memory location
-      (i32.const 226)
-    )
+    get_global $stored_location
+    call $getInt
+
+    i32.const 1
+    i32.add
+    set_local $value
+
+    get_global $stored_location
+    get_local $value
+    call $setInt
+
+    get_local $value
   )
 
-  (export "calc_pace_1" (func $calc_pace_1a))
-  (export "calc_pace_2" (func $calc_pace_2))
-  (export "getInt" (func $getInt))
+  ;; Perform division on two integers.  If the type parameter is 0, an integer
+  ;; division is performed.  Otherwise a floating point division is performed.
+  (func $div (param $num i32) (param $den i32) (param $type i32) (result i32)
+    (if (result i32)
+      (i32.eqz
+        (get_local $type)
+      )
+      (then
+        get_local $num
+        ;;get_local $den
+        ;;i32.div_s
+      )
+      (else
+        get_local $num
+        ;;f32.convert_s/i32
+
+        ;;get_local $den
+        ;;f32.convert_s/i32
+
+        ;;f32.div
+        ;;i32.trunc_s/f32
+      )
+    )
+  )
 )
