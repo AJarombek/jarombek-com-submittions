@@ -3,7 +3,7 @@
 ;; Date: 12/31/2018
 
 (module
-  ;; Function section
+  ;; Function Type section
   (type $calcPace1a (func (param i32 i32 i32) (result i32)))
   (type $calcPace1b (func (param i32 i32 i32) (result i32)))
   (type $calcPace2 (func (param f32 i32 i32) (result f32)))
