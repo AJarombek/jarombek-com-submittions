@@ -1,0 +1,26 @@
+/*
+ * Styles for the App component
+ * Author: Andrew Jarombek
+ * Date: 1/7/2019
+ */
+
+@font-face {
+    font-family: Longway;
+    font-weight: bold;
+    src: url("https://asset.jarombek.com/fonts/Longway-Regular.otf") format("opentype");
+}
+
+@font-face {
+    font-family: Fantasque-Bold;
+    font-weight: bold;
+    src: url("https://asset.jarombek.com/fonts/FantasqueSansMono-Bold.ttf") format("truetype");
+}
+
+h1 {
+    font-family: 'Longway', Helvetica, sans-serif;
+    font-size: 32px;
+    color: #222;
+
+    width: 100%;
+    text-align: center;
+}

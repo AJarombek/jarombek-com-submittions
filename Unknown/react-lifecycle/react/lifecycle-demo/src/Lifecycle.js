@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import './Lifecycle.css';
 
 const Lifecycle = ({ component, event, parameters }) =>
     <div className="lifecycle">

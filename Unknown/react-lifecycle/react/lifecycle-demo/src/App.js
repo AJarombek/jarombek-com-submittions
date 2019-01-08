@@ -42,16 +42,35 @@ class App extends Component {
         this.updateLifeCycleState("componentWillMount()");
     }
 
+    /**
+     * Called when new properties are passed to the component.  You can call setState() from this
+     * component.  This method is part of the component updating lifecycle.
+     * @param nextProps - the new properties passed into the component.
+     */
     componentWillReceiveProps(nextProps) {
-        this.updateLifeCycleState("componentWillReceiveProps()");
+        this.updateLifeCycleState("componentWillReceiveProps()", [nextProps]);
     }
 
+    /**
+     * Determine whether the component updates based on state or property changes.  This method is
+     * part of the component updating lifecycle.
+     * @param nextProps - the new properties passed into the component.
+     * @param nextState - the updated state of the component.
+     * @return {boolean} true if the component should update, false otherwise.
+     */
     shouldComponentUpdate(nextProps, nextState) {
-        this.updateLifeCycleState("shouldComponentUpdate()");
+        // setState() can't be invoked from shouldComponentUpdate()
+        return true;
     }
 
+    /**
+     * Called right before the component updates.  This method is part of the component
+     * mounting lifecycle.
+     * @param nextProps - the new properties passed into the component.
+     * @param nextState - the updated state of the component.
+     */
     componentWillUpdate(nextProps, nextState) {
-        this.updateLifeCycleState("componentWillUpdate()");
+        // setState() can't be invoked from componentWillUpdate()
     }
 
     /**
@@ -62,6 +81,7 @@ class App extends Component {
     render() {
         return (
             <div className="App">
+                <h1>React Lifecycles</h1>
                 <LifecycleList lifecycleList={this.state.life_cycles} />
             </div>
         );
@@ -75,14 +95,29 @@ class App extends Component {
         this.updateLifeCycleState("componentDidMount()");
     }
 
+    /**
+     * Invoked right after the component updates.  This method is part of the component
+     * updating lifecycle.
+     * @param prevProps - the properties of the component prior to the update.
+     * @param prevState - the state of the component prior to the update.
+     */
     componentDidUpdate(prevProps, prevState) {
-        this.updateLifeCycleState("componentDidUpdate()");
+        // setState() can't be invoked from componentDidUpdate()
     }
 
+    /**
+     * Invoked right before the component is un-mounted (removed from the DOM).  This method is
+     * part of the component updating lifecycle.
+     */
     componentWillUnmount() {
         this.updateLifeCycleState("componentWillUnmount()");
     }
 
+    /**
+     * Add a new lifecycle object to the state.
+     * @param event - the lifecycle method that was invoked.
+     * @param parameters - the parameters passed to the lifecycle method.
+     */
     updateLifeCycleState(event, parameters=[]) {
         const newLifeCycle = {
             component: App.ComponentName,
