@@ -7,13 +7,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Lifecycle from './Lifecycle';
+import uuid from 'uuid/v4';
 
 const LifecycleList = ({ lifecycleList=[] }) =>
     <div className="lifecycle-list">
         { (lifecycleList.length === 0) ?
             <p>No Data</p> :
             lifecycleList.map(lifecycle =>
-                <Lifecycle key={lifecycle.id} {...lifecycle} />
+                <Lifecycle key={uuid()} {...lifecycle} />
             )
         }
     </div>;

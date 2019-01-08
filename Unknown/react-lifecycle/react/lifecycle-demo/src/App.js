@@ -22,6 +22,8 @@ class App extends Component {
 
         // Set the initial state
         this.state = {
+            updateCount: 0,
+            noUpdateCount: 0,
             lifeCycles: [
                 {
                     component: App.ComponentName,
@@ -60,7 +62,8 @@ class App extends Component {
      */
     shouldComponentUpdate(nextProps, nextState) {
         // setState() can't be invoked from shouldComponentUpdate()
-        return true;
+        console.info("shouldComponentUpdate()");
+        return this.state.noUpdateCount === nextState.noUpdateCount;
     }
 
     /**
@@ -71,6 +74,7 @@ class App extends Component {
      */
     componentWillUpdate(nextProps, nextState) {
         // setState() can't be invoked from componentWillUpdate()
+        console.info("componentWillUpdate()");
     }
 
     /**
@@ -82,7 +86,15 @@ class App extends Component {
         return (
             <div className="App">
                 <h1>React Lifecycles</h1>
-                <LifecycleList lifecycleList={this.state.life_cycles} />
+                <div className="buttons">
+                    <button className="btn1" onClick={() => this.update()}>
+                        Update
+                    </button>
+                    <button className="btn2" onClick={() => this.noUpdate()}>
+                        Shouldn't Update
+                    </button>
+                </div>
+                <LifecycleList lifecycleList={this.state.lifeCycles} />
             </div>
         );
     }
@@ -103,6 +115,7 @@ class App extends Component {
      */
     componentDidUpdate(prevProps, prevState) {
         // setState() can't be invoked from componentDidUpdate()
+        console.info("componentDidUpdate()");
     }
 
     /**
@@ -130,6 +143,24 @@ class App extends Component {
                 ...this.state.lifeCycles,
                 newLifeCycle
             ]
+        });
+    }
+
+    /**
+     * Change the component state in a way that will update the component.
+     */
+    update() {
+        this.setState({
+            updateCount: this.state.updateCount + 1
+        });
+    }
+
+    /**
+     * Change the component state in a way that won't update the component.
+     */
+    noUpdate() {
+        this.setState({
+            noUpdateCount: this.state.noUpdateCount + 1
         });
     }
 }

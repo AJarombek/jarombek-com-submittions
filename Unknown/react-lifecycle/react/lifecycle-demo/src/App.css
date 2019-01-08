@@ -24,3 +24,47 @@ h1 {
     width: 100%;
     text-align: center;
 }
+
+.buttons {
+    display: table;
+    margin: 30px auto 30px auto;
+}
+
+button {
+    font-family: 'Longway', Helvetica, sans-serif;
+    color: #444;
+
+    border-radius: 4px;
+    margin: 4px 2px 4px 2px;
+    box-shadow: none;
+    cursor: pointer;
+    outline: none;
+    transition: background .4s, box-shadow .4s;
+
+    height: 30px;
+    width: 180px;
+    font-size: 16px;
+}
+
+button:hover {
+    color: white;
+    box-shadow: 0 1px 5px #aaa;
+}
+
+.btn1 {
+    border: 2px solid rgba(0, 0, 153, 0.8);
+}
+
+.btn1:hover {
+    background: rgba(0, 0, 153, 0.8);
+    border: 2px solid rgba(0, 0, 153, 0.8);
+}
+
+.btn2 {
+    border: 2px solid rgba(53, 53, 53, 0.8);
+}
+
+.btn2:hover {
+    background: rgba(53, 53, 53, 0.8);
+    border: 2px solid rgba(53, 53, 53, 0.8);
+}

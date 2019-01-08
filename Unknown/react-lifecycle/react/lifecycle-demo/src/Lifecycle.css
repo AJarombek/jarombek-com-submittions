@@ -12,9 +12,17 @@
     background-color: #ddd;
     border-radius: 2px;
 
+    padding: 25px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
     transition: all .4s ease;
 }
 
 .lifecycle:hover {
     box-shadow: 0 1px 3px rgba(170, 170, 170, 0.5);
+}
+
+.lifecycle-parameters, .lifecycle-event {
+    font-family: 'Fantasque-Bold', Helvetica, sans-serif;
 }

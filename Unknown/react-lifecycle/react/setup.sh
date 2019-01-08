@@ -10,3 +10,4 @@ yarn start
 
 # Dependencies
 yarn add prop-types
+yarn add uuid
