@@ -7,20 +7,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Lifecycle from './Lifecycle';
+import Lifecycle2 from './Lifecycle2';
 import uuid from 'uuid/v4';
 
-const LifecycleList = ({ lifecycleList=[] }) =>
+const LifecycleList = ({ lifecycleList=[], version=1, updateLifeCycleState=() => {} }) =>
     <div className="lifecycle-list">
-        { (lifecycleList.length === 0) ?
+        {(lifecycleList.length === 0) ?
             <p>No Data</p> :
             lifecycleList.map(lifecycle =>
-                <Lifecycle key={uuid()} {...lifecycle} />
+                { return (version === 1) ?
+                    <Lifecycle key={uuid()} {...lifecycle} />:
+                    <Lifecycle2 key={uuid()} {...lifecycle}
+                                updateLifeCycleState={updateLifeCycleState} />;
+                }
             )
         }
     </div>;
 
 LifecycleList.propTypes = {
-    lifecycleList: PropTypes.array
+    lifecycleList: PropTypes.array,
+    version: PropTypes.number,
+    updateLifeCycleState: PropTypes.func
 };
 
 export default LifecycleList;

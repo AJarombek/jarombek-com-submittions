@@ -22,8 +22,19 @@ class App extends Component {
 
         // Set the initial state
         this.state = {
+            // The version of the Lifecycle component currently in use. version in {1,2}
+            version: 1,
+            // Incremented each time the "Update" button is clicked
             updateCount: 0,
+            // Incremented each time the "Shouldn't Update" button is clicked
             noUpdateCount: 0,
+            // Incremented each time componentWillMount() is invoked in the Lifecycle2 component
+            willMountInvoked: 0,
+            // Incremented each time componentDidMount() is invoked in the Lifecycle2 component
+            didMountInvoked: 0,
+            // Incremented each time componentWillUnmount() is invoked in the Lifecycle2 component
+            willUnmountInvoked: 0,
+            // Array of objects passed to the Lifecycle & Lifecycle2 components
             lifeCycles: [
                 {
                     component: App.ComponentName,
@@ -33,7 +44,7 @@ class App extends Component {
                     ]
                 }
             ]
-        }
+        };
     }
 
     /**
@@ -83,9 +94,10 @@ class App extends Component {
      * @return {*} - a reference to the component
      */
     render() {
+        const {lifeCycles, version} = this.state;
         return (
             <div className="App">
-                <h1>React Lifecycles</h1>
+                <h1>React Lifecycles (Version {version})</h1>
                 <div className="buttons">
                     <button className="btn1" onClick={() => this.update()}>
                         Update
@@ -93,8 +105,14 @@ class App extends Component {
                     <button className="btn2" onClick={() => this.noUpdate()}>
                         Shouldn't Update
                     </button>
+                    <button className="btn1" onClick={() => this.updateVersion()}>
+                        Switch to Version {this.state.version === 1 ? 2 : 1}
+                    </button>
                 </div>
-                <LifecycleList lifecycleList={this.state.lifeCycles} />
+                {/* bind() creates an immutable bind of 'this' to 'updateLifeCycleState' */}
+                {/* for all future invocations. */}
+                <LifecycleList lifecycleList={lifeCycles} version={version}
+                               updateLifeCycleState={this.updateLifeCycleState.bind(this)} />
             </div>
         );
     }
@@ -132,6 +150,8 @@ class App extends Component {
      * @param parameters - the parameters passed to the lifecycle method.
      */
     updateLifeCycleState(event, parameters=[]) {
+        console.info("Inside updateLifeCycleState");
+
         const newLifeCycle = {
             component: App.ComponentName,
             event,
@@ -144,6 +164,14 @@ class App extends Component {
                 newLifeCycle
             ]
         });
+    }
+
+    /**
+     * Update the lifecycle component version that is displayed.
+     */
+    updateVersion() {
+        const version = this.state.version === 1 ? 2 : 1;
+        this.setState({version});
     }
 
     /**
@@ -161,6 +189,33 @@ class App extends Component {
     noUpdate() {
         this.setState({
             noUpdateCount: this.state.noUpdateCount + 1
+        });
+    }
+
+    /**
+     * Update the number of times componentWillMount() is invoked in the Lifecycle2 component
+     */
+    updateWillMountInvoked() {
+        this.setState({
+            willMountInvoked: this.state.willMountInvoked + 1
+        });
+    }
+
+    /**
+     * Update the number of times componentDidMount() is invoked in the Lifecycle2 component
+     */
+    updateDidMountInvoked() {
+        this.setState({
+            didMountInvoked: this.state.didMountInvoked + 1
+        });
+    }
+
+    /**
+     * Update the number of times componentWillUnmount() is invoked in the Lifecycle2 component
+     */
+    updateWillUnmountInvoked() {
+        this.setState({
+            willUnmountInvoked: this.state.willUnmountInvoked + 1
         });
     }
 }

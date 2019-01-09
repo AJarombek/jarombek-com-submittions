@@ -11,3 +11,4 @@ yarn start
 # Dependencies
 yarn add prop-types
 yarn add uuid
+yarn add create-react-class
