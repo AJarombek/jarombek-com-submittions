@@ -11,17 +11,22 @@ import createReactClass from 'create-react-class';
 // React.createClass() is deprecated as of React 15.5.0.  Instead you can use a separate npm module
 // create-react-class
 const Lifecycle2 = createReactClass({
+    componentName: "Lifecycle2",
     getDefaultProps() {
         return {
-            component: 'Unknown'
+            component: 'Unknown',
+            updateLifeCycleState: () => {},
+            updateWillMountInvoked: () => {},
+            updateDidMountInvoked: () => {},
+            updateWillUnmountInvoked: () => {}
         };
     },
     getInitialState() {
         return {};
     },
     componentWillMount() {
-        if (this.state.willMountInvoked < 3) {
-            this.props.updateLifeCycleState("componentWillMount()");
+        if (this.props.updateWillMountInvoked() < 2) {
+            this.props.updateLifeCycleState("componentWillMount()", [], this.componentName);
         } else {
             console.info("componentWillMount()");
         }
@@ -37,18 +42,27 @@ const Lifecycle2 = createReactClass({
         );
     },
     componentDidMount() {
-        this.props.updateLifeCycleState("componentDidMount()");
-        console.info("componentDidMount()");
+        if (this.props.updateDidMountInvoked() < 2) {
+            this.props.updateLifeCycleState("componentDidMount()", [], this.componentName);
+        } else {
+            console.info("componentDidMount()");
+        }
     },
     componentWillUnmount() {
-        this.props.updateLifeCycleState("componentWillUnmount()");
-        console.info("componentWillUnmount()");
+        if (this.props.updateWillUnmountInvoked() < 2) {
+            this.props.updateLifeCycleState("componentWillUnmount()", [], this.componentName);
+        } else {
+            console.info("componentWillUnmount()");
+        }
     },
     propTypes: {
         component: PropTypes.string,
         event: PropTypes.string.isRequired,
         parameters: PropTypes.array.isRequired,
-        updateLifeCycleState: PropTypes.func.isRequired
+        updateLifeCycleState: PropTypes.func,
+        updateWillMountInvoked: PropTypes.func,
+        updateDidMountInvoked: PropTypes.func,
+        updateWillUnmountInvoked: PropTypes.func
     }
 });
 

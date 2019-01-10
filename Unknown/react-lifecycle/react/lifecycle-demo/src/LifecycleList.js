@@ -10,7 +10,9 @@ import Lifecycle from './Lifecycle';
 import Lifecycle2 from './Lifecycle2';
 import uuid from 'uuid/v4';
 
-const LifecycleList = ({ lifecycleList=[], version=1, updateLifeCycleState=() => {} }) =>
+const LifecycleList = ({ lifecycleList=[], version=1, updateLifeCycleState=() => {},
+                           updateWillMountInvoked=() => {}, updateDidMountInvoked=() => {},
+                           updateWillUnmountInvoked=() => {} }) =>
     <div className="lifecycle-list">
         {(lifecycleList.length === 0) ?
             <p>No Data</p> :
@@ -18,7 +20,10 @@ const LifecycleList = ({ lifecycleList=[], version=1, updateLifeCycleState=() =>
                 { return (version === 1) ?
                     <Lifecycle key={uuid()} {...lifecycle} />:
                     <Lifecycle2 key={uuid()} {...lifecycle}
-                                updateLifeCycleState={updateLifeCycleState} />;
+                                updateLifeCycleState={updateLifeCycleState}
+                                updateWillMountInvoked={updateWillMountInvoked}
+                                updateDidMountInvoked={updateDidMountInvoked}
+                                updateWillUnmountInvoked={updateWillUnmountInvoked} />;
                 }
             )
         }
@@ -27,7 +32,11 @@ const LifecycleList = ({ lifecycleList=[], version=1, updateLifeCycleState=() =>
 LifecycleList.propTypes = {
     lifecycleList: PropTypes.array,
     version: PropTypes.number,
-    updateLifeCycleState: PropTypes.func
+    // These are only needed for Lifecycle2
+    updateLifeCycleState: PropTypes.func,
+    updateWillMountInvoked: PropTypes.func,
+    updateDidMountInvoked: PropTypes.func,
+    updateWillUnmountInvoked: PropTypes.func
 };
 
 export default LifecycleList;

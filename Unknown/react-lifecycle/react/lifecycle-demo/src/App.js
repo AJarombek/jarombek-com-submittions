@@ -28,12 +28,20 @@ class App extends Component {
             updateCount: 0,
             // Incremented each time the "Shouldn't Update" button is clicked
             noUpdateCount: 0,
+            // Was componentWillMount() invoked in App
+            willMountInvoked: false,
+            // Was componentWillReceiveProps() invoked in App
+            willReceivePropsInvoked: false,
+            // Was componentDidMount() invoked in App
+            didMountInvoked: false,
+            // Was componentWillUnmount() invoked in App
+            willUnmountInvoked: false,
             // Incremented each time componentWillMount() is invoked in the Lifecycle2 component
-            willMountInvoked: 0,
+            lifecycleWillMountCount: 0,
             // Incremented each time componentDidMount() is invoked in the Lifecycle2 component
-            didMountInvoked: 0,
+            lifecycleDidMountCount: 0,
             // Incremented each time componentWillUnmount() is invoked in the Lifecycle2 component
-            willUnmountInvoked: 0,
+            lifecycleWillUnmountCount: 0,
             // Array of objects passed to the Lifecycle & Lifecycle2 components
             lifeCycles: [
                 {
@@ -52,7 +60,10 @@ class App extends Component {
      * part of the component mounting lifecycle.
      */
     componentWillMount() {
-        this.updateLifeCycleState("componentWillMount()");
+        if (!this.state.willMountInvoked) {
+            this.updateLifeCycleState("componentWillMount()");
+            this.setState({willMountInvoked: true});
+        }
     }
 
     /**
@@ -61,7 +72,10 @@ class App extends Component {
      * @param nextProps - the new properties passed into the component.
      */
     componentWillReceiveProps(nextProps) {
-        this.updateLifeCycleState("componentWillReceiveProps()", [nextProps]);
+        if (!this.state.willReceivePropsInvoked) {
+            this.updateLifeCycleState("componentWillReceiveProps()", [nextProps]);
+            this.setState({willReceivePropsInvoked: true});
+        }
     }
 
     /**
@@ -112,7 +126,11 @@ class App extends Component {
                 {/* bind() creates an immutable bind of 'this' to 'updateLifeCycleState' */}
                 {/* for all future invocations. */}
                 <LifecycleList lifecycleList={lifeCycles} version={version}
-                               updateLifeCycleState={this.updateLifeCycleState.bind(this)} />
+                               updateLifeCycleState={this.updateLifeCycleState.bind(this)}
+                               updateWillMountInvoked={this.updateWillMountInvoked.bind(this)}
+                               updateDidMountInvoked={this.updateDidMountInvoked.bind(this)}
+                               updateWillUnmountInvoked={this.updateWillUnmountInvoked.bind(this)}
+                />
             </div>
         );
     }
@@ -122,7 +140,10 @@ class App extends Component {
      * mounting lifecycle.
      */
     componentDidMount() {
-        this.updateLifeCycleState("componentDidMount()");
+        if (!this.state.didMountInvoked) {
+            this.updateLifeCycleState("componentDidMount()");
+            this.setState({didMountInvoked: true});
+        }
     }
 
     /**
@@ -141,19 +162,21 @@ class App extends Component {
      * part of the component updating lifecycle.
      */
     componentWillUnmount() {
-        this.updateLifeCycleState("componentWillUnmount()");
+        if (!this.state.willUnmountInvoked) {
+            this.updateLifeCycleState("componentWillUnmount()");
+            this.setState({willUnmountInvoked: true});
+        }
     }
 
     /**
      * Add a new lifecycle object to the state.
      * @param event - the lifecycle method that was invoked.
      * @param parameters - the parameters passed to the lifecycle method.
+     * @param component - the name of the component that had a lifecycle event.
      */
-    updateLifeCycleState(event, parameters=[]) {
-        console.info("Inside updateLifeCycleState");
-
+    updateLifeCycleState(event, parameters=[], component=App.ComponentName) {
         const newLifeCycle = {
-            component: App.ComponentName,
+            component,
             event,
             parameters
         };
@@ -196,27 +219,42 @@ class App extends Component {
      * Update the number of times componentWillMount() is invoked in the Lifecycle2 component
      */
     updateWillMountInvoked() {
-        this.setState({
-            willMountInvoked: this.state.willMountInvoked + 1
-        });
+        const updatedInvokedCount = this.state.lifecycleWillMountCount + 1;
+        if (updatedInvokedCount < 3) {
+            this.setState({
+                lifecycleWillMountCount: updatedInvokedCount
+            });
+        }
+
+        return updatedInvokedCount;
     }
 
     /**
      * Update the number of times componentDidMount() is invoked in the Lifecycle2 component
      */
     updateDidMountInvoked() {
-        this.setState({
-            didMountInvoked: this.state.didMountInvoked + 1
-        });
+        const updatedInvokedCount = this.state.lifecycleDidMountCount + 1;
+        if (updatedInvokedCount < 3) {
+            this.setState({
+                lifecycleDidMountCount: updatedInvokedCount
+            });
+        }
+
+        return updatedInvokedCount;
     }
 
     /**
      * Update the number of times componentWillUnmount() is invoked in the Lifecycle2 component
      */
     updateWillUnmountInvoked() {
-        this.setState({
-            willUnmountInvoked: this.state.willUnmountInvoked + 1
-        });
+        const updatedInvokedCount = this.state.lifecycleWillUnmountCount + 1;
+        if (updatedInvokedCount < 3) {
+            this.setState({
+                lifecycleWillUnmountCount: updatedInvokedCount
+            });
+        }
+
+        return updatedInvokedCount;
     }
 }
 
