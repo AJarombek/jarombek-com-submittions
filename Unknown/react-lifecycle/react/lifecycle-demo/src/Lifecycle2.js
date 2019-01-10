@@ -11,26 +11,36 @@ import createReactClass from 'create-react-class';
 // React.createClass() is deprecated as of React 15.5.0.  Instead you can use a separate npm module
 // create-react-class
 const Lifecycle2 = createReactClass({
-    componentName: "Lifecycle2",
+    /**
+     * Define the default properties for the component.  In ES6, the default properties are defined
+     * in a class field.  This method is part of the component mounting lifecycle.
+     * @return {{component: string}} - the default properties
+     */
     getDefaultProps() {
         return {
-            component: 'Unknown',
-            updateLifeCycleState: () => {},
-            updateWillMountInvoked: () => {},
-            updateDidMountInvoked: () => {},
-            updateWillUnmountInvoked: () => {}
+            component: 'Unknown'
         };
     },
+    /**
+     * Set the initial state of the component.  In ES6, this is performed in the constructor.
+     * This method is part of the component mounting lifecycle.
+     * @return {{}} - the initial state
+     */
     getInitialState() {
         return {};
     },
+    /**
+     * Called when a component is about to mount (the DOM has not rendered yet).  This method is
+     * part of the component mounting lifecycle.
+     */
     componentWillMount() {
-        if (this.props.updateWillMountInvoked() < 2) {
-            this.props.updateLifeCycleState("componentWillMount()", [], this.componentName);
-        } else {
-            console.info("componentWillMount()");
-        }
+        console.info("componentWillMount()");
     },
+    /**
+     * Render the react element into the DOM.  This method is part of the component
+     * mounting lifecycle.
+     * @return {*} - a reference to the component.
+     */
     render() {
         const { component, event, parameters } = this.props;
         return (
@@ -41,28 +51,27 @@ const Lifecycle2 = createReactClass({
             </div>
         );
     },
+    /**
+     * Invoked right after the component renders.  This method is part of the component
+     * mounting lifecycle.
+     */
     componentDidMount() {
-        if (this.props.updateDidMountInvoked() < 2) {
-            this.props.updateLifeCycleState("componentDidMount()", [], this.componentName);
-        } else {
-            console.info("componentDidMount()");
-        }
+        console.info("componentDidMount()");
     },
+    /**
+     * Invoked right before the component is un-mounted (removed from the DOM).  This method is
+     * part of the component updating lifecycle.
+     */
     componentWillUnmount() {
-        if (this.props.updateWillUnmountInvoked() < 2) {
-            this.props.updateLifeCycleState("componentWillUnmount()", [], this.componentName);
-        } else {
-            console.info("componentWillUnmount()");
-        }
+        console.info("componentWillUnmount()");
     },
+    /**
+     * The optional and required properties of the component.
+     */
     propTypes: {
         component: PropTypes.string,
         event: PropTypes.string.isRequired,
-        parameters: PropTypes.array.isRequired,
-        updateLifeCycleState: PropTypes.func,
-        updateWillMountInvoked: PropTypes.func,
-        updateDidMountInvoked: PropTypes.func,
-        updateWillUnmountInvoked: PropTypes.func
+        parameters: PropTypes.array.isRequired
     }
 });
 

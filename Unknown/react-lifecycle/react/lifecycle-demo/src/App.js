@@ -36,12 +36,6 @@ class App extends Component {
             didMountInvoked: false,
             // Was componentWillUnmount() invoked in App
             willUnmountInvoked: false,
-            // Incremented each time componentWillMount() is invoked in the Lifecycle2 component
-            lifecycleWillMountCount: 0,
-            // Incremented each time componentDidMount() is invoked in the Lifecycle2 component
-            lifecycleDidMountCount: 0,
-            // Incremented each time componentWillUnmount() is invoked in the Lifecycle2 component
-            lifecycleWillUnmountCount: 0,
             // Array of objects passed to the Lifecycle & Lifecycle2 components
             lifeCycles: [
                 {
@@ -123,14 +117,7 @@ class App extends Component {
                         Switch to Version {this.state.version === 1 ? 2 : 1}
                     </button>
                 </div>
-                {/* bind() creates an immutable bind of 'this' to 'updateLifeCycleState' */}
-                {/* for all future invocations. */}
-                <LifecycleList lifecycleList={lifeCycles} version={version}
-                               updateLifeCycleState={this.updateLifeCycleState.bind(this)}
-                               updateWillMountInvoked={this.updateWillMountInvoked.bind(this)}
-                               updateDidMountInvoked={this.updateDidMountInvoked.bind(this)}
-                               updateWillUnmountInvoked={this.updateWillUnmountInvoked.bind(this)}
-                />
+                <LifecycleList lifecycleList={lifeCycles} version={version} />
             </div>
         );
     }
@@ -213,48 +200,6 @@ class App extends Component {
         this.setState({
             noUpdateCount: this.state.noUpdateCount + 1
         });
-    }
-
-    /**
-     * Update the number of times componentWillMount() is invoked in the Lifecycle2 component
-     */
-    updateWillMountInvoked() {
-        const updatedInvokedCount = this.state.lifecycleWillMountCount + 1;
-        if (updatedInvokedCount < 3) {
-            this.setState({
-                lifecycleWillMountCount: updatedInvokedCount
-            });
-        }
-
-        return updatedInvokedCount;
-    }
-
-    /**
-     * Update the number of times componentDidMount() is invoked in the Lifecycle2 component
-     */
-    updateDidMountInvoked() {
-        const updatedInvokedCount = this.state.lifecycleDidMountCount + 1;
-        if (updatedInvokedCount < 3) {
-            this.setState({
-                lifecycleDidMountCount: updatedInvokedCount
-            });
-        }
-
-        return updatedInvokedCount;
-    }
-
-    /**
-     * Update the number of times componentWillUnmount() is invoked in the Lifecycle2 component
-     */
-    updateWillUnmountInvoked() {
-        const updatedInvokedCount = this.state.lifecycleWillUnmountCount + 1;
-        if (updatedInvokedCount < 3) {
-            this.setState({
-                lifecycleWillUnmountCount: updatedInvokedCount
-            });
-        }
-
-        return updatedInvokedCount;
     }
 }
 
