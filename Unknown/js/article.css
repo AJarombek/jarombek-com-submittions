@@ -1,0 +1,74 @@
+/*
+ * Styles for the article stylesheet
+ * Author: Andrew Jarombek
+ * Date: 1/10/2019
+ */
+
+@font-face {
+    font-family: Longway;
+    font-weight: bold;
+    src: url("https://asset.jarombek.com/fonts/Longway-Regular.otf") format("opentype");
+}
+
+body {
+    font-family: 'Longway', Helvetica, sans-serif;
+}
+
+@supports (grid-area: auto) {
+    body {
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr;
+        grid-template-areas:
+                "header header header"
+                ".       body  .     "
+                ".      footer .     ";
+    }
+}
+
+header {
+    font-size: 14px;
+    color: #222;
+}
+
+@supports (grid-area: auto) {
+    header {
+        grid-area: head;
+
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+        grid-template-areas: "type  .  date";
+    }
+
+    header:nth-child(1) {
+        grid-area: type;
+    }
+
+    header:nth-child(2) {
+        grid-area: date;
+    }
+}
+
+@supports not (grid-area: auto) {
+    header {
+        display: table;
+        height: 45px;
+        width: 100%;
+    }
+
+    header p {
+        display: table-cell;
+        vertical-align: middle;
+        height: 100%;
+        width: 50%;
+    }
+
+    header:nth-child(1) {
+        text-align: left;
+        padding-left: 20px;
+    }
+
+    header:nth-child(2) {
+        text-align: right;
+        padding-right: 20px;
+    }
+}

@@ -28,14 +28,6 @@ class App extends Component {
             updateCount: 0,
             // Incremented each time the "Shouldn't Update" button is clicked
             noUpdateCount: 0,
-            // Was componentWillMount() invoked in App
-            willMountInvoked: false,
-            // Was componentWillReceiveProps() invoked in App
-            willReceivePropsInvoked: false,
-            // Was componentDidMount() invoked in App
-            didMountInvoked: false,
-            // Was componentWillUnmount() invoked in App
-            willUnmountInvoked: false,
             // Array of objects passed to the Lifecycle & Lifecycle2 components
             lifeCycles: [
                 {
@@ -54,10 +46,7 @@ class App extends Component {
      * part of the component mounting lifecycle.
      */
     componentWillMount() {
-        if (!this.state.willMountInvoked) {
-            this.updateLifeCycleState("componentWillMount()");
-            this.setState({willMountInvoked: true});
-        }
+        this.updateLifeCycleState("componentWillMount()");
     }
 
     /**
@@ -66,10 +55,7 @@ class App extends Component {
      * @param nextProps - the new properties passed into the component.
      */
     componentWillReceiveProps(nextProps) {
-        if (!this.state.willReceivePropsInvoked) {
-            this.updateLifeCycleState("componentWillReceiveProps()", [nextProps]);
-            this.setState({willReceivePropsInvoked: true});
-        }
+        this.updateLifeCycleState("componentWillReceiveProps()", [nextProps]);
     }
 
     /**
@@ -127,10 +113,7 @@ class App extends Component {
      * mounting lifecycle.
      */
     componentDidMount() {
-        if (!this.state.didMountInvoked) {
-            this.updateLifeCycleState("componentDidMount()");
-            this.setState({didMountInvoked: true});
-        }
+        this.updateLifeCycleState("componentDidMount()");
     }
 
     /**
@@ -149,10 +132,7 @@ class App extends Component {
      * part of the component updating lifecycle.
      */
     componentWillUnmount() {
-        if (!this.state.willUnmountInvoked) {
-            this.updateLifeCycleState("componentWillUnmount()");
-            this.setState({willUnmountInvoked: true});
-        }
+        this.updateLifeCycleState("componentWillUnmount()");
     }
 
     /**
