@@ -1,0 +1,33 @@
+/*
+ * Styles for the tag html document
+ * Author: Andrew Jarombek
+ * Date: 1/12/2019
+ */
+
+body {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+}
+
+div {
+    font-family: 'Longway', Helvetica, sans-serif;
+    font-size: 18px;
+    color: #333;
+
+    background-color: #ddd;
+    border-radius: 2px;
+    padding: 5px;
+
+    transition: all .4s ease;
+}
+
+div:hover {
+    box-shadow: 0 1px 3px rgba(170, 170, 170, 0.5);
+}
+
+img {
+    height: 45px;
+}

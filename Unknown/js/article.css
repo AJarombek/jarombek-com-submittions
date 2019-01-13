@@ -1,5 +1,5 @@
 /*
- * Styles for the article stylesheet
+ * Styles for the article html document
  * Author: Andrew Jarombek
  * Date: 1/10/2019
  */
@@ -10,19 +10,9 @@
     src: url("https://asset.jarombek.com/fonts/Longway-Regular.otf") format("opentype");
 }
 
+/* Layout for all browsers */
 body {
     font-family: 'Longway', Helvetica, sans-serif;
-}
-
-@supports (grid-area: auto) {
-    body {
-        display: grid;
-        grid-template-columns: 1fr 3fr 1fr;
-        grid-template-areas:
-                "header header header"
-                ".       body  .     "
-                ".      footer .     ";
-    }
 }
 
 header {
@@ -30,24 +20,62 @@ header {
     color: #222;
 }
 
+footer > figure > img {
+    height: 45px;
+}
+
+h1 {
+    text-align: center;
+}
+
+/* Layout for CSS Grid supporting browsers */
 @supports (grid-area: auto) {
+    body {
+        display: grid;
+        grid-gap: 10px;
+        grid-template-columns: 1fr 3fr 1fr;
+        grid-template-areas:
+                "header header header"
+                ".       body  .     "
+                ".      footer .     ";
+    }
+
     header {
-        grid-area: head;
+        grid-area: header;
 
         display: grid;
         grid-template-columns: 1fr 2fr 1fr;
         grid-template-areas: "type  .  date";
     }
 
-    header:nth-child(1) {
+    header > p:nth-child(1) {
         grid-area: type;
+        justify-self: start;
+        align-self: center;
+        padding-left: 20px;
     }
 
-    header:nth-child(2) {
+    header > p:nth-child(2) {
         grid-area: date;
+        justify-self: end;
+        align-self: center;
+        padding-right: 20px;
+    }
+
+    body > div {
+        grid-area: body;
+        justify-self: center;
+        align-self: center;
+    }
+
+    footer {
+        grid-area: footer;
+        justify-self: center;
+        align-self: center;
     }
 }
 
+/* Layout for legacy browsers */
 @supports not (grid-area: auto) {
     header {
         display: table;
