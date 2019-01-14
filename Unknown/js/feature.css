@@ -1,0 +1,84 @@
+/*
+ * Styles for the feature html document
+ * Author: Andrew Jarombek
+ * Date: 1/13/2019
+ */
+
+@font-face {
+    font-family: Longway;
+    font-weight: bold;
+    src: url("https://asset.jarombek.com/fonts/Longway-Regular.otf") format("opentype");
+}
+
+/* Layout for all browsers */
+.feature {
+    background: url("https://asset.jarombek.com/kayak.jpg") no-repeat center center;
+    background-size: cover;
+}
+
+.feature > div {
+    background: rgba(0, 0, 0, 0.65);
+    transition: all .4s ease-in-out;
+}
+
+.feature > div:hover {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+/* Layout for CSS Grid supporting browsers */
+@supports (grid-area: auto) {
+    body {
+        display: grid;
+        align-items: center;
+        justify-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .feature {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: "content picture";
+        grid-gap: 20px;
+    }
+
+    .feature-text, .feature-picture {
+        justify-self: center;
+        align-self: center;
+    }
+
+    .feature-text {
+        grid-area: content;
+    }
+
+    .feature-picture {
+        grid-area: picture;
+    }
+}
+
+/* Layout for legacy browsers */
+@supports not (grid-area: auto) {
+    body {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .feature {
+
+    }
+
+    .feature-text {
+        display: table;
+        height: 100%;
+        width: 50%;
+    }
+
+    .feature-picture {
+        display: table;
+        height: 100%;
+        width: 50%;
+    }
+}
