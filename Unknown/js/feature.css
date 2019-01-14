@@ -11,18 +11,47 @@
 }
 
 /* Layout for all browsers */
+body {
+    font-family: 'Longway', Helvetica, sans-serif;
+    font-size: 28px;
+    color: #ccc;
+}
+
 .feature {
     background: url("https://asset.jarombek.com/kayak.jpg") no-repeat center center;
     background-size: cover;
+    height: 80vh;
 }
 
 .feature > div {
     background: rgba(0, 0, 0, 0.65);
     transition: all .4s ease-in-out;
+    height: 80vh;
 }
 
 .feature > div:hover {
     background: rgba(0, 0, 0, 0.7);
+}
+
+.feature-text > h5, .feature-text > p {
+    text-align: center;
+}
+
+.feature-text > h5 {
+    font-size: 36px;
+}
+
+.feature-text > p {
+    font-size: 28px;
+    padding: 0 10px;
+}
+
+figure {
+    margin-top: 0;
+}
+
+img {
+    max-height: 50vh;
 }
 
 /* Layout for CSS Grid supporting browsers */
@@ -35,7 +64,7 @@
         margin: 0;
     }
 
-    .feature {
+    .feature > div {
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-template-areas: "content picture";
@@ -66,19 +95,22 @@
         transform: translate(-50%, -50%);
     }
 
-    .feature {
-
+    .feature > div {
+        display: table;
+        height: 100%;
+        width: 100%;
+        float: left;
     }
 
     .feature-text {
-        display: table;
+        display: table-cell;
+        vertical-align: middle;
         height: 100%;
         width: 50%;
     }
 
     .feature-picture {
-        display: table;
-        height: 100%;
-        width: 50%;
+        float: left;
+        margin-top: 15vh;
     }
 }
