@@ -5,13 +5,13 @@
   <div class="app-body">
     <div class="app-default">
       <h2>Default</h2>
-      <cat-pic-i></cat-pic-i>
+      <cat-pic-i (change)="onChangeI()" [count]="countI"
+                 [immutableCount]="immutableCountI"></cat-pic-i>
     </div>
     <div class="app-onpush">
       <h2>OnPush</h2>
-      <cat-pic-ii></cat-pic-ii>
+      <cat-pic-ii (change)="onChangeII()" [count]="countII"
+                  [immutableCount]="immutableCountII"></cat-pic-ii>
     </div>
   </div>
 </div>
-
-<router-outlet></router-outlet>

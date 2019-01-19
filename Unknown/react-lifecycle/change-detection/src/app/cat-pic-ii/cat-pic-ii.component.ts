@@ -4,7 +4,7 @@
  * @since 1/17/2019
  */
 
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
     selector: 'cat-pic-ii',
@@ -12,11 +12,22 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
     templateUrl: './cat-pic-ii.component.html',
     styleUrls: ['./cat-pic-ii.component.scss']
 })
-export class CatPicIIComponent implements OnInit {
+export class CatPicIIComponent {
 
-    constructor() { }
+    @Input()
+    count: number;
 
-    ngOnInit() {
+    @Input()
+    immutableCount: object;
 
+    @Output()
+    change = new EventEmitter<object>();
+
+    /**
+     * Emit data when the count changes.  This method can be overridden in a parent component.
+     */
+    onChange() {
+        this.count++;
+        this.change.emit({count: this.count});
     }
 }
