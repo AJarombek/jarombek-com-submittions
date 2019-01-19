@@ -1,0 +1,19 @@
+/**
+ * Styles for the App component
+ * Author: Andrew Jarombek
+ * Date: 1/17/2019
+ */
+
+.app {
+  font-family: 'Longway', Helvetica, sans-serif;
+  color: #333;
+}
+
+h1 {
+  font-size: 36px;
+  text-align: center;
+}
+
+.app-body {
+  display: grid;
+}
