@@ -5,13 +5,13 @@
   <div class="app-body">
     <div class="app-default">
       <h2>Default</h2>
-      <cat-pic-i (change)="onChangeI()" [count]="countI"
-                 [immutableCount]="immutableCountI"></cat-pic-i>
+      <horse-pic-i (change)="onChangeI()" [primitiveCount]="primitiveCountI"
+                 [objectCount]="objectCountI"></horse-pic-i>
     </div>
     <div class="app-onpush">
       <h2>OnPush</h2>
-      <cat-pic-ii (change)="onChangeII()" [count]="countII"
-                  [immutableCount]="immutableCountII"></cat-pic-ii>
+      <horse-pic-ii (change)="onChangeII()" [primitiveCount]="primitiveCountII"
+                  [objectCount]="objectCountII"></horse-pic-ii>
     </div>
   </div>
 </div>
