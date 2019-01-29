@@ -23,3 +23,20 @@ mult() {
 # Must invoke a function after its declared
 Cats=$(mult "cat" 3)
 echo ${Cats}
+
+# Same as the mult() function except it uses an 'until' loop
+mult_2() {
+    local Str=""
+    local Count=$2
+
+    until [ ${Count} -le 0 ]
+    do
+        Str="${Str}$1"
+        let Count-=1
+    done
+
+    echo ${Str}
+}
+
+Meows=$(mult_2 "meow" 3)
+echo ${Meows}
