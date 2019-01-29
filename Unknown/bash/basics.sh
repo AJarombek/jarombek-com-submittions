@@ -79,3 +79,38 @@ NumberList=(1 2 3 4 5)
 
 # Get all the items from NumberList
 echo ${NumberList[*]}
+
+# Accumulate all the strings in the town list
+for i in ${NumberList[*]}
+do
+    AllTowns="${AllTowns} ${Towns[$((i - 1))]}"
+done
+
+echo ${AllTowns}
+
+# Accumulate some of the strings in the town list
+for i in 2 4
+do
+    SomeTowns="${SomeTowns} ${Towns[$((i - 1))]}"
+done
+
+echo ${SomeTowns}
+
+# Arrays in Bash are one dimensional, unlike Batch where array elements can be complex structures
+
+# Get the current date
+echo date
+
+# Create a unix timestamp of a date on MacOS
+DateWritten=$(date -j -f "%F" 2019-01-28 +"%s")
+MonthsEnd=$(date -j -f "%F" 2019-01-31 +"%s")
+
+# Equivalent on Linux
+# DateWritten=$(date -d 2019-01-28)
+
+if [ ${DateWritten} -lt ${MonthsEnd} ]
+then
+    echo "Date is before Jan. 31st, 2019"
+else
+    echo "Date is equal to or after Jan. 31st, 2019"
+fi
