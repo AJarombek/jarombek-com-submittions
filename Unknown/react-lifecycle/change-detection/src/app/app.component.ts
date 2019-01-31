@@ -25,6 +25,7 @@ export class AppComponent {
      */
     onChangeI() {
         this.primitiveCountI++;
+        this.objectCountI.count = this.primitiveCountI;
     }
 
     // The component state passed to Horse-Pic-II
@@ -36,5 +37,6 @@ export class AppComponent {
      */
     onChangeII() {
         this.primitiveCountII++;
+        this.objectCountII.count = this.primitiveCountII;
     }
 }

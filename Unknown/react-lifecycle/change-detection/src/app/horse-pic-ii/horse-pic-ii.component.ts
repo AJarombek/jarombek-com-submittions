@@ -22,6 +22,9 @@ export class HorsePicIIComponent {
     // component isn't using 'primitiveCount', it uses 'objectCount'.
     usingPrimitive: boolean = true;
 
+    // True for a short interval after a change occurs, false otherwise
+    changeDetected: boolean = false;
+
     @Input()
     primitiveCount: number;
 
@@ -37,5 +40,21 @@ export class HorsePicIIComponent {
     onChange() {
         this.primitiveCount++;
         this.change.emit({count: this.primitiveCount});
+    }
+
+    /**
+     * Toggle the usingPrimitive flag
+     */
+    changeCountType() {
+        this.usingPrimitive = !this.usingPrimitive;
+    }
+
+    /**
+     * Toggle the changeDetected flag for a short interval.  changeDetected=true adds a CSS class
+     * to the image.
+     */
+    addOnChangeClass() {
+        this.changeDetected = true;
+        setTimeout(() => this.changeDetected = false, 700)
     }
 }

@@ -26,3 +26,17 @@ echo ${Intro} | grep "Andy"
 
 # Command substitution
 echo `ls`
+
+# Same as previous command
+echo $(ls)
+
+# Arithmetic command
+echo $((2 * 23))
+
+# Get the scripts input parameters
+Input1=$1
+Input2=$2
+
+# Validate input parameters using AND and OR commands
+[ -z Input1 ] || (echo "First Argument NOT supplied." && exit 1)
+[ -z Input2 ] || (echo "Second Argument NOT supplied." && exit 2)
