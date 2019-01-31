@@ -9,4 +9,5 @@
     </button>
   </div>
   <p>Times Clicked: <strong>{{usingPrimitive ? primitiveCount : objectCount?.count}}</strong></p>
+  <p [hidden]="true">{{runChangeDetection}}</p>
 </div>

@@ -38,8 +38,7 @@ export class HorsePicIIComponent {
      * Emit data when the count changes.  This method can be overridden in a parent component.
      */
     onChange() {
-        this.primitiveCount++;
-        this.change.emit({count: this.primitiveCount});
+        this.change.emit({primitiveCount: this.primitiveCount, objectCount: this.objectCount});
     }
 
     /**
@@ -56,5 +55,16 @@ export class HorsePicIIComponent {
     addOnChangeClass() {
         this.changeDetected = true;
         setTimeout(() => this.changeDetected = false, 700)
+    }
+
+    /**
+     * Getter for a runChangeDetection property.  This getter is invoked every time a change
+     * detection cycle occurs in this component.
+     * Source: https://bit.ly/2Uw9QKS
+     * @return {boolean} - always returns true
+     */
+    get runChangeDetection() {
+        console.info("Running Change Detection in HorsePicII");
+        return true;
     }
 }

@@ -5,13 +5,15 @@
   <div class="app-body">
     <div class="app-default">
       <h2>Default</h2>
-      <horse-pic-i (change)="onChangeI()" [primitiveCount]="primitiveCountI"
-                 [objectCount]="objectCountI"></horse-pic-i>
+      <horse-pic-i #horseComp (change)="onChangeI(horseComp.usingPrimitive)"
+                   [primitiveCount]="primitiveCountI"
+                   [objectCount]="objectCountI"></horse-pic-i>
     </div>
     <div class="app-onpush">
       <h2>OnPush</h2>
-      <horse-pic-ii (change)="onChangeII()" [primitiveCount]="primitiveCountII"
-                  [objectCount]="objectCountII"></horse-pic-ii>
+      <horse-pic-ii #horseComp (change)="onChangeII(horseComp.usingPrimitive)"
+                    [primitiveCount]="primitiveCountII"
+                    [objectCount]="objectCountII"></horse-pic-ii>
     </div>
   </div>
 </div>

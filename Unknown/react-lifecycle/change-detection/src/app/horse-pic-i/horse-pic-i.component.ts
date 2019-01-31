@@ -57,4 +57,15 @@ export class HorsePicIComponent {
         this.changeDetected = true;
         setTimeout(() => this.changeDetected = false, 700)
     }
+
+    /**
+     * Getter for a runChangeDetection property.  This getter is invoked every time a change
+     * detection cycle occurs in this component.
+     * Source: https://bit.ly/2Uw9QKS
+     * @return {boolean} - always returns true
+     */
+    get runChangeDetection() {
+        console.info("Running Change Detection in HorsePicI");
+        return true;
+    }
 }
