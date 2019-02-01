@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GenericsArrays
 {
@@ -24,6 +25,12 @@ namespace GenericsArrays
         /// </summary>
         /// <param name="item">An initial tuple to put in the map</param>
         public VariantMap(ValueTuple<TK, TV> item) => _contents = new List<(TK, TV)> {item};
+
+        /// <summary>
+        /// Construct a new VariantMap with an initial list of contents 
+        /// </summary>
+        /// <param name="items">An enumerable type to use as the internal contents list</param>
+        public VariantMap(IEnumerable<ValueTuple<TK, TV>> items) => _contents = items.ToList();
         
         /// <summary>
         /// Deconstruct the VariantMap object

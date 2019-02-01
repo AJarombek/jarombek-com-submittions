@@ -29,8 +29,10 @@ export class AppComponent {
         this.countI++;
 
         if (usingPrimitive) {
+            console.info("Updating Primitive");
             this.primitiveCountI = this.countI;
         } else {
+            console.info("Updating Object");
             this.objectCountI.count = this.countI;
         }
     }
@@ -45,15 +47,14 @@ export class AppComponent {
      * @param {boolean} usingPrimitive - whether to change the primitive count or object count
      */
     onChangeII(usingPrimitive: boolean) {
-        console.info("Invoked");
         this.countII++;
 
         if (usingPrimitive) {
+            console.info("Updating Primitive");
             this.primitiveCountII = this.countII;
         } else {
+            console.info("Updating Object");
             this.objectCountII.count = this.countII;
         }
-        console.info(`Primitive: ${this.primitiveCountII}`)
-        console.info(`Object: ${this.objectCountII.count}`)
     }
 }

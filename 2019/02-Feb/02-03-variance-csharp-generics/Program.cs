@@ -4,6 +4,8 @@
  * Date: 1/15/2019
  */
 
+using System;
+using System.Collections.Generic;
 using static System.Diagnostics.Debug;
 
 namespace GenericsArrays
@@ -34,7 +36,19 @@ namespace GenericsArrays
             // Unable to use variance
             // InvariantMap<string, IComparable> invariantMap2 = new InvariantMap<object, Int64>();
             
-            ICovariant<string, object> variantMap = new VariantMap<object, string>();
+            // Map that uses variance
+            ICovariant<string, object> variantMap = new VariantMap<object, string>(("Andy", "Jarombek"));
+            
+            Assert(variantMap.Get("Andy").Equals("Jarombek"));
+            Assert(variantMap.Pop("Andy").Equals("Jarombek"));
+
+            var contents = new List<(object, int)> {("Andy", 23), (0, 0)};
+            
+            // Another map that uses variance
+            ICovariant<object, Int32> variantMap2 = new VariantMap<object, int>(contents);
+            
+            Assert(variantMap2.Get(0).Equals(0));
+            Assert(variantMap2.Get("Andy").Equals(23));
         }
     }
 }

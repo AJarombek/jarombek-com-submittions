@@ -25,20 +25,38 @@ export class HorsePicIIComponent {
     // True for a short interval after a change occurs, false otherwise
     changeDetected: boolean = false;
 
-    @Input()
-    primitiveCount: number;
+    // Private variables that hold the count for the component.  The values bound to these variables
+    // are exposed via getters and setters.
+    private _primitiveCount: number;
+    private _objectCount: object;
 
-    @Input()
-    objectCount: object;
+    @Input() set primitiveCount(value: number) {
+        console.info(`Running Change Detection in HorsePicII for primitiveCount: ${value}`);
+        this._primitiveCount = value;
+    };
+
+    get primitiveCount(): number {
+        return this._primitiveCount;
+    };
+
+    @Input() set objectCount(value: object) {
+        console.info(`Running Change Detection in HorsePicII for objectCount: ${value}`);
+        this._objectCount = value;
+    };
+
+    get objectCount(): object {
+        return this._objectCount;
+    }
 
     @Output()
     change = new EventEmitter<object>();
 
     /**
-     * Emit data when the count changes.  This method can be overridden in a parent component.
+     * Emit data when the count changes.  This method can call another method in a parent component
+     * thanks to emit().
      */
-    onChange() {
-        this.change.emit({primitiveCount: this.primitiveCount, objectCount: this.objectCount});
+    onChange(usingPrimitive: boolean) {
+        this.change.emit({usingPrimitive});
     }
 
     /**

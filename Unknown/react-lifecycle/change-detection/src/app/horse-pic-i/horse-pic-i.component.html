@@ -3,11 +3,11 @@
     <img [ngClass]="{'change-detected': changeDetected}" src="{{imageURL}}" />
   </figure>
   <div class="button-container">
-    <button (click)="onChange(); addOnChangeClass();">Update</button>
+    <button (click)="onChange(usingPrimitive); addOnChangeClass();">Update</button>
     <button (click)="changeCountType()">
       Use {{usingPrimitive ? "Object" : "Primitive"}} Count
     </button>
   </div>
-  <p>Times Clicked: <strong>{{usingPrimitive ? primitiveCount : objectCount?.count}}</strong></p>
+  <p>Times Clicked: <strong>{{usingPrimitive ? primitiveCount : objectCount.count}}</strong></p>
   <p [hidden]="true">{{runChangeDetection}}</p>
 </div>
