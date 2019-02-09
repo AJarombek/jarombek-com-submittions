@@ -30,6 +30,9 @@ export class HorsePicIIComponent {
     private _primitiveCount: number;
     private _objectCount: object;
 
+    // Getter and Setter functions for the primitiveCount input, which changes when clicking the
+    // 'update' button while 'usingPrimitive' is true.
+
     @Input() set primitiveCount(value: number) {
         console.info(`Running Change Detection in HorsePicII for primitiveCount: ${value}`);
         this._primitiveCount = value;
@@ -38,6 +41,9 @@ export class HorsePicIIComponent {
     get primitiveCount(): number {
         return this._primitiveCount;
     };
+
+    // Getter and Setter functions for the objectCount input, which changes when clicking the
+    // 'update' button while 'usingPrimitive' is false.
 
     @Input() set objectCount(value: object) {
         console.info(`Running Change Detection in HorsePicII for objectCount: ${value}`);
