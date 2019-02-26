@@ -6,6 +6,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using static System.Diagnostics.Debug;
 
 namespace Delegates
@@ -82,6 +84,8 @@ namespace Delegates
 
         static void Main(string[] args)
         {
+            /* Testing Program.cs */
+            
             int newBalance = Gamble(1000, 100);
             
             // Gambling 100 dollars either increases or decreases your balance by 100 dollars
@@ -144,6 +148,40 @@ namespace Delegates
             transformer(ref j);
             
             Assert(j == 30);
+            
+            /* Testing Util.cs */
+            
+            var stringList = new List<string> { "Hello", "my", "name", "is", "Andy" };
+            var decimalList = new List<decimal> { 3.75m, 4.22m, 2.29m, 3.04m, 4.03m, 6.88m, 3.96m };
+
+            // Prove that Util.Filter works with strings
+            bool Capitalized(string str) => Regex.IsMatch(str, "^[A-Z].*");
+
+            var capitalizedWords = Util.Filter(stringList, Capitalized);
+            
+            Assert(capitalizedWords[0] == "Hello");
+            Assert(capitalizedWords[1] == "Andy");
+            Assert(capitalizedWords.Count == 2);
+            
+            // Prove that Util.Filter works with decimals
+            bool LongerRun(decimal @decimal) => @decimal > 5.00m;
+
+            var longerRuns = Util.Filter(decimalList, LongerRun);
+            
+            Assert(longerRuns[0] == 6.88m);
+            Assert(longerRuns.Count == 1);
+            
+            // Prove that Util.Reduce works with strings
+            string BuildSentence(string accumulator, string value) => $"{accumulator} {value}";
+
+            var sentence = Util.Reduce(BuildSentence, "Intro:", stringList);
+            
+            Assert(sentence == "Intro: Hello my name is Andy");
+            
+            // Prove that Util.Reduce works with decimals
+            var weeklyMileage = Util.Reduce((x, y) => x + y, 0m, decimalList);
+            
+            Assert(weeklyMileage == 28.17m);
         }
     }
 }
