@@ -1,4 +1,4 @@
-# Learning the basics of Powershell
+﻿# Learning the basics of Powershell
 # Author: Andrew Jarombek
 # Date: 2/7/2019
 
@@ -57,11 +57,11 @@ function Test-Scoping-Variables() {
     # By using the $global: prefix, variables become global
     $global:countGlobal = 0
 
-    Write-Host "Local count: " + $countLocal + ", Script count: " + $script:countScript + ", Global count: " + $global:countGlobal
+    Write-Host "Local count: $countLocal, Script count: $script:countScript, Global count: $global:countGlobal"
 }
 
 Test-Scoping-Variables
-Write-Host "Local count: " + $countLocal + ", Script count: " + $countScript + ", Global count: " + $countGlobal
+Write-Host "Local count: $countLocal, Script count: $countScript, Global count: $countGlobal"
 
 # Powershell array creation is also simple
 $towns = @("Greenwich","Darien","New Canaan","Wilton","Ridgefield")
@@ -93,13 +93,31 @@ Write-Host $coastalTownsString
 
 # PowerShell supports mult-dimensional arrays
 $multiDimensional = @(
-    ("Andrew", "Jarombek")
-    ("Tom", "Caul")
-    ("Joseph", "Smoth")
+    @("Andrew", "Jarombek"),
+    @("Tom", "Caul"),
+    @("Joseph", "Smoth")
 )
 
-$tom = $multiDimensional[2]
+$tom = $multiDimensional[1][0]
 Write-Host $tom
 
 # Variables in PowerShell can have explicit types
 [string[]]$names = @("Andy", "Tom", "Joe")
+
+[DateTime]$CurrentDate = Get-Date -DisplayHint Date
+
+# Demonstrate that there is a lot of functionality availiable on a DateTime object
+Write-Host "It is currently Daylight Savings Time: $($CurrentDate.IsDaylightSavingTime())"
+Write-Host "Current Month: $($CurrentDate.Month)"
+Write-Host "Next Month: $($CurrentDate.AddMonths(1).Month)"
+
+Write-Host $CurrentDate
+
+[DateTime]$EndOfMonth = (Get-Date -Year 2019 -Month 03 -Day 31)
+
+# Its exremely simple to compare dates
+if ($CurrentDate -GT $EndOfMonth) {
+    Write-Host "It isn't March Anymore: $CurrentDate"
+} else {
+    Write-Host "It's still March: $CurrentDate"
+}
