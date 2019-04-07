@@ -1,0 +1,29 @@
+# Outline of how AWS::CloudFormation::Init works.  NOTE: This code is not mean't to be used unaltered
+# Author: Andrew Jarombek
+# Date: 4/6/2019
+
+---
+
+AWS::CloudFormation::Init:
+  configSets:
+    default:
+      - "configuration1"
+      - "configuration2"
+      - "configuration3"
+    skipThirdConfig:
+      - "configuration1"
+      - "configuration2"
+  configuration1:
+    commands:
+      00Command:
+        command: echo "First Configuration Executing..."
+  configuration2:
+    commands:
+      00Command:
+        command: echo "Second Configuration Executing..."
+  configuration3:
+    commands:
+      00Command:
+        command: echo "Third Configuration Executing..."
+
+---
