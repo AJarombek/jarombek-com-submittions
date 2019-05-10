@@ -6,4 +6,4 @@ Source code for software development articles in May 2019.
 
 | Directory Name                           | Corresponding Article                                                |
 |------------------------------------------|----------------------------------------------------------------------|
-| `05-03-csharp-delegates`                 | *COMING SOON*                                                        |
+| `05-12-csharp-delegates`                 | *COMING SOON*                                                        |
