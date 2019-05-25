@@ -105,4 +105,15 @@ main = do
   print $ fmap (+1) (Meters 7005) -- Meters 7006
   print $ fmap (*3) (Miles 1) -- Miles 3
 
+  -- Testing the 'inc' function which uses instances of class Functor
   print $ inc [1,2,3] -- [2,3,4]
+  print $ inc (Just 5) -- Just 6
+  print $ inc Nothing -- Nothing
+
+  print $ inc num2 -- Right 3
+  print $ inc str2 -- Left "andy"
+  -- These are both invalid - the Right function needs to handle type Int, not String
+  -- print $ inc num
+  -- print $ inc str
+
+  print $ inc (Miles 3) -- Miles 4
