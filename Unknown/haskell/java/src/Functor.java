@@ -6,7 +6,7 @@ import java.util.function.Function;
  * @since 5/25/2019
  */
 
-public interface Functor<T, U extends Functor<?, ?>> {
+public interface Functor<T> {
 
     /**
      * Map a function to values wrapped inside the Functor instance
@@ -14,5 +14,5 @@ public interface Functor<T, U extends Functor<?, ?>> {
      * @param <R> The generic type that will be wrapped in the Functor return value
      * @return A new instance of Functor
      */
-    <R> U fmap(Function<T, R> f);
+    <R> Functor<R> fmap(Function<T, R> f);
 }

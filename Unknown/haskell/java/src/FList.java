@@ -9,11 +9,17 @@ import static java.util.stream.Collectors.toList;
  * @since 5/25/2019
  */
 
-public class FList<T> implements Functor<T, FList<?>> {
+public class FList<T> implements Functor<T> {
 
+    // The FList class uses composition to hold an instance of a List object
     private List<T> list;
 
-    FList(Iterable<T> iterable) {
+    /**
+     * Construct an FList object with any iterable collection.  Converts the Iterable to a List.
+     * @param iterable - Iterable collection used as the contents of the FList
+     */
+    public FList(Iterable<T> iterable) {
+        list = new ArrayList<>();
         iterable.forEach(list::add);
     }
 
@@ -21,8 +27,16 @@ public class FList<T> implements Functor<T, FList<?>> {
      * {@inheritDoc}
      */
     @Override
-    public <R> FList<?> fmap(Function<T, R> f) {
+    public <R> FList<R> fmap(Function<T, R> f) {
         List<R> newList = list.stream().map(f).collect(toList());
-        return new FList<R>(newList);
+        return new FList<>(newList);
+    }
+
+    /**
+     * Retrieve the internal list object
+     * @return The Generic list
+     */
+    public List<T> getList() {
+        return list;
     }
 }
