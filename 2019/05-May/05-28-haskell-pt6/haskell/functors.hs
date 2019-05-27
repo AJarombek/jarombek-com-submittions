@@ -64,6 +64,9 @@ inc x = fmap (+1) x
 
 main :: IO ()
 main = do
+  -- Demonstrate basic map operations
+  print $ map (+1) [1,2,3] -- [2,3,4]
+
   -- Testing list Functor instances
   print $ fmap (+1) [1,2,3] -- [2,3,4]
   print $ fmap (*2) [1,2,3] -- [2,4,6]
