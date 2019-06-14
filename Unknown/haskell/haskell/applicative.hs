@@ -24,7 +24,7 @@ class Functor2 f where
 class Functor f => Applicative f where
   pure :: a -> f a
   (<*>) :: f (a -> b) -> f a -> f b
-  -- (<$>) :: (Functor f) => (a -> b) -> f a -> f b  
+  -- (<$>) :: (Functor f) => (a -> b) -> f a -> f b
 
 -- Make Maybe an instance of my Applicative type class (its already an instance of Functor from the Prelude module)
 instance Applicative Maybe where
@@ -41,8 +41,23 @@ instance Applicative (Either a) where
   pure x = Right x
 
   -- (<*>) :: Either (a -> b) -> Either a -> Either b
+
+  -- Definition which does not combine errors
   Left x <*> _ = Left x
   Right f <*> x = fmap f x
+
+  -- Definition which combines errors - https://stackoverflow.com/a/23342577
+  -- Right f <*> Right x = Right (f x)
+  -- Left e <*> Right _ = Left e
+  -- Right _ <*> Left e = Left e
+  -- <> is a function of the Semigroup Type class which combines two values - https://wiki.haskell.org/Monoid
+  -- Left e1 <*> Left e2 = Left (e1 <> e2)
+
+-- instance Semigroup (Either a b) where
+  -- http://hackage.haskell.org/package/base-4.12.0.0/docs/src/GHC.Base.html#Semigroup
+  -- (<>) :: a -> a -> a
+  -- Left _ <> b = b
+  -- a <> _ = a
 
 -- Maybe Maybe an instance of a functor with zero arguments.
 instance Functor0 Maybe where
@@ -59,7 +74,7 @@ instance Functor1 Maybe where
 -- Maybe Maybe an instance of a functor with two arguments.
 instance Functor2 Maybe where
   -- fmap2 :: (a -> b -> c) -> f a -> f b -> f c
-  -- fmap2 f x y = pure f <*> x <*> y
+  fmap2 f x y = pure f <*> x <*> y
 
 main :: IO ()
 main = do
@@ -91,5 +106,8 @@ main = do
   print $ fmap2 (+) (Just 2) Nothing -- Nothing
 
   -- Testing Applicative Either
-  let pure_either = pure :: a -> Either a
-  print $ pure_either 5
+  let pure_either = pure :: b -> Either String b
+  print $ pure_either 5 -- Right 5
+  print $ pure_either "Andy" -- Right "Andy"
+  print $ pure_either [1,2,3] -- Right [1,2,3]
+  print $ pure_either (++) <*> Right "Hello" <*> Right " World" -- "Hello World"

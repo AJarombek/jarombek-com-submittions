@@ -7,4 +7,4 @@ Source code for software development articles in May 2019.
 | Directory Name                           | Corresponding Article                                                  |
 |------------------------------------------|------------------------------------------------------------------------|
 | `05-12-csharp-delegates`                 | [C# Delegates](https://jarombek.com/blog/may-12-2019-csharp-delegates) |
-| `05-28-haskell-pt6`                      | *COMING SOON*                                                          |
+| `05-28-haskell-pt6`                      | [Haskell Pt.6](https://jarombek.com/blog/may-28-2019-haskell-pt6)      |
