@@ -5,7 +5,7 @@
 -}
 
 -- Hide implementations of type classes and methods from the Prelude module
-import Prelude hiding (Applicative, pure, (<*>))
+import Prelude hiding (Applicative, pure, (<*>), (<$>))
 
 -- Type class for a functor with zero arguments.  Simply wraps a value in a type that is an instance of Functor
 class Functor0 f where
@@ -24,12 +24,31 @@ class Functor2 f where
 class Functor f => Applicative f where
   pure :: a -> f a
   (<*>) :: f (a -> b) -> f a -> f b
-  -- (<$>) :: (Functor f) => (a -> b) -> f a -> f b
+  (<$>) :: (a -> b) -> f a -> f b
+
+-- Make [] an instance of my Applicative type class (its already an instance of Functor from the Prelude module)
+instance Applicative [] where
+  -- pure :: a -> [a]
+  pure x = [x]
+
+  -- <$> :: (a -> b) -> [a] -> [b]
+  -- <$> is equivalent to an infix fmap
+  -- f <$> x = fmap f x
+  _ <$> [] = []
+  f <$> (x:xs) = f x : f <$> xs
+
+  -- (<*>) :: Maybe [a -> b] -> [a] -> [b]
+  fs <*> xs = [f x | f <- fs, x <- xs]
 
 -- Make Maybe an instance of my Applicative type class (its already an instance of Functor from the Prelude module)
 instance Applicative Maybe where
   -- pure :: a -> Maybe a
   pure x = Just x
+
+  -- <$> :: (a -> b) -> Maybe a -> Maybe b
+  -- f <$> x = fmap f x
+  _ <$> Nothing = Nothing
+  f <$> (Just x) = Just (f x)
 
   -- (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b
   Nothing <*> _ = Nothing
@@ -39,6 +58,11 @@ instance Applicative Maybe where
 instance Applicative (Either a) where
   -- pure :: a -> Either a
   pure x = Right x
+
+  -- <$> :: (a -> b) -> Either a -> Either b
+  -- f <$> x = fmap f x
+  _ <$> (Left x) = Left x
+  f <$> (Right x) = Right (f x)
 
   -- (<*>) :: Either (a -> b) -> Either a -> Either b
 
@@ -105,9 +129,27 @@ main = do
   print $ fmap2 (+) Nothing (Just 2) -- Nothing
   print $ fmap2 (+) (Just 2) Nothing -- Nothing
 
+  -- Testing Applicative List []
+  let pure_list = pure :: a -> [a]
+  print $ pure_list 1 -- [1]
+  print $ pure_list "Andy" -- ["Andy"]
+  print $ pure_list (Just 1) -- [Just 1]
+  print $ pure_list (+1) <*> [1,2,3] -- [2,3,4]
+  print $ [(+1), (*10)] <*> [1,2,3] -- [2,3,4,10,20,30]
+
   -- Testing Applicative Either
   let pure_either = pure :: b -> Either String b
   print $ pure_either 5 -- Right 5
   print $ pure_either "Andy" -- Right "Andy"
   print $ pure_either [1,2,3] -- Right [1,2,3]
   print $ pure_either (++) <*> Right "Hello" <*> Right " World" -- "Hello World"
+
+  -- Testing the <$> function
+  print $ (+1) <$> [1,2,3] -- [2,3,4]
+  print $ (+) <$> [1,2,3] <*> [4,5,6] -- [5,6,7,6,7,8,7,8,9]
+
+  print $ (++) <$> (Just "My name") <*> (Just " is Andy") -- Just "My name is Andy"
+  print $ (++) <$> Nothing <*> (Just "This won't print") -- Nothing
+  print $ (++) <$> (Just "This won't print") <*> Nothing -- Nothing
+
+  -- print $ (++) <$> Right "Hi" <*> Right "There"
