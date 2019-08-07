@@ -83,19 +83,19 @@ instance Applicative (Either a) where
   -- Left _ <> b = b
   -- a <> _ = a
 
--- Maybe Maybe an instance of a functor with zero arguments.
+-- Make Maybe an instance of a functor with zero arguments.
 instance Functor0 Maybe where
   -- fmap0 :: a -> f a
   -- fmap0 x = Just x
   fmap0 x = pure x
 
--- Maybe Maybe an instance of a functor with one argument.
+-- Make Maybe an instance of a functor with one argument.
 instance Functor1 Maybe where
   -- fmap1 :: (a -> b) -> f a -> f b
   -- fmap1 f x = fmap f x
   fmap1 f x = pure f <*> x
 
--- Maybe Maybe an instance of a functor with two arguments.
+-- Make Maybe an instance of a functor with two arguments.
 instance Functor2 Maybe where
   -- fmap2 :: (a -> b -> c) -> f a -> f b -> f c
   fmap2 f x y = pure f <*> x <*> y
