@@ -1,5 +1,6 @@
 /**
  * Demonstrate how equality between types works in TypeScript and how it compares to JavaScript.
+ * Sources: [https://basarat.gitbooks.io/typescript/content/docs/javascript/equality.html]
  * @author Andrew Jarombek
  * @since 8/9/2019
  */

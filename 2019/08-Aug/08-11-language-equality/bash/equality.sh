@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 # Demonstrate type equality in Bash.
+# Sources: [https://stackoverflow.com/a/20449556, https://unix.stackexchange.com/a/168297,
+#           https://unix.stackexchange.com/a/306115]
 # Author: Andrew Jarombek
 # Date: 8/10/2019
 
@@ -63,6 +65,8 @@ fi
 # Both of these comparisons throw errors.
 # ((24 -eq 24))
 # ((24 = 24))
+# (("andy" -eq "andy"))
+# (("andy" = "andy"))
 
 if ((24 == 24))
 then
@@ -83,4 +87,29 @@ then
     success "((\"10\" == \"10\" && \"5\" != \"6\"))"
 else
     failure "((\"10\" == \"10\" && \"5\" != \"6\"))"
+fi
+
+# Command substitution also throws an error.
+# (24 == 24)
+# ("andy" == "andy")
+
+# Test equality of arrays
+todays_workouts=("run" "walk" "kayak")
+tomorrows_workouts=("run" "walk")
+mondays_workouts=("run" "walk" "kayak")
+
+# array[@] and array[*] both retrieve all the items in the array.  The difference between the two
+# operators is noticeable when used in a for loop:
+# https://linuxconfig.org/how-to-use-arrays-in-bash-script#h6-1-1-print-the-values-of-an-array
+day1=${todays_workouts[@]}
+day2=${tomorrows_workouts[@]}
+day3=${mondays_workouts[*]}
+
+# [[ conditions ]] has some extended features over [ conditions ], including the use of two
+# conditions separated by an && operator!  Source: https://unix.stackexchange.com/a/32227
+if [[ "${day1}" != "${day2}" && "${day1}" == "${day3}" ]]
+then
+    success "[[ Arrays Equality ]]"
+else
+    failure "[[ Arrays Equality ]]"
 fi
