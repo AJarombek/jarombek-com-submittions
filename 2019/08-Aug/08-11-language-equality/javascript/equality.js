@@ -164,6 +164,47 @@ const equals = (a, b) => {
 assert(equals({}, {}));
 assert(equals({first: 'andy', last: 'jarombek'}, {last: 'jarombek', first: 'andy'}));
 
+// This still won't work for nested objects.
+assert(
+    !equals(
+        {type: 'walk', stats: {minutes: 76, seconds: 40}},
+        {type: 'walk', stats: {minutes: 76, seconds: 40}}
+    )
+);
+
+/**
+ * Test for value equality on two arrays.  NOTE: object values in the array are tested for
+ * reference equality.
+ * Source: [https://gomakethings.com/how-to-check-if-two-arrays-are-equal-with-vanilla-js/]
+ * @param array1 The first array to test for equality.
+ * @param array2 The second array to test for equality.
+ * @return {boolean} {@code true} if the arrays (un-nested) values are equal,
+ * {@code false} otherwise.
+ */
+const arrayEquals = (array1, array2) => {
+    if (array1.length !== array2.length) return false;
+
+    for (let i = 0; i < array1.length; i++) {
+        if (array1[i] !== array2[i]) return false;
+    }
+
+    return true;
+};
+
+// Prove that arrayEquals() tests for value equality on array items.
+assert(arrayEquals([], []));
+assert(arrayEquals([1, "2", true], [1, "2", true]));
+
+// ...however it still tests for reference equality when array items are objects.
+assert(!arrayEquals([{}], [{}]));
+
 /**
  * fun edge cases for ==
  */
+
+// NaN (Not a Number) isn't equal to any other value, even itself!
+assert(NaN != NaN);
+assert(NaN !== NaN);
+
+// https://stackoverflow.com/a/45444600
+assert([] == ![]);

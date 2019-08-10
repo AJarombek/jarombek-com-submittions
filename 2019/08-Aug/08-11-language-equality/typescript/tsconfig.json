@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "system",
+    "removeComments": false,
+    "outFile": "./equality.js"
+  },
+  "files": [
+    "equality.ts"
+  ]
+}
