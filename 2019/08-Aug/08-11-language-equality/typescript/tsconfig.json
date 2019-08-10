@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "module": "system",
+    "module": "commonjs",
     "removeComments": false,
-    "outFile": "./equality.js"
+    "target": "es5",
+    "outDir": "./es5"
   },
   "files": [
     "equality.ts"
