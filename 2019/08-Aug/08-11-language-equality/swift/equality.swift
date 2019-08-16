@@ -33,6 +33,9 @@ assert(lastName == lastNameAgain)
 // var valueTypesReferencesEqual: Bool = name === nameAgain
 // var valueTypesReferencesEqual: Bool = animalsComfortingMe === animalsComfortingMeAgain
 
+/**
+ Struct representing a ball of yarn for knitting.
+ */
 struct Yarn: Equatable {
     let fiber: String
     let color: String
@@ -50,10 +53,10 @@ struct Yarn: Equatable {
     }
 }
 
-let firstYarnBall = Yarn(fiber: "Polyester", color: "Pitter Patter", yards: 210)
-let secondYarnBall = firstYarnBall
-let thirdYarnBall = Yarn(fiber: "Polyester", color: "Pitter Patter", yards: 210)
-let fourthYarnBall = Yarn(fiber: "Polyester", color: "Vanilla", yards: 70)
+let firstYarnBall: Yarn = Yarn(fiber: "Polyester", color: "Pitter Patter", yards: 210)
+let secondYarnBall: Yarn = firstYarnBall
+let thirdYarnBall: Yarn = Yarn(fiber: "Polyester", color: "Pitter Patter", yards: 210)
+let fourthYarnBall: Yarn = Yarn(fiber: "Polyester", color: "Vanilla", yards: 70)
 
 // Since Yarn is a struct and not a class, reference equality doesn't work.  Remember that the
 // arguments to ==(lhs, rhs) must be of type AnyObject?
@@ -62,3 +65,49 @@ let fourthYarnBall = Yarn(fiber: "Polyester", color: "Vanilla", yards: 70)
 assert(firstYarnBall == secondYarnBall)
 assert(secondYarnBall == thirdYarnBall)
 assert(thirdYarnBall != fourthYarnBall)
+
+/**
+ Class representing wrapping paper for a gift.
+ */
+class WrappingPaper: Equatable {
+    let brand: String
+    let pattern: String
+
+    /**
+     Initialize a new WrappingPaper object with a brand and pattern.
+     - parameters:
+     - brand: The company that created the wrapping paper.
+     - pattern: The visual pattern on the wrapping paper.
+     */
+    init(brand: String, pattern: String) {
+        self.brand = brand
+        self.pattern = pattern
+    }
+
+    /**
+     Function from the equatable protocol to overload the == operator when comparing wrapping gift objects.
+     - parameters:
+     - lhs: the first wrapping paper object to test for equality.
+     - rhs: the second wrapping paper object to test for equality.
+     - returns: true if the properties in both the wrapping paper objects are equal, false otherwise.
+     */
+    static func ==(lhs: WrappingPaper, rhs: WrappingPaper) -> Bool {
+        return (lhs.brand == rhs.brand) && (lhs.pattern == rhs.pattern)
+    }
+}
+
+let firstWrappingPaper: WrappingPaper = WrappingPaper(brand: "Hallmark", pattern: "Disney Princess")
+let secondWrappingPaper: WrappingPaper = firstWrappingPaper
+let thirdWrappingPaper: WrappingPaper = WrappingPaper(brand: "Hallmark", pattern: "Disney Princess")
+let fourthWrappingPaper: WrappingPaper = WrappingPaper(brand: "Unknown", pattern: "None")
+
+// Since WrappingPaper is a class, objects of type WrappingPaper can use the reference equality operator ===.
+// This is because both objects are of type AnyObject?
+assert(firstWrappingPaper === secondWrappingPaper)
+assert(secondWrappingPaper !== thirdWrappingPaper)
+assert(thirdWrappingPaper !== fourthWrappingPaper)
+
+// Since WrappingPaper implements the Equatable protocol, it can also use value equality.
+assert(firstWrappingPaper == secondWrappingPaper)
+assert(secondWrappingPaper == thirdWrappingPaper)
+assert(thirdWrappingPaper != fourthWrappingPaper)
