@@ -7,6 +7,7 @@
 #include <iostream>
 #include <typeinfo>
 #include <cassert>
+#include "WrappingPaper.h"
 
 using namespace std;
 
@@ -85,11 +86,35 @@ int main() {
     assert(&yarn2 != &yarn3);
     assert(&yarn3 != &yarn4);
 
-    // The last assertion can actually be made at compile time instead of runtime.
+    // The last assertion can be made at compile time instead of runtime.
     static_assert(
         &yarn3 != &yarn4,
         "Assertion Error: Different valued structs have the same memory location at compile time."
     );
 
     // Classes can also overload the == and != operators.
+    string brand = "Hallmark";
+    string pattern = "Disney Princess";
+    string unknown = "Unknown";
+
+    WrappingPaper wrappingPaper1 = {&brand, &pattern};
+    WrappingPaper* wrappingPaper2 = &wrappingPaper1;
+    WrappingPaper wrappingPaper3 = {&brand, &pattern};
+    WrappingPaper wrappingPaper4 = {&unknown, &unknown};
+
+    // Use == and != to test the objects for value equality.
+    assert(wrappingPaper1 == *wrappingPaper2);
+    assert(*wrappingPaper2 == wrappingPaper3);
+    assert(wrappingPaper3 != wrappingPaper4);
+
+    // Use == and != on the pointers of the objects to test for reference equality.
+    assert(&wrappingPaper1 == wrappingPaper2);
+    assert(wrappingPaper2 != &wrappingPaper3);
+    assert(&wrappingPaper3 != &wrappingPaper4);
+
+    // The last assertion can be made at compile time instead of runtime.
+    static_assert(
+        &wrappingPaper3 != &wrappingPaper4,
+        "Assertion Error: Different valued objects have the same memory location at compile time."
+    );
 }

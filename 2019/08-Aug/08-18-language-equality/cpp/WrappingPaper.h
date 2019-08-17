@@ -13,7 +13,7 @@ using namespace std;
 
 class WrappingPaper {
 public:
-    WrappingPaper(string brand, string pattern);
+    WrappingPaper(string* brand, string* pattern);
     bool operator == (WrappingPaper& other);
     bool operator != (WrappingPaper& other);
 private:
