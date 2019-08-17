@@ -1,6 +1,6 @@
 /**
  * Demonstrate how equality works in C.
- * Sources: [https://stackoverflow.com/a/8840096,
+ * Sources: [https://stackoverflow.com/a/8840096, https://stackoverflow.com/q/141720,
  * https://www.programiz.com/c-programming/library-function/string.h/strcmp]
  * @author Andrew Jarombek
  * @date 8/17/2019
@@ -93,6 +93,21 @@ int main() {
     assert(!yarnEqual(&yarn3, &yarn4));
 
     // To compare them for reference equality, convert the structs to pointers and then use ==.
+    // NOTE: yarn2 is already a pointer type.
+    assert(&yarn1 == yarn2);
+    assert(yarn2 != &yarn3);
+    assert(&yarn3 != &yarn4);
+
+    // It's also said that while memcmp() often works when comparing structs for value equality,
+    // it should not be trusted - https://stackoverflow.com/q/141720.  memcmp() returns 0 if all the bytes of memory
+    // for the struct are equal, another number otherwise.
+    int yarn1EqualsYarn2 = memcmp(&yarn1, yarn2, sizeof(Yarn)) == 0;
+    int yarn2EqualsYarn3 = memcmp(yarn2, &yarn3, sizeof(Yarn)) == 0;
+    int yarn3EqualsYarn4 = memcmp(&yarn3, &yarn4, sizeof(Yarn)) == 0;
+
+    assert(yarn1EqualsYarn2);
+    assert(yarn2EqualsYarn3);
+    assert(!yarn3EqualsYarn4);
 
     return 0;
 }
