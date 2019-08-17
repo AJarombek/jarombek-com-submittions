@@ -17,6 +17,27 @@ typedef struct Yarn {
     string fiber;
     string color;
     int yards;
+
+    /**
+     * Overload the == operator to test value equality between two Yarn structs.
+     * @param other Another Yarn struct to test equality with.
+     * @return true if the two Yarn structs have equal values, false otherwise.
+     */
+    bool operator == (Yarn& other) {
+        return fiber == other.fiber
+             && color == other.color
+             && yards == other.yards;
+    }
+
+    /**
+     * Overload the != operator to test value inequality between two Yarn structs.
+     * @param other Another Yarn struct to test equality with.
+     * @return true if the two Yarn structs DON'T have equal values, false otherwise.
+     */
+    bool operator != (Yarn& other) {
+        return !(*this == other);
+    }
+
 } Yarn;
 
 int main() {
@@ -49,4 +70,26 @@ int main() {
 
     // Similar to C, there is no == operator for structs by default.  Unlike C, in C++ the == operator can be
     // overloaded to work with two structs of the same type.
+    Yarn yarn1 = {"Polyester", "Pitter Patter", 210};
+    Yarn& yarn2 = yarn1;
+    Yarn yarn3 = {"Polyester", "Pitter Patter", 210};
+    Yarn yarn4 = {"Polyester", "Vanilla", 70};
+
+    // Use == and != to test the structs for value equality.
+    assert(yarn1 == yarn2);
+    assert(yarn2 == yarn3);
+    assert(yarn3 != yarn4);
+
+    // Use == and != on the pointers of the structs to test for reference equality.
+    assert(&yarn1 == &yarn2);
+    assert(&yarn2 != &yarn3);
+    assert(&yarn3 != &yarn4);
+
+    // The last assertion can actually be made at compile time instead of runtime.
+    static_assert(
+        &yarn3 != &yarn4,
+        "Assertion Error: Different valued structs have the same memory location at compile time."
+    );
+
+    // Classes can also overload the == and != operators.
 }
