@@ -30,7 +30,7 @@ public class Yarn {
      * instance variable, although it does accept null values.
      * @param fiber The fiber that the yarn is made of.
      * @param color The visual color of the yarn.
-     * @param yards The length of the yarn in yards
+     * @param yards The length of the yarn in yards.
      * @return A new Yarn object.
      */
     static Yarn create(String fiber, String color, int yards) {

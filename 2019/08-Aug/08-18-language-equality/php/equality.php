@@ -6,6 +6,8 @@
  * @since 8/17/2019
  */
 
+require_once "Yarn.php";
+
 // Similar to JavaScript, PHP has type coercion.  PHP is in general considered a loosely typed language.
 assert(2 == '2');
 assert("2" == 2);
@@ -29,8 +31,8 @@ assert(2 === 2);
 // This causes type coercion to fail.  A string and an integer aren't held in the same memory location.
 assert(2 !== "2");
 
-// PHP does have a concept of references, however I can't find anything on reference equality.  PHP does not
-// have the concept of pointers.
+// PHP does have a concept of references, however I can't find anything on reference equality for primitive types.
+// PHP does not have the concept of pointers.
 $name = "Andy";
 $nameAgain =& $name;
 
@@ -40,3 +42,19 @@ $name = $name . " Jarombek";
 assert($name == $nameAgain);
 assert($name == "Andy Jarombek");
 assert($nameAgain == "Andy Jarombek");
+
+// When testing equality of objects, == tests for value equality and === tests for reference equality.  These operators
+// work without any explicit definitions and without operator overloading.
+$yarn1 = new Yarn("Polyester", "Pitter Patter", 210);
+$yarn2 = $yarn1;
+$yarn3 = new Yarn("Polyester", "Pitter Patter", 210);
+$yarn4 = new Yarn("Polyester", "Vanilla", 70);
+
+assert($yarn1 == $yarn2);
+assert($yarn1 === $yarn2);
+
+assert($yarn2 == $yarn3);
+assert($yarn2 !== $yarn3);
+
+assert($yarn3 != $yarn4);
+assert($yarn3 !== $yarn4);
