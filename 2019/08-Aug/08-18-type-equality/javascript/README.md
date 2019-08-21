@@ -4,4 +4,4 @@ Demonstrate how type equality works in JavaScript.
 
 | Filename                   | Description                                                                 |
 |----------------------------|-----------------------------------------------------------------------------|
-| `equality.js`             | Main script to demonstrate equality in JavaScript.                           |
+| `equality.js`              | Main script to demonstrate equality in JavaScript.                          |

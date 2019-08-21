@@ -14,6 +14,23 @@ class Equality {
         int fiveAgain = 5;
         assert five == fiveAgain;
 
+        // Java is strictly typed, casting is necessary to convert types.  There are some exceptions,
+        // such as boxing and un-boxing primitives.
+        double two = 2.0;
+        int twoInt = (int) two;
+
+        // This comparison is successful even though two is of type 'double' and twoInt is of type 'int'.
+        assert two == twoInt;
+
+        // Integer is coerced (un-boxed) to primitive type int.  new Integer() is now deprecated.
+        assert 2 == new Integer(2);
+
+        Integer twoInteger = 2;
+        assert twoInt == twoInteger;
+
+        // In most cases, comparing two values of different types fails at compile time.
+        // assert 2 == "2";
+
         // Java doesn't support operator overloading, so Equals() always checks for value equality and == always checks
         // for reference equality for objects.  I'd argue this is better than C#'s approach.
         String day = "Saturday the 27th";

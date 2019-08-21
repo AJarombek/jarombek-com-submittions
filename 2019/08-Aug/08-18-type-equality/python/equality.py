@@ -60,7 +60,7 @@ class Yarn:
 
     def __eq__(self, other):
         """
-        Implement the build in __eq__ function to test for value equality between two Yarn objects.  Return
+        Implement the built in __eq__ function to test for value equality between two Yarn objects.  Return
         NotImplemented if a Yarn object is compared to a different object.  By default __neq__ negates the result of
         __eq__, so I don't need to explicitly implement it.
         :param other: An object to compare to this Yarn object.

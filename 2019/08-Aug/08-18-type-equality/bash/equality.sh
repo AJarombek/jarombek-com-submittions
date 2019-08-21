@@ -61,7 +61,7 @@ else
     failure "[ 2 != 3 ]"
 fi
 
-# The double parenthesis construct $(( )) is used to perform arithmetic.
+# The double parentheses construct $(( )) is used to perform arithmetic.
 # Both of these comparisons throw errors.
 # ((24 -eq 24))
 # ((24 = 24))
@@ -75,13 +75,13 @@ else
     failure "((24 == 24))"
 fi
 
-# Using strings with double parenthesis compile but aren't evaluated properly.
+# Using strings with double parentheses compile but aren't evaluated properly.
 if (("Greenwich,CT" != "greenwich,connecticut"))
 then
     failure "((24 == 24))" # This is never called.  Don't use $(( )) to compare strings.
 fi
 
-# ... Unless if the strings are convertable to integers.
+# ... Unless if the strings are convertible to integers.
 if (("10" == "10" && "5" != "6"))
 then
     success "((\"10\" == \"10\" && \"5\" != \"6\"))"

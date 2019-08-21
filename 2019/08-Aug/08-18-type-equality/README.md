@@ -2,7 +2,7 @@
 
 Revisiting equality operators and equality functionality in different programming languages.
 
-## Directories
+### Directories
 
 | Directory                  | Description                                                                 |
 |----------------------------|-----------------------------------------------------------------------------|
@@ -19,3 +19,7 @@ Revisiting equality operators and equality functionality in different programmin
 | `python`                   | Demonstrate how equality works in C (Object-Oriented).                      |
 | `swift`                    | Demonstrate how equality works in C (Object-Oriented).                      |
 | `typescript`               | Demonstrate how equality works in C (Prototype-Based).                      |
+
+### Resources
+
+1) [Strong vs. Weak Typing](https://en.wikipedia.org/wiki/Strong_and_weak_typing)
