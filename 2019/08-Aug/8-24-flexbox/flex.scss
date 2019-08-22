@@ -1,0 +1,29 @@
+/*
+ Demonstrate how flexbox works when creating web page layouts.
+ Author: Andrew Jarombek
+ Date: 8/22/2019
+ */
+
+$flex-example-1: 9999px;
+
+.flex-container {
+    display: flex;
+    display: -ms-flexbox;
+    flex-direction: column;
+}
+
+.flex-item {
+    @media all and (max-width: $flex-example-1) {
+        height: 40px;
+    }
+}
+
+.language {
+    @media all and (max-width: $flex-example-1) {}
+}
+
+.code-lines {
+    @media all and (max-width: $flex-example-1) {
+        margin: auto 0;
+    }
+}
