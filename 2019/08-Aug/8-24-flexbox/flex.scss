@@ -5,25 +5,102 @@
  */
 
 $flex-example-1: 9999px;
+$flex-example-2: 1299px;
+
+// Flexbox specific styles
 
 .flex-container {
     display: flex;
     display: -ms-flexbox;
     flex-direction: column;
-}
 
-.flex-item {
-    @media all and (max-width: $flex-example-1) {
-        height: 40px;
+    @media all and (max-width: $flex-example-2) {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .flex-item {
+        display: flex;
+        display: -ms-flexbox;
+        flex-direction: row;
+        align-items: center;
+        align-self: center;
+
+        @media all and (max-width: $flex-example-1) {
+            height: 60px;
+            width: 100%;
+        }
+
+        @media all and (max-width: $flex-example-2) {
+            height: auto;
+            width: auto;
+            flex-grow: 1;
+        }
+    }
+
+    .ranking {
+        @media all and (max-width: $flex-example-1) {
+            margin: 0 20px;
+        }
+    }
+
+    .language {
+        @media all and (max-width: $flex-example-1) {}
+    }
+
+    .code-lines {
+        @media all and (max-width: $flex-example-1) {
+            margin: 0 20px 0 auto;
+        }
     }
 }
 
-.language {
-    @media all and (max-width: $flex-example-1) {}
+// Other styles
+
+h1 {
+    font-size: 28px;
+    font-family: 'Longway', Helvetica, sans-serif;
+    text-align: center;
 }
 
-.code-lines {
-    @media all and (max-width: $flex-example-1) {
-        margin: auto 0;
+.flex-container {
+    font-family: 'Longway', Helvetica, sans-serif;
+
+    .flex-item:nth-child(1) {
+        background-color: rgba(255, 215, 0, 0.4);
+    }
+
+    .flex-item:nth-child(2) {
+        background-color: rgba(192, 192, 192, 0.4);
+    }
+
+    .flex-item:nth-child(3) {
+        background-color: rgba(176, 141, 87, 0.4);
+    }
+
+    .flex-item {
+        background-color: rgba(235, 235, 235, 0.4);
+
+        box-shadow: 0 1px 3px rgba(170, 170, 170, 0.2);
+        border-radius: 3px;
+
+        @media all and (max-width: $flex-example-1) {
+            margin: 5px;
+        }
+    }
+
+    .ranking {
+        font-size: 24px;
+        font-weight: bold;
+        color: #555;
+    }
+
+    .language {
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    .code-lines {
+        font-size: 18px;
     }
 }
