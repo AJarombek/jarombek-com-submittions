@@ -4,6 +4,7 @@
  Date: 8/22/2019
  */
 
+ // A different flexbox pattern is demonstrated at each breakpoint.
 $flex-example-1: 9999px;
 $flex-example-2: 1299px;
 $flex-example-3: 1199px;
@@ -13,61 +14,126 @@ $flex-example-5: 999px;
 // Flexbox specific styles
 
 .flex-container {
+    // Define a flex container which contains direct children which are flex items.
     display: flex;
-    display: -ms-flexbox;
+    // Define the main axis of the flex container.  Column defines the y-axis (vertical) as the main axis.
     flex-direction: column;
+    // Defines the flex items alignment along the cross axis of the flex container.  Since the main axis 
+    // is the y-axis, this defines the horizontal positioning of items along the x-axis.
+    align-items: center;
+
+    // IE 10-11 flexbox prefixes
+    display: -ms-flexbox;
     -ms-flex-direction: column;
 
     @media all and (max-width: $flex-example-2) {
+        // Define the main axis of the flex-container as the x-axis (horizontal).
         flex-direction: row;
+        // Ensure that all the flex items try to fit onto one line.
+        flex-wrap: nowrap;
+        overflow-x: scroll;
+
+        // IE 10-11 flexbox prefixes
         -ms-flex-direction: row;
-        flex-wrap: initial;
-        -ms-flex-wrap: initial;
-        overflow: scroll;
+        -ms-flex-wrap: nowrap;
     }
 
     @media all and (max-width: $flex-example-3) {
+        // Define the main axis of the flex-container as the x-axis (horizontal).
         flex-direction: row;
-        -ms-flex-direction: row;
+        // Allow flex items to wrap onto multiple lines when they run out of room in the flex container.
         flex-wrap: wrap;
+
+        // Could also use 'overflow-x: initial' here, but it doesn't work in IE.
+        overflow-x: hidden;
+
+        // IE 10-11 flexbox prefixes
         -ms-flex-wrap: wrap;
+        -ms-flex-direction: row;
     }
 
     @media all and (max-width: $flex-example-4) {
+        // The attribute 'flex-flow' is shorthand for flex-direction and flex-wrap.  Define the main axis
+        // as the x-axis and allow flex item to wrap onto multiple lines.
         flex-flow: row wrap;
+        // Define the flex items alignment along the main axis, in this case x-axis.  space-around 
+        // specifies that items are evenly distributed in the line they appear on.
+        justify-content: space-around;
+
+        // IE 10-11 flexbox prefixes.  There is no IE prefix for flex-flow, so flex-direction and flex-wrap 
+        // are used.
         -ms-flex-direction: row;
         -ms-flex-wrap: wrap;
-        justify-content: space-around;
     }
 
     .flex-item {
         display: flex;
-        display: -ms-flexbox;
         flex-direction: row;
-        -ms-flex-direction: row;
+        // Defines the flex items alignment along the cross axis of the flex container.  Since the main axis 
+        // is the x-axis, this defines the vertical positioning of items along the y-axis.
         align-items: center;
-        align-self: center;
+
+        // IE 10-11 flexbox prefixes
+        display: -ms-flexbox;
+        -ms-flex-direction: row;
 
         @media all and (max-width: $flex-example-1) {
             height: 60px;
             width: 100%;
+
+            // Defines the ability of a flex item to grow if there is extra room in the flex container.  
+            // Since I assigned a flex-grow of 1 to each flex item, any extra room will be evenly distributed
+            // amongst every flex item.
+            flex-grow: 1;
+            // Defines the ability of a flex item to shrink if needed.  Since I assigned a flex-shrink of 0 to
+            // each flex item, they won't shrink.
+            flex-shrink: 0;
+            // Determines the original size of the flex item before flex-grow and flex-shrink add or remove 
+            // from the size.  Auto just means to look at the size of the items content.
+            flex-basis: auto;
+
+            // IE 10-11 flexbox prefixes. In the finalized grid spec, the 'flex' attribute is shorthand 
+            // for flex-grow, flex-shrink, and flex-basis.
+            -ms-flex: 1 0 auto;
         }
 
         @media all and (max-width: $flex-example-2) {
             height: auto;
             width: auto;
+
+            flex-grow: 1;
+            flex-shrink: 0;
+            flex-basis: auto;
+
+            // IE 10-11 flexbox prefixes.
+            -ms-flex: 1 0 auto;
         }
 
         @media all and (max-width: $flex-example-3) {
             height: auto;
             width: auto;
+
             flex-grow: 1;
+            flex-shrink: 0;
+            flex-basis: auto;
+
+            // IE 10-11 flexbox prefixes.
+            -ms-flex: 1 0 auto;
         }
 
         @media all and (max-width: $flex-example-4) {
             height: auto;
             width: auto;
+
+            // Since I assigned a flex-grow of 0 to each flex item, they can't grow.
             flex-grow: 0;
+            // Since I assigned a flex-shrink of 1 to each flex item, they will shink in size evenly 
+            // (if necessary).
+            flex-shrink: 1;
+            flex-basis: auto;
+
+            // IE 10-11 flexbox prefixes.
+            -ms-flex: 0 1 auto;
         }
 
         @media all and (max-width: $flex-example-5) {
@@ -83,10 +149,6 @@ $flex-example-5: 999px;
         @media all and (max-width: $flex-example-1) {
             margin: 0 20px;
         }
-    }
-
-    .language {
-        @media all and (max-width: $flex-example-1) {}
     }
 
     .code-lines {
@@ -106,13 +168,24 @@ $flex-example-5: 999px;
 
 // Other styles
 
+/**
+ * truetype fonts don't work on IE, use the following media query to target IE 9-11.
+ */
+@mixin IE-Fonts {
+    @media screen and (min-width: 0\0) {
+        font-family: 'Fantasque-Bold', Helvetica, sans-serif;
+    }
+}
+
 h1 {
+    @include IE-Fonts;
     font-size: 28px;
     font-family: 'Longway', Helvetica, sans-serif;
     text-align: center;
 }
 
 .flex-container {
+    @include IE-Fonts;
     font-family: 'Longway', Helvetica, sans-serif;
 
     .flex-item:nth-child(1) {
