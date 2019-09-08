@@ -16,3 +16,4 @@ Demo ElasticSearch instance.  ElasticSearch is a search and analytics engine.
 
 1) [ElasticSearch Terraform](https://www.terraform.io/docs/providers/aws/r/elasticsearch_domain.html)
 2) [ElasticSearch VPC Access](https://stackoverflow.com/a/51959154)
+3) [Strict Content-Type Checking CURL ElasticSearch 6.0](https://stackoverflow.com/a/47545023)

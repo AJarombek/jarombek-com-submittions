@@ -1,0 +1,11 @@
+{
+  "first": "Andrew",
+  "last": "Jarombek",
+  "age": 24,
+  "state": "CT",
+  "town": "Riverside",
+  "profession": "Software Engineer",
+  "employers": [
+    "Gartner"
+  ]
+}

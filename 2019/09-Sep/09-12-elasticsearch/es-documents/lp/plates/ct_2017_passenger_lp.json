@@ -2,7 +2,7 @@
   "name": "ct-passenger-default-2017",
   "description": "A passenger license plate from Connecticut, USA from 2017.  Follows the default state scheme.",
   "user": "passenger",
-  "issued": "2017",
+  "issued": 2017,
   "number": "AJ 85634",
   "state": "Connecticut",
   "state_code": "CT",

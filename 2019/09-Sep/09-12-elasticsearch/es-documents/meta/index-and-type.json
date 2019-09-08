@@ -1,0 +1,35 @@
+{
+  "settings": {
+    "index": {
+      "number_of_shards": 5,
+      "number_of_replicas": 2
+    }
+  },
+  "mappings": {
+    "author": {
+      "properties": {
+        "first": {
+          "type": "text"
+        },
+        "last": {
+          "type": "text"
+        },
+        "age": {
+          "type": "integer"
+        },
+        "state": {
+          "type": "text"
+        },
+        "town": {
+          "type": "text"
+        },
+        "profession": {
+          "type": "text"
+        },
+        "employers": {
+          "type": "text"
+        }
+      }
+    }
+  }
+}

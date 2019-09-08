@@ -21,6 +21,7 @@ terraform {
 
 locals {
   public_cidr = "0.0.0.0/0"
+  my_ip_address = "69.124.72.192"
   es_domain = "sandbox-elasticsearch-demo"
 }
 
@@ -32,28 +33,11 @@ data "aws_region" "current" {}
 
 data "aws_caller_identity" "current" {}
 
-data "aws_vpc" "sandbox-vpc" {
-  tags = {
-    Name = "sandbox-vpc"
-  }
-}
-
-data "aws_subnet" "sandbox-fearless-subnet" {
-  tags = {
-    Name = "sandbox-vpc-fearless-public-subnet"
-  }
-}
-
-data "aws_subnet" "sandbox-speaknow-subnet" {
-  tags = {
-    Name = "sandbox-vpc-speaknow-public-subnet"
-  }
-}
-
 data "template_file" "elasticsearch-access-policy" {
   template = file("es-access-policy.json")
 
   vars = {
+    MY_IP = local.my_ip_address
     REGION = data.aws_region.current.name
     ACCOUNT_ID = data.aws_caller_identity.current.account_id
     ES_DOMAIN = local.es_domain
@@ -71,14 +55,6 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
   cluster_config {
     instance_type = "t2.small.elasticsearch"
     instance_count = 1
-  }
-
-  vpc_options {
-    subnet_ids = [
-      data.aws_subnet.sandbox-fearless-subnet.id
-    ]
-
-    security_group_ids = [module.lambda-rds-backup-security-group.security_group_id[0]]
   }
 
   ebs_options {
@@ -100,32 +76,4 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
 resource "aws_elasticsearch_domain_policy" "elasticsearch-policy" {
   domain_name = aws_elasticsearch_domain.elasticsearch.domain_name
   access_policies = data.template_file.elasticsearch-access-policy.rendered
-}
-
-resource "aws_iam_service_linked_role" "elasticsearch-linked-role" {
-  aws_service_name = "es.amazonaws.com"
-  description = "Give Amazon ES Permissions to Access the VPC"
-}
-
-module "lambda-rds-backup-security-group" {
-  source = "github.com/ajarombek/terraform-modules//security-group?ref=v0.1.6"
-
-  # Mandatory arguments
-  name = "sandbox-elasticsearch-demo-sg"
-  tag_name = "sandbox-elasticsearch-demo-sg"
-  vpc_id = data.aws_vpc.sandbox-vpc.id
-
-  # Optional arguments
-  sg_rules = [
-    {
-      # SSH Inbound traffic
-      type = "ingress"
-      from_port = 443
-      to_port = 443
-      protocol = "tcp"
-      cidr_blocks = local.public_cidr
-    }
-  ]
-
-  description = "Security Group for the ElasticSeach Cluster"
 }

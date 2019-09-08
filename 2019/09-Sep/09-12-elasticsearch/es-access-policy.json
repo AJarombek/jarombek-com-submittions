@@ -5,7 +5,14 @@
       "Action": "es:*",
       "Principal": "*",
       "Effect": "Allow",
-      "Resource": "arn:aws:es:${REGION}:${ACCOUNT_ID}:domain/${ES_DOMAIN}/"
+      "Condition": {
+        "IpAddress": {
+          "aws:SourceIp": [
+            "${MY_IP}/32"
+          ]
+        }
+      },
+      "Resource": "arn:aws:es:${REGION}:${ACCOUNT_ID}:domain/${ES_DOMAIN}/*"
     }
   ]
 }
