@@ -1,0 +1,48 @@
+{
+  "settings": {
+    "index": {
+      "number_of_shards": 5,
+      "number_of_replicas": 2
+    }
+  },
+  "mappings": {
+    "properties": {
+      "name": {
+        "type": "text"
+      },
+      "description": {
+        "type": "keyword",
+        "ignore_above": 256
+      },
+      "user": {
+        "type": "text"
+      },
+      "issued": {
+        "type": "integer"
+      },
+      "number": {
+        "type": "text"
+      },
+      "state": {
+        "type": "text"
+      },
+      "state_code": {
+        "type": "text"
+      },
+      "country": {
+        "type": "text"
+      },
+      "resale": {
+        "type": "nested",
+        "properties": {
+          "top_range": {
+            "type": "double"
+          },
+          "bottom_range": {
+            "type": "double"
+          }
+        }
+      }
+    }
+  }
+}

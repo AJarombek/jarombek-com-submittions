@@ -1,0 +1,14 @@
+{
+  "name": "nv-passenger-default-2002",
+  "description": "A passenger license plate from New York, USA last used in 1999.  Follows the default state scheme.",
+  "user": "passenger",
+  "issued": 1999,
+  "number": "DG3 35J",
+  "state": "New York",
+  "state_code": "NY",
+  "country": "USA",
+  "resale": {
+    "top_range": 20,
+    "bottom_range": 6
+  }
+}

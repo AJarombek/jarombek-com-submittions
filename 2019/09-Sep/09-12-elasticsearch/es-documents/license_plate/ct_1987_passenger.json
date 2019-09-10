@@ -1,0 +1,11 @@
+{
+  "name": "ct-passenger-default-1987",
+  "description": "A passenger license plate from Connecticut, USA in 1987.  Follows the default state scheme.",
+  "user": "passenger",
+  "issued": 1987,
+  "number": "BUSCH 5",
+  "state": "Connecticut",
+  "state_code": "CT",
+  "country": "USA",
+  "resale": {}
+}

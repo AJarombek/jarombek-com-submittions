@@ -1,0 +1,14 @@
+{
+  "name": "sk-passenger-default-2002",
+  "description": "A passenger license plate from Saskatchewan, Canada last used in 1989.  Follows the default state scheme.",
+  "user": "passenger",
+  "issued": 1989,
+  "number": "NRG 480",
+  "state": "Saskatchewan",
+  "state_code": "SK",
+  "country": "CAN",
+  "resale": {
+    "top_range": 25,
+    "bottom_range": 10
+  }
+}

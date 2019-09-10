@@ -1,0 +1,14 @@
+{
+  "name": "qr-passenger-default-2014",
+  "description": "A passenger license plate from Quintana Roo, Mexico last used in 2014.  Follows the default state scheme.",
+  "user": "passenger",
+  "issued": 2014,
+  "number": "UUP 267 B",
+  "state": "Quintana Roo",
+  "state_code": "QR",
+  "country": "MEX",
+  "resale": {
+    "top_range": 40,
+    "bottom_range": 15
+  }
+}

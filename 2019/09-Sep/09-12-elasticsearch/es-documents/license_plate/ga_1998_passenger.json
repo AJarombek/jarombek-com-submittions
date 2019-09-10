@@ -1,0 +1,14 @@
+{
+  "name": "ga-passenger-default-1998",
+  "description": "A passenger license plate from Georgia, USA last used in 1998.  Follows the default state scheme.",
+  "user": "passenger",
+  "issued": 1998,
+  "number": "268 ZPS",
+  "state": "Georgia",
+  "state_code": "GA",
+  "country": "USA",
+  "resale": {
+    "top_range": 10,
+    "bottom_range": 5
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "nv-passenger-default-2002",
+  "description": "A passenger license plate from Nevada, USA last used in 2002.  Follows the default state scheme.",
+  "user": "passenger",
+  "issued": 2002,
+  "number": "065 KHX",
+  "state": "Nevada",
+  "state_code": "NV",
+  "country": "USA",
+  "resale": {
+    "top_range": 12,
+    "bottom_range": 5
+  }
+}
