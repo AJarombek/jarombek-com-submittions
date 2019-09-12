@@ -29,6 +29,17 @@ DELETE /author
 PUT /author
 { ... }
 
-# Get the mappings of types in the author index.
+# Get the mapping of the type in the author and license_plate indexes.
 GET /author/_mapping
+GET /license_plate/_mapping
+
+# Retrieve all documents from all indexes.  Returns 10 (or less) documents by default.
+GET /_search
+
+# Retrieve all documents in the license_plate index.
+GET /license_plate/_search
+
+# Retrieve documents in the license_plate index which conform this match query.
+GET /license_plate/_search
+{ ... }
 ```

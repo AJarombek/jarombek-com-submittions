@@ -22,5 +22,50 @@ curl -XDELETE ${ES_ENDPOINT}/license_plate
 curl -XPUT ${ES_ENDPOINT}/license_plate -H 'Content-Type: application/json' -d @es-documents/license_plate/index.json
 curl ${ES_ENDPOINT}/license_plate?pretty=true
 
-# Add a document to the lp index and plate type
-curl -XPUT ${ES_ENDPOINT}/license_plate/_doc/1 -d @es-endpoints/license_plate/ct_2017_passenger.json
+# Delete the documents in the plates index
+curl -XDELETE ${ES_ENDPOINT}/license_plate/_doc/1
+curl -XDELETE ${ES_ENDPOINT}/license_plate/_doc/2
+curl -XDELETE ${ES_ENDPOINT}/license_plate/_doc/3
+curl -XDELETE ${ES_ENDPOINT}/license_plate/_doc/4
+curl -XDELETE ${ES_ENDPOINT}/license_plate/_doc/5
+curl -XDELETE ${ES_ENDPOINT}/license_plate/_doc/6
+curl -XDELETE ${ES_ENDPOINT}/license_plate/_doc/7
+
+# Add documents to the plates index
+curl -XPUT ${ES_ENDPOINT}/license_plate/_doc/1 -H 'Content-Type: application/json' \
+    -d @es-documents/license_plate/ct_2017_passenger.json
+curl -XPUT ${ES_ENDPOINT}/license_plate/_doc/2 -H 'Content-Type: application/json' \
+    -d @es-documents/license_plate/ct_1987_passenger.json
+curl -XPUT ${ES_ENDPOINT}/license_plate/_doc/3 -H 'Content-Type: application/json' \
+    -d @es-documents/license_plate/nv_2002_passenger.json
+curl -XPUT ${ES_ENDPOINT}/license_plate/_doc/4 -H 'Content-Type: application/json' \
+    -d @es-documents/license_plate/qr_2014_passenger.json
+curl -XPUT ${ES_ENDPOINT}/license_plate/_doc/5 -H 'Content-Type: application/json' \
+    -d @es-documents/license_plate/sk_1989_passenger.json
+curl -XPUT ${ES_ENDPOINT}/license_plate/_doc/6 -H 'Content-Type: application/json' \
+    -d @es-documents/license_plate/ny_1999_passenger.json
+curl -XPUT ${ES_ENDPOINT}/license_plate/_doc/7 -H 'Content-Type: application/json' \
+    -d @es-documents/license_plate/ga_1998_passenger.json
+
+# Retrieve the documents in the plates index
+curl ${ES_ENDPOINT}/license_plate/_doc/1?pretty=true
+curl ${ES_ENDPOINT}/license_plate/_doc/2?pretty=true
+curl ${ES_ENDPOINT}/license_plate/_doc/3?pretty=true
+curl ${ES_ENDPOINT}/license_plate/_doc/4?pretty=true
+curl ${ES_ENDPOINT}/license_plate/_doc/5?pretty=true
+curl ${ES_ENDPOINT}/license_plate/_doc/6?pretty=true
+curl ${ES_ENDPOINT}/license_plate/_doc/7?pretty=true
+
+# Retrieve the type mappings for the license_plate and author indexes.
+curl ${ES_ENDPOINT}/author/_mapping?pretty=true
+curl ${ES_ENDPOINT}/license_plate/_mapping?pretty=true
+
+# Search all indexes.
+curl ${ES_ENDPOINT}/_search?pretty=true
+
+# Search the entire license_plate index.
+curl ${ES_ENDPOINT}/license_plate/_search?pretty=true
+
+# Perform a basic text search on the license_plate index.
+curl ${ES_ENDPOINT}/license_plate/_search?pretty=true -H 'Content-Type: application/json' \
+    -d @es-documents/license_plate/term_query.json
