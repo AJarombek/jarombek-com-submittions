@@ -21,7 +21,7 @@ terraform {
 
 locals {
   public_cidr = "0.0.0.0/0"
-  my_ip_address = "69.124.72.192"
+  my_ip_address = var.ip_address
   es_domain = "sandbox-elasticsearch-demo"
 }
 
