@@ -1,0 +1,11 @@
+{
+  "name": "Westchester Triathlon (Running Leg)",
+  "location": "Rye, NY",
+  "date": "2019-09-22",
+  "exercise": "run",
+  "miles": 6.21,
+  "result": {
+    "time": "35:45",
+    "pace": "5:46"
+  }
+}

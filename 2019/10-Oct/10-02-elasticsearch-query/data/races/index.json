@@ -1,0 +1,41 @@
+{
+  "settings": {
+    "index": {
+      "number_of_shards": 5,
+      "number_of_replicas": 2
+    }
+  },
+  "mappings": {
+    "properties": {
+      "name": {
+        "type": "text"
+      },
+      "location": {
+        "type": "text"
+      },
+      "date": {
+        "type": "keyword",
+        "ignore_above": 256
+      },
+      "exercise": {
+        "type": "text"
+      },
+      "miles": {
+        "type": "double"
+      },
+      "result": {
+        "type": "nested",
+        "properties": {
+          "time": {
+            "type": "keyword",
+            "ignore_above": 256
+          },
+          "pace": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      }
+    }
+  }
+}
