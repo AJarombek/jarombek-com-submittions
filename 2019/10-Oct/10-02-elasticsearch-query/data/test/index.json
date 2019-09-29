@@ -1,0 +1,28 @@
+{
+  "settings": {
+    "index": {
+      "number_of_shards": 5,
+      "number_of_replicas": 2
+    },
+    "analysis": {
+      "analyzer": {
+        "custom_analyzer": {
+          "tokenizer": "standard",
+          "char_filter": [
+            "emoji_filter"
+          ]
+        }
+      },
+      "char_filter": {
+        "emoji_filter": {
+          "type": "mapping",
+          "mappings": [
+            "🙂 => :)",
+            "🙁 => :(",
+            "😀 => :D"
+          ]
+        }
+      }
+    }
+  }
+}
