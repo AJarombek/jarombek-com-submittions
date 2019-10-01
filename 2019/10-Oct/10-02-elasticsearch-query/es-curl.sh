@@ -41,7 +41,71 @@ curl ${ES_ENDPOINT}/race/_doc/4?pretty=true
 curl ${ES_ENDPOINT}/race/_doc/5?pretty=true
 curl ${ES_ENDPOINT}/race/_doc/6?pretty=true
 
+# Testing analyzers in Elasticsearch without an index
+# Returns a single token with value "\nTitle\n"
+curl -XPOST ${ES_ENDPOINT}/_analyze?pretty=true -H 'Content-Type: application/json' -d '{
+  "tokenizer": "keyword",
+  "char_filter": ["html_strip"],
+  "text": "<h1>Title</h1>"
+}'
+
+# Returns a single token with value "Title"
+curl -XPOST ${ES_ENDPOINT}/_analyze?pretty=true -H 'Content-Type: application/json' -d '{
+  "tokenizer": "standard",
+  "char_filter": ["html_strip"],
+  "text": "<h1>Title</h1>"
+}'
+
+# Returns tokens: [Hello, my, name, is, Andy]
+curl -XPOST ${ES_ENDPOINT}/_analyze?pretty=true -H 'Content-Type: application/json' -d '{
+  "tokenizer": "standard",
+  "text": "Hello my name is Andy."
+}'
+
+# Returns tokens: [Hello, my, name, is, Andy.]
+curl -XPOST ${ES_ENDPOINT}/_analyze?pretty=true -H 'Content-Type: application/json' -d '{
+  "tokenizer": "whitespace",
+  "text": "Hello my name is Andy."
+}'
+
+# Returns tokens: [hello, my, name, is, andy]
+curl -XPOST ${ES_ENDPOINT}/_analyze?pretty=true -H 'Content-Type: application/json' -d '{
+  "tokenizer": "lowercase",
+  "text": "Hello my name is Andy."
+}'
+
 # Delete, create, and retrieve an index for testing character filters on ElasticSearch.
 curl -XDELETE ${ES_ENDPOINT}/test
 curl -XPUT ${ES_ENDPOINT}/test -H 'Content-Type: application/json' -d @data/test/index.json
 curl ${ES_ENDPOINT}/test?pretty=true
+
+# Run the test indexes analyzer on some strings
+curl -XPOST ${ES_ENDPOINT}/test/_analyze -H 'Content-Type: application/json' -d '{
+  "analyzer": "emoji_analyzer",
+  "text": "😀"
+}'
+
+curl -XPOST ${ES_ENDPOINT}/test/_analyze -H 'Content-Type: application/json' -d '{
+  "analyzer": "emoji_analyzer",
+  "text": "🙂"
+}'
+
+curl -XPOST ${ES_ENDPOINT}/test/_analyze -H 'Content-Type: application/json' -d '{
+  "analyzer": "emoji_analyzer",
+  "text": "🙁"
+}'
+
+curl -XPOST ${ES_ENDPOINT}/test/_analyze -H 'Content-Type: application/json' -d '{
+  "analyzer": "emoji_analyzer",
+  "text": "😍"
+}'
+
+# Change the testing index to include multiple different custom tokenizers.
+curl -XDELETE ${ES_ENDPOINT}/test
+curl -XPUT ${ES_ENDPOINT}/test -H 'Content-Type: application/json' -d @data/test/indexV2.json
+
+# Returns tokens: [andrew@jarombek.com, ajarombek95@gmail.com]
+curl -XPOST ${ES_ENDPOINT}/test/_analyze -H 'Content-Type: application/json' -d '{
+  "analyzer": "email_analyzer",
+  "text": "My emails are andrew@jarombek.com and ajarombek95@gmail.com."
+}'

@@ -1,0 +1,22 @@
+{
+  "settings": {
+    "index": {
+      "number_of_shards": 5,
+      "number_of_replicas": 2
+    },
+    "analysis": {
+      "analyzer": {
+        "email_analyzer": {
+          "tokenizer": "email"
+        }
+      },
+      "tokenizer": {
+        "email": {
+          "type": "pattern",
+          "pattern": "([a-zA-Z0-9_.-]+@[a-zA-Z0-9_.-]+\\.[a-zA-Z]{2,})",
+          "group": 1
+        }
+      }
+    }
+  }
+}

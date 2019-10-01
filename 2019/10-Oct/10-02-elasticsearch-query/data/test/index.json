@@ -6,8 +6,8 @@
     },
     "analysis": {
       "analyzer": {
-        "custom_analyzer": {
-          "tokenizer": "standard",
+        "emoji_analyzer": {
+          "tokenizer": "whitespace",
           "char_filter": [
             "emoji_filter"
           ]
