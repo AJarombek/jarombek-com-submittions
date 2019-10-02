@@ -8,6 +8,19 @@
       "analyzer": {
         "email_analyzer": {
           "tokenizer": "email"
+        },
+        "short_words_analyzer": {
+          "tokenizer": "short_words"
+        },
+        "long_words_analyzer": {
+          "tokenizer": "standard",
+          "filter": ["english_stop"]
+        }
+      },
+      "filter": {
+        "english_stop": {
+          "type": "stop",
+          "stopwords": "_english_"
         }
       },
       "tokenizer": {
@@ -15,6 +28,10 @@
           "type": "pattern",
           "pattern": "([a-zA-Z0-9_.-]+@[a-zA-Z0-9_.-]+\\.[a-zA-Z]{2,})",
           "group": 1
+        },
+        "short_words": {
+          "type": "classic",
+          "max_token_length": 2
         }
       }
     }

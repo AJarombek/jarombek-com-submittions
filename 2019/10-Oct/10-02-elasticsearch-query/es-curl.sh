@@ -109,3 +109,69 @@ curl -XPOST ${ES_ENDPOINT}/test/_analyze -H 'Content-Type: application/json' -d 
   "analyzer": "email_analyzer",
   "text": "My emails are andrew@jarombek.com and ajarombek95@gmail.com."
 }'
+
+# Returns tokens: [Hi, my, is]
+curl -XPOST ${ES_ENDPOINT}/test/_analyze -H 'Content-Type: application/json' -d '{
+  "analyzer": "short_words_analyzer",
+  "text": "Hi my name is Andy Jarombek."
+}'
+
+# Returns tokens: [Dotty, good, horse]
+curl -XPOST ${ES_ENDPOINT}/test/_analyze -H 'Content-Type: application/json' -d '{
+  "analyzer": "long_words_analyzer",
+  "text": "Dotty is a good horse."
+}'
+
+# Delete, create, and retrieve an index with a custom analyzer for technologies on ElasticSearch.
+curl -XDELETE ${ES_ENDPOINT}/tech
+curl -XPUT ${ES_ENDPOINT}/tech -H 'Content-Type: application/json' -d @data/tech/index.json
+curl ${ES_ENDPOINT}/tech?pretty=true
+
+# Returns tokens: [Java]
+curl -XPOST ${ES_ENDPOINT}/tech/_analyze -H 'Content-Type: application/json' -d '{
+  "analyzer": "tech_analyzer",
+  "text": "Java"
+}'
+
+# Returns tokens: [Java, JavaS, avaS, ...]
+curl -XPOST ${ES_ENDPOINT}/tech/_analyze -H 'Content-Type: application/json' -d '{
+  "analyzer": "tech_analyzer",
+  "text": "JavaScript"
+}'
+
+# Returns tokens: [Node, Node., Node.j, Node.js, ode., ...]
+curl -XPOST ${ES_ENDPOINT}/tech/_analyze -H 'Content-Type: application/json' -d '{
+  "analyzer": "tech_analyzer",
+  "text": "Node.js"
+}'
+
+# Delete all the documents in the 'tech' index
+curl -XPOST ${ES_ENDPOINT}/tech/_delete_by_query -H 'Content-Type: application/json' -d '{
+    "query": {
+        "match_all": {}
+    }
+}'
+
+# Create three documents in the 'tech' index
+curl -XPOST ${ES_ENDPOINT}/tech/_doc -H 'Content-Type: application/json' -d \
+    '{"name": "Elasticsearch"}'
+curl -XPOST ${ES_ENDPOINT}/tech/_doc -H 'Content-Type: application/json' -d \
+    '{"name": "Logstash"}'
+curl -XPOST ${ES_ENDPOINT}/tech/_doc -H 'Content-Type: application/json' -d \
+    '{"name": "Kibana"}'
+
+# View all the documents in the 'tech' index
+curl ${ES_ENDPOINT}/tech/_doc/_search?pretty=true -H 'Content-Type: application/json' -d '{
+    "query": {
+        "match_all": {}
+    }
+}'
+
+# Match 'Elasticsearch'
+curl ${ES_ENDPOINT}/tech/_doc/_search?pretty=true -H 'Content-Type: application/json' -d '{
+    "query": {
+        "match": {
+            "name": "stic"
+        }
+    }
+}'

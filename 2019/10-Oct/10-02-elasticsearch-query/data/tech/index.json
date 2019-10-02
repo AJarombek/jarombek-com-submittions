@@ -1,0 +1,35 @@
+{
+  "settings": {
+    "index": {
+      "number_of_shards": 5,
+      "number_of_replicas": 2,
+      "max_ngram_diff": 10
+    },
+    "analysis": {
+      "analyzer": {
+        "tech_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "char_filter": [],
+          "filter": ["tech_ngram"]
+        }
+      },
+      "filter": {
+        "tech_ngram": {
+          "type": "ngram",
+          "min_gram": 4,
+          "max_gram": 10
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "name": {
+        "type": "text",
+        "analyzer": "tech_analyzer",
+        "search_analyzer": "standard"
+      }
+    }
+  }
+}
