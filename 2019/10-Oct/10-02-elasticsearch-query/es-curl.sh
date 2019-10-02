@@ -27,7 +27,7 @@ curl -XPUT ${ES_ENDPOINT}/race/_doc/2 -H 'Content-Type: application/json' \
 curl -XPUT ${ES_ENDPOINT}/race/_doc/3 -H 'Content-Type: application/json' \
     -d @data/races/mohawk_mountain.json
 curl -XPUT ${ES_ENDPOINT}/race/_doc/4 -H 'Content-Type: application/json' \
-    -d @data/races/hidden_valley.json
+    -d @data/races/woodbridge_trail.json
 curl -XPUT ${ES_ENDPOINT}/race/_doc/5 -H 'Content-Type: application/json' \
     -d @data/races/nyrr_cross_country.json
 curl -XPUT ${ES_ENDPOINT}/race/_doc/6 -H 'Content-Type: application/json' \
@@ -167,8 +167,21 @@ curl ${ES_ENDPOINT}/tech/_doc/_search?pretty=true -H 'Content-Type: application/
     }
 }'
 
-# Match 'Elasticsearch'
+# Matches: ['Elasticsearch']
 curl ${ES_ENDPOINT}/tech/_doc/_search?pretty=true -H 'Content-Type: application/json' -d '{
+    "query": {
+        "match": {
+            "name": "stic"
+        }
+    }
+}'
+
+# Prove that 'Elasticsearch' will not match when an ngram analyzer isn't applied to the name field.
+curl -XPOST ${ES_ENDPOINT}/tech_default/_doc -H 'Content-Type: application/json' -d \
+    '{"name": "Elasticsearch"}'
+
+# Matches: []
+curl ${ES_ENDPOINT}/tech_default/_doc/_search?pretty=true -H 'Content-Type: application/json' -d '{
     "query": {
         "match": {
             "name": "stic"
