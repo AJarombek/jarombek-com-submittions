@@ -4,5 +4,9 @@
   "date": "2019-10-05",
   "exercise": "run",
   "miles": 6.21,
-  "result": {}
+  "result": {
+    "time": "33:46",
+    "pace": "5:26",
+    "url": "https://my4.raceresult.com/138992/"
+  }
 }

@@ -33,6 +33,10 @@
           "pace": {
             "type": "keyword",
             "ignore_above": 256
+          },
+          "url": {
+            "type": "keyword",
+            "ignore_above": 256
           }
         }
       }

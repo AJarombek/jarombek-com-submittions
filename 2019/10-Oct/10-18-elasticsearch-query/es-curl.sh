@@ -41,6 +41,18 @@ curl ${ES_ENDPOINT}/race/_doc/4?pretty=true
 curl ${ES_ENDPOINT}/race/_doc/5?pretty=true
 curl ${ES_ENDPOINT}/race/_doc/6?pretty=true
 
+# Returns tokens: [hello, my, name, is, andy]
+curl -XPOST ${ES_ENDPOINT}/_analyze?pretty=true -H 'Content-Type: application/json' -d '{
+  "analyzer": "standard",
+  "text": "Hello my name is Andy."
+}'
+
+# Returns tokens: [Hello, my, name, is, Andy.]
+curl -XPOST ${ES_ENDPOINT}/_analyze?pretty=true -H 'Content-Type: application/json' -d '{
+  "analyzer": "whitespace",
+  "text": "Hello my name is Andy."
+}'
+
 # Testing analyzers in Elasticsearch without an index
 # Returns a single token with value "\nTitle\n"
 curl -XPOST ${ES_ENDPOINT}/_analyze?pretty=true -H 'Content-Type: application/json' -d '{
