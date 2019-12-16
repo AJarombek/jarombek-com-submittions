@@ -1,0 +1,11 @@
+{
+  "name": "Freezer 5K",
+  "location": "Yorktown Heights, NY",
+  "facility": "Yorktown Heights",
+  "date": "2020-02-09",
+  "exercise": "run",
+  "miles": 3.11,
+  "kilometers": 5,
+  "registered": false,
+  "result": {}
+}

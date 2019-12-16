@@ -11,7 +11,7 @@ terraform validate
 terraform apply -auto-approve -var 'ip_address=xxx.xxx.xxx.xxx'
 
 # Destroy Infrastructure
-terraform destroy -auto-approve
+terraform destroy -auto-approve -var 'ip_address=xxx.xxx.xxx.xxx'
 ```
 
 ### Files

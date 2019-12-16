@@ -1,0 +1,11 @@
+{
+  "name": "Boston Buildup",
+  "location": "Ridgefield, CT",
+  "facility": "Scotland Elementary School",
+  "date": "2020-01-19",
+  "exercise": "run",
+  "miles": 9.32,
+  "kilometers": 15,
+  "registered": false,
+  "result": {}
+}
