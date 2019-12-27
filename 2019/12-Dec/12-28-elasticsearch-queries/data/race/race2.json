@@ -2,9 +2,10 @@
   "name": "Ocean Breeze Miles Mania",
   "location": "New York, NY",
   "facility": "Ocean Breeze Athletic Complex",
-  "date": "2020-02-27",
+  "date": "2020-01-02",
   "exercise": "run",
+  "category": "Indoor Track",
   "miles": 2,
-  "registered": false,
+  "registered": true,
   "result": {}
 }

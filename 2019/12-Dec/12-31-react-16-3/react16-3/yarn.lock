@@ -4523,6 +4523,13 @@ istanbul-reports@^2.2.6:
   dependencies:
     handlebars "^4.1.2"
 
+"jarombek-react-components@git://github.com/ajarombek/jarombek-react-components.git#v0.1.0":
+  version "0.1.0"
+  resolved "git://github.com/ajarombek/jarombek-react-components.git#55c5b0cc89dbf6ebf0cd11d08730655c6f6d3143"
+  dependencies:
+    prop-types "^15.7.2"
+    react "^16.12.0"
+
 jest-changed-files@^24.9.0:
   version "24.9.0"
   resolved "https://registry.yarnpkg.com/jest-changed-files/-/jest-changed-files-24.9.0.tgz#08d8c15eb79a7fa3fc98269bc14b451ee82f8039"
@@ -7042,7 +7049,7 @@ react-scripts@3.2.0:
   optionalDependencies:
     fsevents "2.0.7"
 
-react@^16.3.0:
+react@^16.12.0, react@^16.3.0:
   version "16.12.0"
   resolved "https://registry.yarnpkg.com/react/-/react-16.12.0.tgz#0c0a9c6a142429e3614834d5a778e18aa78a0b83"
   dependencies:

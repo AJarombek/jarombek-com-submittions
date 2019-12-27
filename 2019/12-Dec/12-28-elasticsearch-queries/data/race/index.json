@@ -1,0 +1,64 @@
+{
+  "settings": {
+    "index": {
+      "number_of_shards": 5,
+      "number_of_replicas": 2
+    }
+  },
+  "mappings": {
+    "properties": {
+      "name": {
+        "type": "text"
+      },
+      "location": {
+        "type": "text"
+      },
+      "facility": {
+        "type": "text"
+      },
+      "date": {
+        "type": "keyword",
+        "ignore_above": 256
+      },
+      "exercise": {
+        "type": "keyword",
+        "ignore_above": 256
+      },
+      "category": {
+        "type": "text"
+      },
+      "miles": {
+        "type": "double"
+      },
+      "meters": {
+        "type": "double"
+      },
+      "kilometers": {
+        "type": "double"
+      },
+      "registered": {
+        "type": "boolean"
+      },
+      "result": {
+        "type": "nested",
+        "properties": {
+          "url": {
+            "type": "keyword",
+            "ignore_above": 256
+          },
+          "position": {
+            "type": "integer"
+          },
+          "time": {
+            "type": "keyword",
+            "ignore_above": 256
+          },
+          "pace": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      }
+    }
+  }
+}

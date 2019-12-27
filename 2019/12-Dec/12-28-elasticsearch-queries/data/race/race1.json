@@ -4,7 +4,13 @@
   "facility": "The Armory",
   "date": "2019-12-19",
   "exercise": "run",
+  "category": "Indoor Track",
   "miles": 1,
   "registered": true,
-  "result": {}
+  "result": {
+    "url": "https://results.armorytrack.com/meets/3985/athletes/2887619",
+    "position": 28,
+    "time": "4:54",
+    "pace": "4:54"
+  }
 }

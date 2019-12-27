@@ -8,13 +8,13 @@
 import React from 'react';
 import './App.css';
 
-function App() {
+const App = () => {
     return (
         <div className="App">
-            <h1>React 16.3 Dashboard</h1>
+            <h1>React 16.3</h1>
             <p>Release Date: March 29, 2018</p>
         </div>
     );
-}
+};
 
 export default App;
