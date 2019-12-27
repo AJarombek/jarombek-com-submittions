@@ -1,0 +1,26 @@
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "range": {
+            "miles": {
+              "gte": 1,
+              "lte": 2
+            }
+          }
+        },
+        {
+          "range": {
+            "date": {
+              "gte": "2020-01-01",
+              "lte": "2020-01-31",
+              "format": "yyyy-MM-dd",
+              "boost": 2
+            }
+          }
+        }
+      ]
+    }
+  }
+}

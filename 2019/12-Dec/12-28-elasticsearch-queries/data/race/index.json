@@ -17,8 +17,8 @@
         "type": "text"
       },
       "date": {
-        "type": "keyword",
-        "ignore_above": 256
+        "type": "date",
+        "format": "yyyy-MM-dd"
       },
       "exercise": {
         "type": "keyword",
