@@ -1,0 +1,10 @@
+{
+  "query": {
+    "match": {
+      "category": {
+        "query": "Road Trail",
+        "operator": "or"
+      }
+    }
+  }
+}

@@ -75,4 +75,33 @@ curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/
 curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' \
     -d @query/08-race-match-keyword.json
 
+# Perform a full text search for races that have a category containing the keywords 'Road' or 'Trail'.
+# The 'or' is implicit.
+curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' \
+    -d @query/09-race-road-trail.json
+
+# Perform a full text search for races that have a category containing the keywords 'Road' AND 'Trail'
+curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' \
+    -d @query/10-race-road-and-trail.json
+
+# Perform a full text search for races that have a category containing the keywords 'Road' OR 'Trail'
+curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' \
+    -d @query/11-race-road-or-trail.json
+
+# Query races whose names contain two of the following strings: 'NYRR', '#1', '#2', '#3'.
+curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' \
+    -d @query/12-race-nyrr-first-three.json
+
+# Fuzzy match query of 'NYCRR' will match documents with 'NYRR' in their name.
+curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' \
+    -d @query/13-race-nyrr-fuzzy.json
+
+# Phrase match query of 'York NY' will match documents whose location ends in 'York, NY'.
+curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' \
+    -d @query/14-race-ny-phrase.json
+
+# Phrase match query that allows for two missing words in the search text phrase.
+curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' \
+    -d @query/15-race-phrase-slop.json
+
 curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' -d '{}'

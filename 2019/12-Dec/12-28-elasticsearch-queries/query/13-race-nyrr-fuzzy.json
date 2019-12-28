@@ -1,0 +1,10 @@
+{
+  "query": {
+    "match": {
+      "name": {
+        "query": "NYCRR",
+        "fuzziness": 1
+      }
+    }
+  }
+}

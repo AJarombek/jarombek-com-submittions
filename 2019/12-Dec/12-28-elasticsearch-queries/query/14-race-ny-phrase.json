@@ -1,0 +1,9 @@
+{
+  "query": {
+    "match_phrase": {
+      "location": {
+        "query": "York NY"
+      }
+    }
+  }
+}

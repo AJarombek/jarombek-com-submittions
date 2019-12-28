@@ -1,0 +1,10 @@
+{
+  "query": {
+    "match": {
+      "name": {
+        "query": "NYRR #1 #2 #3",
+        "minimum_should_match": 2
+      }
+    }
+  }
+}

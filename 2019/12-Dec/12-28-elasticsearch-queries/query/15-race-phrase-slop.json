@@ -1,0 +1,10 @@
+{
+  "query": {
+    "match_phrase": {
+      "name": {
+        "query": "NYRR Night Races #4",
+        "slop": 2
+      }
+    }
+  }
+}
