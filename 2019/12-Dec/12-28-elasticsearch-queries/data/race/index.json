@@ -25,7 +25,12 @@
         "ignore_above": 256
       },
       "category": {
-        "type": "text"
+        "type": "text",
+        "fields": {
+          "raw": {
+            "type": "keyword"
+          }
+        }
       },
       "miles": {
         "type": "double"

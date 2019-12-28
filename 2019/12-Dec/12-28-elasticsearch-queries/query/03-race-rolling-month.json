@@ -1,0 +1,10 @@
+{
+  "query": {
+    "range": {
+      "date": {
+        "gte": "now-15d",
+        "lte": "now+15d"
+      }
+    }
+  }
+}

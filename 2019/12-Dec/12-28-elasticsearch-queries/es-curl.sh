@@ -52,4 +52,27 @@ curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/
 
 # Query for short races (1-2 miles) in January.
 curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' -d @query/02-race-short-jan.json
+
+# Query for races in the next 15 days and the last 15 days.
+curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' \
+    -d @query/03-race-rolling-month.json
+
+# Query for races that have a 'meters' field.
+curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' -d @query/04-race-meters.json
+
+# Query for races that have a category that exactly matches 'Road'.
+curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' -d @query/05-race-road.json
+
+# Same as the previous query, except no scoring occurs [all documents get a score of 1.0].
+curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' \
+    -d @query/06-race-road-no-score.json
+
+# Perform a full text search on a 'text' field.
+curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' \
+    -d @query/07-race-match-text.json
+
+# Perform a full text search on a 'keyword' field.  This is the same as performing a term query (05-race-road)
+curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' \
+    -d @query/08-race-match-keyword.json
+
 curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' -d '{}'
