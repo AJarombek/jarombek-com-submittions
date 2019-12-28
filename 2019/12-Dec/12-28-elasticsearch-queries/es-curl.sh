@@ -104,4 +104,24 @@ curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/
 curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' \
     -d @query/15-race-phrase-slop.json
 
+# Query match on multiple fields with a boost on the first field - 'title' and 'description'
+curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' \
+    -d @query/16-race-multi-match.json
+
+# Bool Query that returns a mile race at the armory that occurs in March 2020.
+curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' \
+    -d @query/17-race-mile-armory-march.json
+
+# Mile races at the armory without any scoring.  All scores are set to 0.0.
+curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' \
+    -d @query/18-race-mile-armory-no-score.json
+
+# Mile races either at the armory or in 2020.  This is an inclusive OR.
+curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' \
+    -d @query/19-race-mile-2020.json
+
+# Query races at the armory that are not the mile.
+curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' \
+    -d @query/20-race-armory-not-mile.json
+
 curl ${ES_ENDPOINT}/race/_doc/_search?pretty=true -H 'Content-Type: application/json' -d '{}'

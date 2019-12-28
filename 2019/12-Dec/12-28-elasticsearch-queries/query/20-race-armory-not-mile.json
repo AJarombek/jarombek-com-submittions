@@ -1,0 +1,22 @@
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "facility": "Armory"
+          }
+        }
+      ],
+      "must_not": [
+        {
+          "term": {
+            "miles": {
+              "value": 1
+            }
+          }
+        }
+      ]
+    }
+  }
+}
