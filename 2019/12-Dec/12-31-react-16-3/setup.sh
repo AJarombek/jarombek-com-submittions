@@ -7,5 +7,10 @@
 npx --version
 npx create-react-app react16-3
 
+npm ls react-dom
+npm ls react
+
 cd react16-3
 yarn
+
+yarn start
