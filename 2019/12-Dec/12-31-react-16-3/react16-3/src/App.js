@@ -5,6 +5,7 @@
  * @since 11/14/2019
  */
 
+import {hot} from 'react-hot-loader/root';
 import React from 'react';
 import {AJTextCard, AJResponsiveGrid} from 'jarombek-react-components';
 
@@ -22,15 +23,45 @@ const App = () => {
                 mediumBreakpoint="600px"
                 largeBreakpoint="900px"
                 items={[
-                    <AJTextCard title={"Context"} />,
-                    <AJTextCard title={"Create Ref"} />,
-                    <AJTextCard title={"Forward Ref"} />,
-                    <AJTextCard title={"New Lifecycle"} />,
-                    <AJTextCard title={"Strict Mode"} />
+                    <AJTextCard
+                        key="content"
+                        title="Context"
+                        content={<>...</>}
+                        action={f=>f}
+                        actionText="Learn More"
+                    />,
+                    <AJTextCard
+                        key="create-ref"
+                        title="Create Ref"
+                        content={<>...</>}
+                        action={f=>f}
+                        actionText="Learn More"
+                    />,
+                    <AJTextCard
+                        key="forward-ref"
+                        title="Forward Ref"
+                        content={<>...</>}
+                        action={f=>f}
+                        actionText="Learn More"
+                    />,
+                    <AJTextCard
+                        key="new-lifecycle"
+                        title="New Lifecycle"
+                        content={<>...</>}
+                        action={f=>f}
+                        actionText="Learn More"
+                    />,
+                    <AJTextCard
+                        key="strict-mode"
+                        title="Strict Mode"
+                        content={<>...</>}
+                        action={f=>f}
+                        actionText="Learn More"
+                    />
                 ]}
             />
         </div>
     );
 };
 
-export default App;
+export default hot(App);

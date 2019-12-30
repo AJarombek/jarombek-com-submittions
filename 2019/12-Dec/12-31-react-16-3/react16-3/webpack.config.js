@@ -6,6 +6,7 @@
 
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlWebPackPlugin = require("html-webpack-plugin");
 
 module.exports = {
     entry: {
@@ -17,9 +18,11 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /(node_modules)/,
-                use: {
-                    loader: 'babel-loader'
-                }
+                use: [
+                    {
+                        loader: 'babel-loader'
+                    }
+                ]
             },
             {
                 test: /\.css$/,
@@ -43,8 +46,19 @@ module.exports = {
     plugins: [
         new MiniCssExtractPlugin({
             filename: "[name].css"
-        })
+        }),
+        new HtmlWebPackPlugin({
+            template: "./src/index.html",
+            filename: "index.html"
+        }),
     ],
+    resolve: {
+        alias: {
+            // https://github.com/facebook/react/issues/13991#issuecomment-557677352
+            'react': path.resolve('./node_modules/react'),
+            'react-dom': '@hot-loader/react-dom'
+        }
+    },
     output: {
         path: path.join(__dirname, "dist/"),
         filename: '[name].js',
