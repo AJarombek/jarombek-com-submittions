@@ -1,0 +1,18 @@
+/**
+ * Stylesheet for the App component.
+ * Author: Andrew Jarombek
+ * Date: 12/26/2019
+ */
+
+h1 {
+    font-family: 'Roboto-Bold', Helvetica, sans-serif;
+    text-align: center;
+}
+
+p {
+    font-family: Longway, Helvetica, sans-serif;
+    text-align: center;
+}
+
+
+

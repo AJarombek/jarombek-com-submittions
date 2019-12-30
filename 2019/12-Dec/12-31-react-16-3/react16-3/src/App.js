@@ -6,7 +6,6 @@
  */
 
 import React from 'react';
-import './App.css';
 import {AJTextCard, AJResponsiveGrid} from 'jarombek-react-components';
 
 require('react-dom');
