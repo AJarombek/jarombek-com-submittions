@@ -7,6 +7,28 @@
 import 'react-hot-loader';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import App from "./App";
+import ContextDemo from "./ContextDemo";
+import CreateRefDemo from "./CreateRefDemo";
+import ForwardRefDemo from "./ForwardRefDemo";
+import NewLifecycleDemo from "./NewLifecycleDemo";
+import StrictModeDemo from "./StrictModeDemo";
+
+const RoutedApp = () => {
+    return (
+        <Router>
+            <Switch>
+                <Route exact path="/" component={App} />
+                <Route exact path="/context" component={ContextDemo} />
+                <Route exact path="/create-ref" component={CreateRefDemo} />
+                <Route exact path="/forward-ref" component={ForwardRefDemo} />
+                <Route exact path="/new-lifecycle" component={NewLifecycleDemo} />
+                <Route exact path="/strict-mode" component={StrictModeDemo} />
+            </Switch>
+        </Router>
+    );
+};
+
+ReactDOM.render(<RoutedApp />, document.getElementById('root'));

@@ -1,8 +1,11 @@
 import React from 'react';
+import FeaturePage from './FeaturePage';
 
 const NewLifecycleDemo = () => {
     return (
-        <div> </div>
+        <FeaturePage>
+            <h1>...</h1>
+        </FeaturePage>
     );
 };
 
