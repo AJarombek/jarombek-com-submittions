@@ -1,0 +1,11 @@
+/**
+ * Stylesheet for the ContextDemo component.
+ * Author: Andrew Jarombek
+ * Date: 12/31/2019
+ */
+
+.context-demo-body > p {
+    font-family: 'Sylexiad', Helvetica, sans-serif;
+    font-size: 24px;
+    letter-spacing: 0.7px;
+}

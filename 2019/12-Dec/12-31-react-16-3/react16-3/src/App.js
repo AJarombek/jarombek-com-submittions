@@ -13,6 +13,14 @@ import {AJTextCard, AJResponsiveGrid} from 'jarombek-react-components';
 const App = () => {
     const history = useHistory();
 
+    const contextNode =
+        <>
+            In React 16.3, the Context API was rewritten.  Context allows data to be shared amongst
+            components without passing it via props from parents to children<sup>1</sup>.  While I'm
+            still learning which scenarios are appropriate for the context API, the React blog
+            recommends to use it for "global" data used by a tree of React components<sup>2</sup>.
+        </>;
+
     return (
         <div className="App">
             <h1>React 16.3</h1>
@@ -25,7 +33,7 @@ const App = () => {
                     <AJTextCard
                         key="context"
                         title="Context"
-                        content={<>...</>}
+                        content={contextNode}
                         action={() => history.push('/context')}
                         actionText="Learn More"
                     />,

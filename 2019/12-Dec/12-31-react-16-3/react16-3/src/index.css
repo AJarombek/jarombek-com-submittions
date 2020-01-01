@@ -1,1 +1,6 @@
 @import "App.css";
+@import "ContextDemo.css";
+
+body {
+    background-color: #e8e8e8;
+}
