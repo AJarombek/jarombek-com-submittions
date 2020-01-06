@@ -1,0 +1,21 @@
+/**
+ * Stylesheet for the ThemeWithProps component.
+ * Author: Andrew Jarombek
+ * Date: 1/5/2020
+ */
+
+.theme-with-props {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.light-theme-with-props {
+    background-color: white;
+}
+
+.dark-theme-with-props {
+    background-color: #444;
+}

@@ -11,7 +11,15 @@ import { AJNavTextCircle } from 'jarombek-react-components';
 
 const ThemeWithContext = () => {
   return (
-    <div> </div>
+    <div>
+      <AJSwitchIcon
+        initialState={true}
+        disabled={false}
+        onChange={() => {}}
+        offImageUrl="assets/green.png"
+        onImageUrl="assets/light.png"
+      />
+    </div>
   );
 };
 
