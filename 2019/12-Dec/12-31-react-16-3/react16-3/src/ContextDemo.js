@@ -9,6 +9,7 @@ import { useHistory } from 'react-router-dom';
 import { AJNavTextCircle } from 'jarombek-react-components';
 import FeaturePage from './FeaturePage';
 import ThemeWithProps from './ThemeWithProps';
+import ThemeWithContext from './ThemeWithContext';
 
 const ContextDemo = () => {
   return (
@@ -31,6 +32,10 @@ const ContextDemo = () => {
           First I implemented this scenario using props.
         </p>
         <ThemeWithProps />
+        <p>
+          Next I implemented the same component with the context API.
+        </p>
+        <ThemeWithContext />
       </div>
     </FeaturePage>
   );
