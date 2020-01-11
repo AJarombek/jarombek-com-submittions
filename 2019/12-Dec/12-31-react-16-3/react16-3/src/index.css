@@ -1,6 +1,6 @@
 @import "App.css";
 @import "ContextDemo.css";
-@import "ThemeWithProps.css";
+@import "ThemeWithContextProps.css";
 
 body {
     background-color: #e8e8e8;

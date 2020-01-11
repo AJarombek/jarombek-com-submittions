@@ -7,25 +7,28 @@
 
 import React, { createContext, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { AJNavTextCircle } from 'jarombek-react-components';
+import { AJSwitchIcon, AJTextCard } from 'jarombek-react-components';
 import classnames from 'classnames';
 
-const ThemeContext = React.createContext('light');
+import green from './assets/green.png';
+import light from './assets/light.png';
+
+const ThemeContext = createContext('light');
 
 const ThemeWithContext = () => {
   const [theme, setTheme] = useState('light');
 
   return (
-    <div className="theme-with-context">
+    <div className={classnames("theme-with-context", `${theme}-theme-with-context`)}>
       <ThemeContext.Provider value={theme}>
         <AJSwitchIcon
           initialState={true}
           disabled={false}
           onChange={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          offImageUrl="assets/green.png"
-          onImageUrl="assets/light.png"
+          offImageUrl={green}
+          onImageUrl={light}
         />
-        <ThemeWithContext />
+        <ThemeWithContextCard />
       </ThemeContext.Provider>
     </div>
   );

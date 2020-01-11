@@ -1,5 +1,5 @@
 /**
- * Setup Jest for component unit tests.
+ * Setup Jest for React 16.3 unit tests.
  * @author Andrew Jarombek
  * @since 12/30/2019
  */
