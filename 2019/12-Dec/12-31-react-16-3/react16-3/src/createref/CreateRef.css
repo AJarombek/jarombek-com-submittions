@@ -1,0 +1,27 @@
+/**
+ * Stylesheet for the CallbackRefSample/CreateRefSample/StringRefSample components.
+ * Author: Andrew Jarombek
+ * Date: 1/12/2020
+ */
+
+.callback-ref-sample {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.callback-ref-sample figure {
+    height: 60px;
+    width: 60px;
+}
+
+.callback-ref-sample figure:focus {
+    filter: light(1);
+}
+
+.callback-ref-sample figure img {
+    height: 100%;
+    width: 100%;
+}

@@ -4,12 +4,12 @@
  * @since 12/30/2019
  */
 
-import React from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { AJNavTextCircle, AJCodeSnippet } from 'jarombek-react-components';
 import FeaturePage from './FeaturePage';
-import ThemeWithProps from './ThemeWithProps';
-import ThemeWithContext from './ThemeWithContext';
+import ThemeWithProps from './context/ThemeWithProps';
+import ThemeWithContext from './context/ThemeWithContext';
 
 const themeWithPropsCode =
 `// ThemeWithProps.js
@@ -111,7 +111,7 @@ const ContextDemo = () => {
   return (
     <FeaturePage>
       <h1>Context API</h1>
-      <div className="context-demo-body">
+      <div className="demo-body">
         <p>
           In React 16.3, the Context API was rewritten. Context allows data to be shared
           amongst components without passing it via props from parents to children<sup>1</sup>.
@@ -180,7 +180,35 @@ const ContextDemo = () => {
           In <strong>ThemeWithContext.js</strong> I created a context by calling
           <code>createContext()</code>, which is a method imported from React<sup>3</sup>.  The
           argument passed to <code>createContext()</code> is the default value of the context when a
-          component does not have a context provider above it in the component hierarchy.
+          component does not have a context provider above it in the component hierarchy.  In my
+          example, the default value of the context is <code>'light'</code>, so by default
+          components should display their light theme.
+        </p>
+        <p>
+          A context provider is a React component attached to a context object as a property.
+          Remember that a context object is created with <code>createContext()</code>.  In my
+          example, the context object is <code>ThemeContext</code>.  Context provider's are a
+          context object's <code>Provider</code> property.  In my example, the context provider of
+          <code>ThemeContext</code> is <code>ThemeContext.Provider</code>.
+        </p>
+        <p>
+          All components that are children of a context provider can subscribe to the value it
+          provides.  In my example, the <code>ThemeWithContextCard</code> component subscribes to
+          the context with the <code>useContext()</code> hook method (Note: Hooks are a React 16.8
+          feature.  If you are using an older version of react, you can use
+          <code>Context.Consumer</code> for functional components and <code>this.context</code> for
+          ES6 class components)<sup>4</sup>.
+        </p>
+        <p>
+          <code>useContext()</code> takes a context object as an argument and returns the current
+          value of the context<sup>5</sup>.  <code>ThemeWithContextCard</code> takes the context
+          value and uses it to determine the HTML class attached to the component.  This class is
+          what toggles the component between light and dark themes.
+        </p>
+        <p>
+          Although my example is very basic, it begins to show the power of the Context API.
+          Context really shines in more complex component hierarchies by removing long chains of
+          prop exchanges.
         </p>
       </div>
     </FeaturePage>

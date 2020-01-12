@@ -10,8 +10,8 @@ import { useHistory } from 'react-router-dom';
 import {AJTextCard, AJSwitchIcon} from 'jarombek-react-components';
 import classnames from 'classnames';
 
-import green from './assets/green.png';
-import light from './assets/light.png';
+import green from '../assets/green.png';
+import light from '../assets/light.png';
 
 const ThemeWithProps = () => {
   const [theme, setTheme] = useState('light');
