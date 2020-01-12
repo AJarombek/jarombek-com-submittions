@@ -11,3 +11,38 @@
     line-height: 1.4;
     text-align: left;
 }
+
+.context-demo-body .aj-code-snippet {
+    width: 85%;
+    margin: 0 auto;
+}
+
+.context-demo-body .aj-code-snippet > code {
+    font-family: 'Fantasque-Bold', Helvetica, sans-serif;
+}
+
+.context-demo-body p code, .context-demo-body p strong, .context-demo-body p a {
+    margin: 0 4px;
+}
+
+.context-demo-body p code {
+    font-family: 'Fantasque-Bold', Helvetica, sans-serif;
+    font-size: 20px;
+    background-color: #333;
+    color: rgb(97, 218, 250);
+    padding: 4px;
+    border-radius: 2px;
+}
+
+.context-demo-body p strong, .context-demo-body p a {
+    font-family: 'Sylexiad-Bold', Helvetica, sans-serif;
+}
+
+.context-demo-body p a {
+    color: #999;
+    text-decoration: none;
+}
+
+.context-demo-body p a:hover {
+    text-decoration: underline;
+}
