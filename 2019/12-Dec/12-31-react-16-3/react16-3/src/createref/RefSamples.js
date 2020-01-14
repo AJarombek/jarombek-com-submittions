@@ -21,7 +21,6 @@ class RefSamples extends React.Component {
 
     this.focusLightFigure1 = () => {
       if (this.lightFigure1) {
-        console.info(this.lightFigure1);
         this.lightFigure1.style.filter = 'brightness(5)';
       }
     };

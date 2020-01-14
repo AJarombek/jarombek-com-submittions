@@ -40,6 +40,15 @@ sup {
     letter-spacing: 0.7px;
 }
 
+.aj-text-card-content code {
+    font-family: 'Fantasque-Bold', Helvetica, sans-serif;
+    font-size: 16px;
+    background-color: #333;
+    color: rgb(97, 218, 250);
+    padding: 4px;
+    border-radius: 2px;
+}
+
 .aj-text-card-footer {
     display: flex;
     justify-content: center;
