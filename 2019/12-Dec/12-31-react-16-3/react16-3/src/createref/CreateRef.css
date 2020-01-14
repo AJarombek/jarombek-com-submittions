@@ -4,24 +4,32 @@
  * Date: 1/12/2020
  */
 
-.callback-ref-sample {
+.ref-samples {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    justify-content: center;
     width: 60%;
     margin: 0 auto;
 }
 
-.callback-ref-sample figure {
+.ref-samples > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ref-samples figure {
     height: 60px;
     width: 60px;
 }
 
-.callback-ref-sample figure:focus {
-    filter: light(1);
+.ref-samples img:focus {
+    outline: none;
 }
 
-.callback-ref-sample figure img {
+.ref-samples img {
     height: 100%;
     width: 100%;
+    filter: brightness(4);
 }

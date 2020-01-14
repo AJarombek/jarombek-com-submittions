@@ -6,7 +6,7 @@
 
 import React from 'react';
 import FeaturePage from './FeaturePage';
-import CallbackRefSample from './createref/CallbackRefSample';
+import RefSamples from './createref/RefSamples';
 
 const CreateRefDemo = () => {
     return (
@@ -16,7 +16,7 @@ const CreateRefDemo = () => {
             <p>
               Text
             </p>
-            <CallbackRefSample />
+            <RefSamples />
           </div>
         </FeaturePage>
     );
