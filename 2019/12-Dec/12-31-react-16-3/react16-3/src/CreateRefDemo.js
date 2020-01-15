@@ -117,7 +117,25 @@ const CreateRefDemo = () => {
         <p>
           Let me finish by briefly explaining the code sample I wrote.  Upon component construction,
           I assigned the variable <code>this.lightFigure3</code> to the result of
-          <code>createRef()</code>.
+          <code>createRef()</code>.  <code>createRef()</code> creates a ref object.  In the
+          <code>render()</code> function, the ref is attached to the <code>&lt;img&gt;</code> node
+          using the <code>ref</code> attribute.
+        </p>
+        <AJCodeSnippet language="javascript">
+          {`&lt;img src={light} ref={this.lightFigure3} /&gt;`}
+        </AJCodeSnippet>
+        <p>
+          Attaching a ref object to a React element like I did above causes the React element's DOM
+          node to be attached to the ref object.  At this point calling the ref provides access to
+          the DOM node and the DOM API.
+        </p>
+        <p>
+          I also added an <code>onClick()</code> handler to the
+          <code>&lt;AJOutlinedButton&gt;</code> component, which is a wrapper around a button
+          element.  The arrow function invoked by the <code>onClick()</code> handler sets a value to
+          <code>style.filter</code> on the referenced DOM node.  This sets a <code>filter</code> CSS
+          style to the <code>img</code> node using the DOM API.  As a result, the light bulb image
+          appears to light up.
         </p>
       </div>
     </FeaturePage>
