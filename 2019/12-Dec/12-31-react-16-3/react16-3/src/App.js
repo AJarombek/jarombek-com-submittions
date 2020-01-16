@@ -13,7 +13,7 @@ import { AJTextCard, AJResponsiveGrid } from 'jarombek-react-components';
 const App = () => {
   const history = useHistory();
 
-  const contextNode =
+  const contextNote =
     <>
       In React 16.3, the Context API was rewritten. Context allows data to be shared amongst
       components without passing it via props from parents to children<sup>1</sup>. While I'm
@@ -21,13 +21,22 @@ const App = () => {
       recommends to use it for "global" data used by a tree of React components<sup>2</sup>.
     </>;
 
-  const createRefNode =
+  const createRefNote =
     <>
       Refs are a feature I've known about and used since I first learned React.  Refs provide a way
       to access a DOM node and use the DOM API.  React is well known for its virtual DOM, a layer of
       abstraction on top of the DOM.  Usually we interact with the virtual DOM in a declarative
       way, however Refs allow us to write traditional imperative DOM API code.  React 16.3
       introduced a new way to create Refs with the <code>createRef()</code> method.
+    </>;
+
+  const forwardRefNote =
+    <>
+      Ref Forwarding is when refs are passed through a component to a React element in their render
+      method.  Passing refs through props does not work, so special logic is needed.  If you try to
+      pass a ref as a prop, it will be bound to the component instead of the underlying DOM node.
+      React 16.3 introduced ref forwarding, which allows refs to be forwarded through a component to
+      an underlying DOM node.
     </>;
 
   return (
@@ -42,21 +51,21 @@ const App = () => {
           <AJTextCard
             key="context"
             title="Context"
-            content={contextNode}
+            content={contextNote}
             action={() => history.push('/context')}
             actionText="Learn More"
           />,
           <AJTextCard
             key="create-ref"
             title="Create Ref"
-            content={createRefNode}
+            content={createRefNote}
             action={() => history.push('/create-ref')}
             actionText="Learn More"
           />,
           <AJTextCard
             key="forward-ref"
             title="Forward Ref"
-            content={<>...</>}
+            content={forwardRefNote}
             action={() => history.push('/forward-ref')}
             actionText="Learn More"
           />,

@@ -4,28 +4,54 @@
  * @since 1/15/2020
  */
 
-import React, {createRef} from 'react';
+import React, {createRef, useState} from 'react';
 import ButtonWrapper from './ButtonWrapper';
 import ForwardRefButtonWrapper from './ForwardRefButtonWrapper';
 
 const ForwardRefSample = () => {
+  // Create refs to attach to the custom button wrapper components.
   const buttonWrapperRef = createRef();
   const buttonWrapperForwardRef = createRef();
 
+  // Create hooks which are used to display (render) the value of the refs.
+  const [propRef, setPropRef] = useState("");
+  const [forwardRef, setForwardRef] = useState("");
+
+  // Action which occurs when the ButtonWrapper component is clicked.
+  const buttonWrapperOnClick = () => {
+    console.info(buttonWrapperRef.current);
+    setPropRef(buttonWrapperRef.current);
+  };
+
+  // Action which occurs when the ButtonWrapperForwardRef component is clicked.
+  const buttonWrapperForwardRefOnClick = () => {
+    console.info(buttonWrapperForwardRef.current);
+    buttonWrapperForwardRef.current = buttonWrapperForwardRef.current.toString();
+    setForwardRef(buttonWrapperForwardRef);
+  };
+
   return (
-    <div>
-      <ButtonWrapper
-        onClick={() => console.info(buttonWrapperRef.current)}
-        ref={buttonWrapperRef}>
+    <div className="forward-ref-sample">
+      <div className="prop-ref">
+        <h3>Ref on Component WITHOUT a Forward Ref</h3>
+        <ButtonWrapper
+          onClick={() => buttonWrapperOnClick()}
+          ref={buttonWrapperRef}>
 
-        No Forward Ref
-      </ButtonWrapper>
-      <ForwardRefButtonWrapper
-        onClick={() => console.info(buttonWrapperForwardRef.current)}
-        ref={buttonWrapperForwardRef}>
+          No Forward Ref
+        </ButtonWrapper>
+        <p>{JSON.stringify(propRef)}</p>
+      </div>
+      <div className="forward-ref">
+        <h3>Ref on Component WITH a Forward Ref</h3>
+        <ForwardRefButtonWrapper
+          onClick={() => buttonWrapperForwardRefOnClick()}
+          ref={buttonWrapperForwardRef}>
 
-        Forward Ref
-      </ForwardRefButtonWrapper>
+          Forward Ref
+        </ForwardRefButtonWrapper>
+        <p>{JSON.stringify(forwardRef)}</p>
+      </div>
     </div>
   );
 };

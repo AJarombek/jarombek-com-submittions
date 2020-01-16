@@ -12,7 +12,7 @@ const ButtonWrapper = (props) => {
   const {children, onClick, ref} = props;
 
   return (
-    <button type="button" onClick={onClick} ref={ref}>
+    <button className="button-wrapper" type="button" onClick={onClick} ref={ref}>
       {children}
     </button>
   );
