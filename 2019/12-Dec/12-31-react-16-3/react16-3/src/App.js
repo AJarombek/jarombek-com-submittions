@@ -32,8 +32,8 @@ const App = () => {
 
   const forwardRefNote =
     <>
-      Ref Forwarding is when refs are passed through a component to a React element in their render
-      method.  Passing refs through props does not work, so special logic is needed.  If you try to
+      Ref Forwarding is when refs are passed through a component to a React element.
+      Passing refs through props does not work, so special logic is needed.  If you try to
       pass a ref as a prop, it will be bound to the component instead of the underlying DOM node.
       React 16.3 introduced ref forwarding, which allows refs to be forwarded through a component to
       an underlying DOM node.
