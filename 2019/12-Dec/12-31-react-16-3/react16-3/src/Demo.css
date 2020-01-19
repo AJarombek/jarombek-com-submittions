@@ -4,7 +4,7 @@
  * Date: 12/31/2019
  */
 
-.context-demo-body > p {
+.demo-body > p {
     font-family: 'Sylexiad', Helvetica, sans-serif;
     font-size: 24px;
     letter-spacing: 0.7px;
@@ -32,6 +32,11 @@
     color: rgb(97, 218, 250);
     padding: 4px;
     border-radius: 2px;
+}
+
+.demo-body p code.code-listing {
+    background-color: transparent;
+    color: black;
 }
 
 .demo-body p strong, .demo-body p a {

@@ -4,7 +4,7 @@
  * @since 1/15/2020
  */
 
-import React, { forwardRef } from 'react';
+import React from 'react';
 import FeaturePage from './FeaturePage';
 import ForwardRefSample from './forwardref/ForwardRefSample';
 import { AJCodeSnippet } from 'jarombek-react-components';

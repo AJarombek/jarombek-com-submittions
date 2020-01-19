@@ -122,7 +122,7 @@ const CreateRefDemo = () => {
           using the <code>ref</code> attribute.
         </p>
         <AJCodeSnippet language="javascript">
-          {`&lt;img src={light} ref={this.lightFigure3} /&gt;`}
+          {`<img src={light} ref={this.lightFigure3} />`}
         </AJCodeSnippet>
         <p>
           Attaching a ref object to a React element like I did above causes the React element's DOM

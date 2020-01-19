@@ -43,10 +43,20 @@ sup {
 .aj-text-card-content code {
     font-family: 'Fantasque-Bold', Helvetica, sans-serif;
     font-size: 16px;
-    background-color: #333;
-    color: rgb(97, 218, 250);
+    background-color: transparent;
+    color: black;
     padding: 4px;
     border-radius: 2px;
+}
+
+.aj-text-card-content a {
+    font-family: 'Sylexiad-Bold', Helvetica, sans-serif;
+    color: #999;
+    text-decoration: none;
+}
+
+.aj-text-card-content a:hover {
+    text-decoration: underline;
 }
 
 .aj-text-card-footer {

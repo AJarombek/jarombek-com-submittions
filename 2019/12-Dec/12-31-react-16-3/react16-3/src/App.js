@@ -39,6 +39,16 @@ const App = () => {
       an underlying DOM node.
     </>;
 
+  const newLifecyclesNote =
+    <>
+      Last year I wrote an article about <a
+      href="https://jarombek.com/blog/jan-19-2019-react-lifecycles">lifecycle methods in
+      React</a>.  It turns out my article was outdated upon arrival, since the React team began a
+      multi-year process of deprecating existing lifecycles and adding new ones.  In React 16.3, two
+      new lifecycle methods were introduced - <code>getDerivedStateFromProps()</code> and
+      <code>getSnapshotBeforeUpdate()</code>.
+    </>;
+
   return (
     <div className="App">
       <h1>React 16.3</h1>
@@ -72,7 +82,7 @@ const App = () => {
           <AJTextCard
             key="new-lifecycle"
             title="New Lifecycle"
-            content={<>...</>}
+            content={newLifecyclesNote}
             action={() => history.push('/new-lifecycle')}
             actionText="Learn More"
           />,
