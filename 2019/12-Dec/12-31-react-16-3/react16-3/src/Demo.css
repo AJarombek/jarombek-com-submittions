@@ -37,6 +37,7 @@
 .demo-body p code.code-listing {
     background-color: transparent;
     color: black;
+    margin-left: 30px;
 }
 
 .demo-body p strong, .demo-body p a {

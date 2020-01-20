@@ -33,6 +33,14 @@ const NewLifecycleDemo = () => {
               want to rename existing methods before React 17 is released.
             </p>
             <p>
+              In my opinion there were some confusing aspects to some of these deprecated lifecycle
+              methods.  For example, <code>componentWillMount()</code> is invoked before
+              <code>componentDidMount()</code>.  However, API calls should occur in
+              <code>componentDidMount()</code>, going against conventional logic that API calls
+              should be initialized as soon as possible<sup>8</sup>.  Hopefully removing these
+              lifecycle methods will help simplify things.
+            </p>
+            <p>
               Once React 17 is released, the class component lifecycles will be:
             </p>
             <p>
@@ -40,25 +48,56 @@ const NewLifecycleDemo = () => {
               a lifecycle method)
             </p>
             <p>
-              <code className="code-listing">componentDidMount()</code>
+              <code className="code-listing">getDerivedStateFromProps(props, state)</code>
             </p>
             <p>
               <code className="code-listing">render()</code>
             </p>
             <p>
+              <code className="code-listing">componentDidMount()</code>
+            </p>
+            <p>
               <code className="code-listing">shouldComponentUpdate()</code>
             </p>
             <p>
-              <code className="code-listing">getDerivedStateFromProps()</code>
+              <code className="code-listing">getSnapshotBeforeUpdate(prevProps, prevState)</code>
             </p>
             <p>
-              <code className="code-listing">getSnapshotBeforeUpdate()</code>
-            </p>
-            <p>
-              <code className="code-listing">componentDidUpdate()</code>
+              <code className="code-listing">
+                componentDidUpdate(prevProps, prevState, snapshot)
+              </code>
             </p>
             <p>
               <code className="code-listing">componentWillUnmount()</code>
+            </p>
+            <p>
+              <code className="code-listing">getDerivedStateFromError(error)</code>
+            </p>
+            <p>
+              <code className="code-listing">componentDidCatch(error, info)</code>
+            </p>
+            <p>
+              Note that <code>componentDidCatch()</code> was released in React 16.0 and
+              <code>getDerivedStateFromError()</code> in React 16.6.  Let's take a look at
+              <code>getDerivedStateFromProps()</code> and <code>getSnapshotBeforeUpdate()</code>
+              specifically since they were released with React 16.3.
+            </p>
+            <p>
+              <code>getDerivedStateFromProps()</code> replaces the soon to be deprecated
+              <code>componentWillReceiveProps()</code> lifecycle method.  The main difference
+              between the two is that <code>componentWillReceiveProps()</code> allows for side
+              effects while <code>getDerivedStateFromProps()</code> does not<sup>9</sup>.  What this
+              means is that <code>getDerivedStateFromProps()</code> does not have access to the
+              component instance while <code>componentWillReceiveProps()</code> does<sup>10</sup>.
+              This is due to <code>getDerivedStateFromProps()</code> being a static method.  The
+              React team made this change because providing developers access to the component
+              instance in <code>componentWillReceiveProps()</code> led to code that didn't match the
+              lifecycle methods intended use.
+            </p>
+            <p>
+              <code>getDerivedStateFromProps()</code> is invoked before a component renders.  Based
+              on the methods name, its main purpose is to update the state, which is derived from
+              the props.
             </p>
           </div>
         </FeaturePage>
