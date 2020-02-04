@@ -1,0 +1,17 @@
+{
+  "name": "02-05-react-jest-enzyme",
+  "version": "1.0.0",
+  "description": "Jest Hello World",
+  "main": "test.js",
+  "dependencies": {
+    "jest": "^25.1.0"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "Jest"
+  ],
+  "author": "Andrew Jarombek",
+  "license": "ISC"
+}
